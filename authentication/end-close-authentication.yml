@@ -1,0 +1,20 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/end-close-openapi-original.json
+docs: https://endclose.com/docs/authentication.md
+notes: >-
+  End Close authenticates every request with an API key sent in the X-API-KEY header.
+  Keys are viewed/managed in the Settings section of the End Close dashboard
+  (https://app.endclose.com). Keys are environment-scoped (test vs live).
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-API-KEY
+  sources:
+  - openapi/end-close-openapi-original.json
