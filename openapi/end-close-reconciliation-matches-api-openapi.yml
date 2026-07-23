@@ -1,0 +1,162 @@
+openapi: 3.1.0
+info:
+  title: End Close Bank Account Balances Reconciliation Matches API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Reconciliation Matches
+paths:
+  /reconciliation_matches:
+    get:
+      summary: List reconciliation matches
+      description: Returns a paginated list of matches, optionally filtered by reconciliation or status.
+      parameters:
+      - in: query
+        name: reconciliation_id
+        schema:
+          type: string
+        description: Filter by reconciliation
+      - in: query
+        name: status
+        schema:
+          type: string
+        description: Filter by match status
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 25
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: Pagination offset
+      responses:
+        '200':
+          description: Paginated list of matches
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReconciliationMatch'
+                  has_more:
+                    type: boolean
+                  offset:
+                    type: number
+                  total_count:
+                    type: integer
+                    description: Total number of matches matching the filters, across all pages
+      tags:
+      - Reconciliation Matches
+    post:
+      summary: Create a reconciliation match
+      description: Manually match a set of records. All records must be unreconciled and belong to the specified reconciliation's data streams.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - reconciliation_id
+              - record_ids
+              properties:
+                reconciliation_id:
+                  type: string
+                record_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: IDs of records to match together
+                create_adjustment:
+                  type: boolean
+                  description: If true, creates an adjustment record to balance the match
+                adjustment_reason:
+                  type: string
+                  description: Description for the adjustment record
+      responses:
+        '201':
+          description: Match created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationMatch'
+        '422':
+          description: Validation error (records not found, already reconciled, or not in reconciliation)
+      tags:
+      - Reconciliation Matches
+  /reconciliation_matches/{id}:
+    get:
+      summary: Retrieve a reconciliation match
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Match retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationMatch'
+        '404':
+          description: Match not found
+      tags:
+      - Reconciliation Matches
+    delete:
+      summary: Delete a reconciliation match
+      description: Deletes a reconciliation match and resets all associated records to unreconciled status.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Match deleted and records unreconciled
+        '404':
+          description: Match not found
+      tags:
+      - Reconciliation Matches
+components:
+  schemas:
+    ReconciliationMatch:
+      type: object
+      description: A reconciliation match represents a group of records that have been matched together. Endclose supports many-to-one matching, so a single match can contain a large number of records — to retrieve them, use `GET /v1/records?reconciliation_match_id={id}`.
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+        group_key:
+          type: string
+        reconciliation_id:
+          type: integer
+        reconciliation_rule_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        record_count:
+          type: integer
+          description: Total number of records in this match
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

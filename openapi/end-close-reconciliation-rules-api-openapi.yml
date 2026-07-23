@@ -1,0 +1,287 @@
+openapi: 3.1.0
+info:
+  title: End Close Bank Account Balances Reconciliation Rules API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Reconciliation Rules
+paths:
+  /reconciliation_rules:
+    get:
+      summary: List reconciliation rules
+      description: Returns all rules for a reconciliation, ordered by priority.
+      parameters:
+      - in: query
+        name: reconciliation_id
+        required: true
+        schema:
+          type: string
+        description: The reconciliation to list rules for
+      responses:
+        '200':
+          description: List of rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReconciliationRule'
+      tags:
+      - Reconciliation Rules
+    post:
+      summary: Create a reconciliation rule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - reconciliation_id
+              - filters
+              properties:
+                reconciliation_id:
+                  type: string
+                filters:
+                  $ref: '#/components/schemas/ReconciliationRule/properties/filters'
+                priority:
+                  type: integer
+                  default: 0
+                group_by:
+                  $ref: '#/components/schemas/ReconciliationRule/properties/group_by'
+                cardinality:
+                  $ref: '#/components/schemas/ReconciliationRule/properties/cardinality'
+                rollup:
+                  $ref: '#/components/schemas/ReconciliationRule/properties/rollup'
+                description:
+                  type: string
+                  description: Optional human-readable description of what this rule matches
+      responses:
+        '201':
+          description: Rule created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationRule'
+        '422':
+          description: Validation error
+      tags:
+      - Reconciliation Rules
+  /reconciliation_rules/{id}:
+    get:
+      summary: Retrieve a reconciliation rule
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Rule retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationRule'
+        '404':
+          description: Rule not found
+      tags:
+      - Reconciliation Rules
+    patch:
+      summary: Update a reconciliation rule
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filters:
+                  type: object
+                priority:
+                  type: integer
+                group_by:
+                  $ref: '#/components/schemas/ReconciliationRule/properties/group_by'
+                cardinality:
+                  $ref: '#/components/schemas/ReconciliationRule/properties/cardinality'
+                rollup:
+                  $ref: '#/components/schemas/ReconciliationRule/properties/rollup'
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Rule updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationRule'
+        '404':
+          description: Rule not found
+      tags:
+      - Reconciliation Rules
+    delete:
+      summary: Delete a reconciliation rule
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Rule deleted successfully
+        '404':
+          description: Rule not found
+      tags:
+      - Reconciliation Rules
+components:
+  schemas:
+    ReconciliationRule:
+      type: object
+      required:
+      - filters
+      - reconciliation_id
+      properties:
+        id:
+          type: integer
+        priority:
+          type: integer
+          description: Lower values run first
+        filters:
+          type: object
+          description: A rule tree with group nodes (AND/OR) and condition leaf nodes. Conditions compare a field on one side to a field on the other side.
+          properties:
+            operand:
+              type: string
+              enum:
+              - and
+              - or
+              description: Logical operator for combining child rules
+            rules:
+              type: array
+              description: Child rules (groups or conditions)
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: Source field to compare (e.g. "amount", "date", "metadata.invoice_id")
+                  operand:
+                    type: string
+                    enum:
+                    - eq
+                    - neq
+                    - gt
+                    - gte
+                    - lt
+                    - lte
+                    - contains
+                    - in
+                    - not_in
+                    description: Comparison operator
+                  value:
+                    type: string
+                    description: Target field to compare against (e.g. "amount", "external_id")
+                  tolerance_amount:
+                    type: number
+                    description: Optional tolerance for fuzzy matching with the 'eq' operand. Must be a positive number.
+                  tolerance_unit:
+                    type: string
+                    enum:
+                    - dollar
+                    - percent
+                    - day
+                    - month
+                    description: Unit for tolerance. 'dollar' and 'percent' for number fields, 'day' and 'month' for date fields. 'month' matches records in the same calendar month (tolerance_amount is ignored).
+                  transforms:
+                    type: object
+                    description: 'Optional transforms applied to field values before comparison. Each side (key/value) can have a single transform string, a parameterized transform object, or an array of transforms applied in order (first = innermost). Available transforms: lowercase, uppercase, alphanumeric_only, digits_only, first_n_chars (requires {"name": "first_n_chars", "args": {"n": 8}}).'
+                    properties:
+                      key:
+                        description: Transform(s) for the Side A (key) field.
+                      value:
+                        description: Transform(s) for the Side B (value) field.
+        group_by:
+          type: array
+          items:
+            type: string
+          description: 'Side A field keys to group records by before matching. The first key is the primary axis: in `rollup.group_by_kind` ''date'' mode it must be a date field; in ''identifier'' mode it can be any field (e.g. a batch id in metadata). Additional keys further segment Side A — in date mode each segment matches only Side B records with the same value for those fields; in identifier mode they form a composite cohort key.'
+        cardinality:
+          type: string
+          enum:
+          - one_to_one
+          - many_to_one
+          default: one_to_one
+          description: Match cardinality. 'one_to_one' matches single records on each side. 'many_to_one' rolls up multiple records on one side to match a single record on the other side — requires the `rollup` field to be set.
+        rollup:
+          type: object
+          nullable: true
+          description: Required when cardinality is 'many_to_one'. Configures how records on the many side are aggregated before matching.
+          properties:
+            lookback_days:
+              type: integer
+              minimum: 1
+              description: Optional. Number of days of history to include when rolling up records. Must be set together with `date_field`. Omit both to match without a time bound.
+            date_field:
+              type: string
+              description: Optional. The date field on the rolled-up records used to anchor the lookback window. Must be set together with `lookback_days`.
+            group_by_kind:
+              type: string
+              enum:
+              - date
+              - identifier
+              default: date
+              description: How `group_by` is interpreted. 'date' (default) buckets records per day and walks a date-window running sum. 'identifier' buckets records by exact value (e.g. a batch id) and matches the bucket total to one record on the other side, optionally bounded by the lookback window.
+          dependentRequired:
+            lookback_days:
+            - date_field
+            date_field:
+            - lookback_days
+        description:
+          type: string
+          description: Optional human-readable description of what this rule matches
+        source:
+          type: string
+          enum:
+          - user
+          - ai
+          - default
+          description: Origin of the rule. 'user' = created manually via the API or UI. 'ai' = created by the AI rules engine. 'default' = seeded built-in rule.
+        status:
+          type: string
+          enum:
+          - active
+          - proposed
+          description: Active rules are used by the reconciliation engine. Proposed rules are awaiting review from a cold start.
+        confidence:
+          type: string
+          enum:
+          - high
+          - medium
+          - low
+          description: AI confidence rating. Only present on AI-generated rules from cold start.
+        sample_match_rate:
+          type: string
+          description: How many sample records this rule matched during dry-run evaluation (e.g. '42/50'). Only present on AI-generated rules from cold start.
+        reconciliation_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

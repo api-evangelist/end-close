@@ -1,0 +1,171 @@
+openapi: 3.1.0
+info:
+  title: End Close Bank Account Balances Bank Accounts API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Bank Accounts
+paths:
+  /bank_accounts:
+    get:
+      summary: List bank accounts
+      description: Returns all bank accounts for the current environment, ordered by name.
+      responses:
+        '200':
+          description: List of bank accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+        '401':
+          description: Unauthorized
+      tags:
+      - Bank Accounts
+    post:
+      summary: Create a bank account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: Human readable name for the bank account
+                currency:
+                  type: string
+                  description: Three-letter ISO 4217 currency code (e.g. USD, EUR). Must be uppercase. Optional.
+                  pattern: ^[A-Z]{3}$
+      responses:
+        '201':
+          description: Bank account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+      tags:
+      - Bank Accounts
+  /bank_accounts/{id}:
+    get:
+      summary: Retrieve a bank account
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the bank account
+      responses:
+        '200':
+          description: Bank account retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Bank account not found
+      tags:
+      - Bank Accounts
+    patch:
+      summary: Update a bank account
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the bank account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Human readable name for the bank account
+                currency:
+                  type: string
+                  description: Three-letter ISO 4217 currency code (e.g. USD, EUR). Must be uppercase. Optional.
+                  pattern: ^[A-Z]{3}$
+      responses:
+        '200':
+          description: Bank account updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Bank account not found
+      tags:
+      - Bank Accounts
+    delete:
+      summary: Delete a bank account
+      description: Permanently deletes a bank account. Returns 409 Conflict if the bank account has linked data streams.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the bank account
+      responses:
+        '204':
+          description: Bank account deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Bank account not found
+        '409':
+          description: Cannot delete bank account because it has linked data streams
+      tags:
+      - Bank Accounts
+components:
+  schemas:
+    BankAccount:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: integer
+          description: Unique numeric identifier
+        name:
+          type: string
+          description: Human readable name for the bank account
+        currency:
+          type: string
+          description: Three-letter ISO 4217 currency code (e.g. USD, EUR). Must be uppercase. Optional — bank accounts may be created without a currency.
+          pattern: ^[A-Z]{3}$
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

@@ -1,0 +1,242 @@
+openapi: 3.1.0
+info:
+  title: End Close Bank Account Balances Reconciliation Stories API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Reconciliation Stories
+paths:
+  /reconciliation_stories:
+    get:
+      summary: List reconciliation stories
+      description: Returns all reconciliation stories in the environment, newest first.
+      responses:
+        '200':
+          description: List of stories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReconciliationStory'
+      tags:
+      - Reconciliation Stories
+    post:
+      summary: Create a reconciliation story
+      description: Create a story and attach a chain of reconciliations. The first link must use role `origin` and have no shared_data_stream_id; subsequent links must use role `continuation` and specify the shared data stream linking them to the previous reconciliation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                links:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - reconciliation_id
+                    - position
+                    properties:
+                      reconciliation_id:
+                        type: string
+                      position:
+                        type: integer
+                        description: 1-indexed position in the chain
+                      role:
+                        type: string
+                        enum:
+                        - origin
+                        - continuation
+                        default: origin
+                      shared_data_stream_id:
+                        type: string
+                        nullable: true
+                        description: Required for continuation links
+      responses:
+        '201':
+          description: Story created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationStory'
+        '422':
+          description: Validation error
+      tags:
+      - Reconciliation Stories
+  /reconciliation_stories/{id}:
+    get:
+      summary: Retrieve a reconciliation story
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Story retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationStory'
+        '404':
+          description: Story not found
+      tags:
+      - Reconciliation Stories
+    patch:
+      summary: Update a reconciliation story
+      description: Update the story name and/or replace its links. If `links` is provided, all existing links are replaced with the new chain. If `links` is omitted, only the name is updated.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                links:
+                  type: array
+                  description: Replace the entire chain. Omit to leave links unchanged.
+                  items:
+                    type: object
+                    required:
+                    - reconciliation_id
+                    - position
+                    properties:
+                      reconciliation_id:
+                        type: string
+                      position:
+                        type: integer
+                      role:
+                        type: string
+                        enum:
+                        - origin
+                        - continuation
+                      shared_data_stream_id:
+                        type: string
+                        nullable: true
+      responses:
+        '200':
+          description: Story updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationStory'
+        '404':
+          description: Story not found
+        '422':
+          description: Validation error
+      tags:
+      - Reconciliation Stories
+    delete:
+      summary: Delete a reconciliation story
+      description: Permanently deletes a story and unlinks it from all reconciliations. The reconciliations themselves are not deleted.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Story deleted successfully
+        '404':
+          description: Story not found
+      tags:
+      - Reconciliation Stories
+components:
+  schemas:
+    ReconciliationStoryLink:
+      type: object
+      required:
+      - reconciliation_id
+      - position
+      - role
+      properties:
+        id:
+          type: integer
+        position:
+          type: integer
+          description: 1-indexed position in the chain. Must be unique within a story.
+        role:
+          type: string
+          enum:
+          - origin
+          - continuation
+          description: The first link is the 'origin'. All subsequent links are 'continuation' and must set shared_data_stream_id.
+        reconciliation_id:
+          type: integer
+          description: The reconciliation this link points to
+        reconciliation_name:
+          type: string
+        shared_data_stream_id:
+          type: integer
+          nullable: true
+          description: The data stream that connects this link to the previous link in the chain. Required for continuation links, null for origin.
+        shared_data_stream_name:
+          type: string
+          nullable: true
+        side_a_streams:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+        side_b_streams:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+    ReconciliationStory:
+      type: object
+      required:
+      - name
+      description: A reconciliation story groups related reconciliations into an ordered chain so end-to-end flow can be tracked. Each link points to a reconciliation; non-origin links must specify the data stream that connects them to the previous reconciliation in the chain.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: Human readable name for the story
+        created_at:
+          type: string
+          format: date-time
+        links:
+          type: array
+          description: Ordered list of reconciliations participating in the story
+          items:
+            $ref: '#/components/schemas/ReconciliationStoryLink'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

@@ -1,0 +1,214 @@
+openapi: 3.1.0
+info:
+  title: End Close Bank Account Balances API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Bank Account Balances
+paths:
+  /bank_account_balances:
+    get:
+      summary: List bank account balances
+      description: Returns all balances for a bank account, ordered by date descending.
+      parameters:
+      - in: query
+        name: bank_account_id
+        required: true
+        schema:
+          type: string
+        description: The bank account to list balances for
+      responses:
+        '200':
+          description: List of bank account balances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccountBalance'
+        '401':
+          description: Unauthorized
+        '422':
+          description: bank_account_id is required
+      tags:
+      - Bank Account Balances
+    post:
+      summary: Create or update a bank account balance
+      description: Creates a balance for the specified bank account. If a balance already exists for the same date and balance type, it will be updated with the new amount (upsert behavior).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - bank_account_id
+              - date
+              - balance_type
+              - amount_cents
+              properties:
+                bank_account_id:
+                  type: string
+                  description: ID of the bank account
+                date:
+                  type: string
+                  format: date
+                  description: The date of the balance
+                balance_type:
+                  type: string
+                  enum:
+                  - opening_ledger
+                  - closing_ledger
+                  - current_ledger
+                  - opening_available
+                  - opening_available_next_business_day
+                  - closing_available
+                  - current_available
+                  - previously_closed_book
+                  - other
+                  description: The type of balance
+                amount_cents:
+                  type: integer
+                  description: The balance amount in cents (e.g., 1234 = $12.34)
+      responses:
+        '201':
+          description: Balance created or updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccountBalance'
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+      tags:
+      - Bank Account Balances
+  /bank_account_balances/bulk:
+    post:
+      summary: Bulk create or update bank account balances
+      description: Submit up to 1,000 balances for a bank account in a single request. Each balance is upserted — if a balance already exists for the same date and balance type, it will be updated with the new amount. All balances are processed in a single transaction.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - bank_account_id
+              - balances
+              properties:
+                bank_account_id:
+                  type: string
+                  description: ID of the bank account
+                balances:
+                  type: array
+                  minItems: 1
+                  maxItems: 1000
+                  items:
+                    type: object
+                    required:
+                    - date
+                    - balance_type
+                    - amount_cents
+                    properties:
+                      date:
+                        type: string
+                        format: date
+                        description: The date of the balance
+                      balance_type:
+                        type: string
+                        enum:
+                        - opening_ledger
+                        - closing_ledger
+                        - current_ledger
+                        - opening_available
+                        - opening_available_next_business_day
+                        - closing_available
+                        - current_available
+                        - previously_closed_book
+                        - other
+                        description: The type of balance
+                      amount_cents:
+                        type: integer
+                        description: The balance amount in cents (e.g., 1234 = $12.34)
+      responses:
+        '201':
+          description: Balances created or updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: Number of balances processed
+                  balances:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BankAccountBalance'
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error (e.g. exceeds 1,000 balances)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+      - Bank Account Balances
+components:
+  schemas:
+    BankAccountBalance:
+      type: object
+      required:
+      - bank_account_id
+      - date
+      - balance_type
+      - amount_cents
+      properties:
+        id:
+          type: integer
+          description: Unique numeric identifier
+        bank_account_id:
+          type: integer
+          description: ID of the bank account this balance belongs to
+        date:
+          type: string
+          format: date
+          description: The date of the balance
+        balance_type:
+          type: string
+          enum:
+          - opening_ledger
+          - closing_ledger
+          - current_ledger
+          - opening_available
+          - opening_available_next_business_day
+          - closing_available
+          - current_available
+          - previously_closed_book
+          - other
+          description: The type of balance
+        amount_cents:
+          type: integer
+          description: The balance amount in cents (e.g., 1234 = $12.34)
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

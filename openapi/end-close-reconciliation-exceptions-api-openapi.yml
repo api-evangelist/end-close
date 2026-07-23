@@ -1,0 +1,427 @@
+openapi: 3.1.0
+info:
+  title: End Close Bank Account Balances Reconciliation Exceptions API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Reconciliation Exceptions
+paths:
+  /reconciliation_exceptions:
+    get:
+      summary: List reconciliation exceptions
+      description: Returns a paginated list of exceptions, optionally filtered by reconciliation or status. Each row includes data-stream metadata and an aggregates summary so you can render a queue without a follow-up request per row.
+      parameters:
+      - in: query
+        name: reconciliation_id
+        schema:
+          type: string
+        description: Filter by reconciliation
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - open
+          - investigating
+          - dismissed
+          - resolved
+        description: Filter by exception status
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 25
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: Pagination offset
+      responses:
+        '200':
+          description: Paginated list of exceptions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReconciliationException'
+                  has_more:
+                    type: boolean
+                  offset:
+                    type: number
+        '401':
+          description: Unauthorized
+      tags:
+      - Reconciliation Exceptions
+    post:
+      summary: Create a reconciliation exception
+      description: Create an exception for a reconciliation and data stream. Only one `open` or `investigating` exception can exist per (data stream, reconciliation) pair at a time. `title` defaults to `"{data_stream_name} — overdue records"`, and `status` defaults to `open`. The system automatically creates exceptions via its overdue sweeper — use this endpoint when you want to open one manually.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - reconciliation_id
+              - data_stream_id
+              properties:
+                reconciliation_id:
+                  type: string
+                  description: Reconciliation the exception belongs to
+                data_stream_id:
+                  type: string
+                  description: Data stream the exception is scoped to. Must belong to the reconciliation.
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                  - open
+                  - investigating
+                  - dismissed
+                  - resolved
+                  default: open
+      responses:
+        '201':
+          description: Exception created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationException'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Reconciliation or data stream not found
+        '422':
+          description: Validation failed, or a duplicate open/investigating exception already exists for this (data stream, reconciliation)
+      tags:
+      - Reconciliation Exceptions
+  /reconciliation_exceptions/{id}:
+    get:
+      summary: Retrieve a reconciliation exception
+      description: Returns the exception with assignees, comments, recent investigation sessions, `aggregates` for the entire overdue slice, and `filtered_aggregates` restricted to the supplied filter query parameters. All filter parameters are optional.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: amount_min
+        schema:
+          type: integer
+        description: Include records with signed amount >= amount_min (cents)
+      - in: query
+        name: amount_max
+        schema:
+          type: integer
+        description: Include records with signed amount <= amount_max (cents)
+      - in: query
+        name: date_from
+        schema:
+          type: string
+          format: date
+        description: Include records with transaction date >= date_from
+      - in: query
+        name: date_to
+        schema:
+          type: string
+          format: date
+        description: Include records with transaction date <= date_to
+      - in: query
+        name: direction
+        schema:
+          type: string
+          enum:
+          - debit
+          - credit
+        description: Include only debits (amount < 0) or credits (amount > 0)
+      - in: query
+        name: counterparty
+        schema:
+          type: string
+        description: Case-insensitive substring match on record description
+      - in: query
+        name: age_bucket
+        schema:
+          type: string
+          enum:
+          - lt_7d
+          - 7_30d
+          - 30_90d
+          - gt_90d
+        description: Convenience age filter on time since `overdue_at`
+      responses:
+        '200':
+          description: Exception retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationException'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Exception not found
+      tags:
+      - Reconciliation Exceptions
+    patch:
+      summary: Update a reconciliation exception
+      description: Update the title, description, or status of an exception.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                  - open
+                  - investigating
+                  - dismissed
+                  - resolved
+      responses:
+        '200':
+          description: Exception updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationException'
+        '404':
+          description: Exception not found
+      tags:
+      - Reconciliation Exceptions
+    delete:
+      summary: Delete a reconciliation exception
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Exception deleted successfully
+        '404':
+          description: Exception not found
+      tags:
+      - Reconciliation Exceptions
+components:
+  schemas:
+    ReconciliationException:
+      type: object
+      required:
+      - title
+      - reconciliation_id
+      - data_stream_id
+      description: A reconciliation exception represents unmatched overdue records that need human attention. Exceptions are scoped to a (reconciliation, data_stream) tuple and managed by the sweeper job — record membership is computed on read from the set of unmatched records whose `overdue_at` has passed.
+      properties:
+        id:
+          type: integer
+        reconciliation_id:
+          type: integer
+          description: The reconciliation this exception belongs to
+        reconciliation_name:
+          type: string
+          description: Name of the parent reconciliation
+        data_stream_id:
+          type: integer
+          description: The data stream this exception is scoped to
+        data_stream_name:
+          type: string
+          description: Human-readable name of the scoped data stream
+        data_stream_key:
+          type: string
+          description: Immutable key of the scoped data stream
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - open
+          - investigating
+          - dismissed
+          - resolved
+          default: open
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        opened_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the exception most recently transitioned into an open state. Distinct from `created_at` so reopening is tracked cleanly.
+        closed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: When the exception most recently transitioned into a resolved or dismissed state. Cleared on reopen.
+        assignees:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              workos_user_id:
+                type: string
+        decimal_places:
+          type: integer
+          description: Number of decimal places (2 for USD)
+          default: 2
+        aggregates:
+          allOf:
+          - $ref: '#/components/schemas/ExceptionAggregates'
+          description: Whole-exception aggregates over the current unmatched overdue slice.
+        filtered_aggregates:
+          allOf:
+          - $ref: '#/components/schemas/ExceptionAggregates'
+          description: Aggregates restricted to the filter query parameters. Equals `aggregates` when no filter is supplied. Only present on the show response.
+        comments:
+          type: array
+          description: Comments on this exception, oldest first
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              body:
+                type: string
+              author_workos_id:
+                type: string
+              mentions:
+                type: array
+                items:
+                  type: integer
+                description: User IDs mentioned in the comment
+              created_at:
+                type: string
+                format: date-time
+        investigation:
+          allOf:
+          - $ref: '#/components/schemas/AgentInvestigationSession'
+          nullable: true
+          description: The most recent agent investigation session for this exception, if any.
+        investigation_sessions:
+          type: array
+          description: Up to the five most recent investigation sessions, newest first. Exceptions may accumulate multiple sessions as the overdue set evolves.
+          items:
+            $ref: '#/components/schemas/AgentInvestigationSession'
+    AgentInvestigationSession:
+      type: object
+      description: An agent-run investigation into an exception's record slice.
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          description: Investigation status (e.g. pending, running, completed, failed)
+        outcome:
+          type: string
+          nullable: true
+          enum:
+          - match_found
+          - no_match
+          - needs_review
+          - null
+          description: Standardized outcome of a completed investigation. `match_found` = confident candidate matches; `no_match` = thorough search returned nothing; `needs_review` = candidates found but signals are weak. Null when the session is not yet completed or failed.
+        recommendation_text:
+          type: string
+          nullable: true
+          description: Agent's recommendation once the investigation completes
+        confidence_score:
+          type: number
+          nullable: true
+          description: Agent confidence in its recommendation (0.0-1.0)
+        candidate_records_searched:
+          type: integer
+          nullable: true
+          description: Number of candidate records the agent evaluated
+        suggested_record_ids:
+          type: array
+          nullable: true
+          items:
+            type: integer
+          description: Records the agent suggests linking to this exception
+        filter_params:
+          type: object
+          nullable: true
+          additionalProperties: true
+          description: Filter parameters the session was scoped to, if any. Matches the filter shape on `GET /reconciliation_exceptions/{id}`.
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+    ExceptionAggregates:
+      type: object
+      description: Summary statistics for the (filtered) set of unmatched overdue records behind an exception.
+      properties:
+        record_count:
+          type: integer
+          description: Number of matching overdue unmatched records
+        total_amount:
+          type: integer
+          description: Sum of signed amounts in cents (debits are negative)
+        debit_count:
+          type: integer
+          description: Count of records with amount < 0
+        debit_sum:
+          type: integer
+          description: Sum of debit amounts in cents (non-positive)
+        credit_count:
+          type: integer
+          description: Count of records with amount > 0
+        credit_sum:
+          type: integer
+          description: Sum of credit amounts in cents (non-negative)
+        avg_age_days:
+          type: number
+          description: Average age in days since each record's `overdue_at`
+        oldest_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Transaction date of the oldest record in the slice
+        newest_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Transaction date of the newest record in the slice
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

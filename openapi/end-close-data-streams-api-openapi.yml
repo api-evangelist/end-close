@@ -1,0 +1,460 @@
+openapi: 3.1.0
+info:
+  title: End Close Bank Account Balances Data Streams API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Data Streams
+paths:
+  /data_streams:
+    get:
+      summary: List data streams
+      responses:
+        '200':
+          description: List of data streams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataStream'
+      tags:
+      - Data Streams
+    post:
+      summary: Create a data stream
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - key
+              - name
+              properties:
+                key:
+                  type: string
+                  description: Unique immutable identifier
+                name:
+                  type: string
+                  description: Human readable name
+                type:
+                  type: string
+                  enum:
+                  - api
+                  - bank_feed
+                  default: api
+                  description: The type of data stream to create
+                bank_account_id:
+                  type: string
+                  description: Required when type is bank_feed. The ID of the bank account to link.
+      responses:
+        '201':
+          description: Data stream created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStream'
+        '422':
+          description: Validation error (e.g. missing required fields, duplicate key, bank_account_id not found)
+      tags:
+      - Data Streams
+  /data_streams/{key}:
+    get:
+      summary: Retrieve a data stream
+      description: Retrieve a data stream using its unique immutable key.
+      parameters:
+      - in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        description: The immutable data stream key
+      responses:
+        '200':
+          description: Data stream retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStream'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Data stream not found
+      tags:
+      - Data Streams
+    patch:
+      summary: Update a data stream
+      description: Update the name of a data stream.
+      parameters:
+      - in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        description: The immutable data stream key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: New human readable name
+      responses:
+        '200':
+          description: Data stream updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStream'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Data stream not found
+      tags:
+      - Data Streams
+    delete:
+      summary: Delete a data stream
+      description: 'Permanently deletes a data stream and all associated records and property definitions.
+
+
+        **Sync vs async:** Streams with at most 10,000 records are deleted synchronously and return 204. Streams above that threshold *must* be deleted asynchronously by passing `?async=true`; otherwise the request fails with 409. Callers may also opt into the async path explicitly for any size. The async path returns 202 with a `DataStreamOperation` payload; poll `GET /data_streams/{key}/operations/{id}` for progress.'
+      parameters:
+      - in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        description: The immutable data stream key
+      - in: query
+        name: async
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+        description: When `"true"`, run the delete asynchronously and return 202 + a `DataStreamOperation`. Required for streams with more than 10,000 records.
+      responses:
+        '204':
+          description: Data stream deleted synchronously (record count ≤ 10,000 and `async` not requested)
+        '202':
+          description: Async delete accepted. Poll `GET /data_streams/{key}/operations/{id}` (also set in the `Location` header) until `status` is `completed` or `failed`.
+          headers:
+            Location:
+              description: URL of the operation to poll
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStreamOperation'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Data stream not found
+        '409':
+          description: Either (a) the stream is linked to reconciliations and cannot be deleted, or (b) it has more than 10,000 records and `?async=true` was not provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+      - Data Streams
+  /data_streams/{key}/reset:
+    post:
+      summary: Reset a data stream
+      description: Asynchronously wipes all records on the stream while preserving stream config, property definitions, and reconciliation links. Always async. Poll the returned operation.
+      parameters:
+      - in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        description: The immutable data stream key
+      responses:
+        '202':
+          description: Reset accepted. Poll `GET /data_streams/{key}/operations/{id}` (also set in the `Location` header).
+          headers:
+            Location:
+              description: URL of the operation to poll
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStreamOperation'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Data stream not found
+      tags:
+      - Data Streams
+  /data_streams/{key}/health:
+    get:
+      summary: Get data stream ingestion health
+      description: Cheap, indexed snapshot of ingestion health for the stream — record count, import batch totals, orphan records, bulk request counters by status, and last ingestion time. Safe to poll from the UI.
+      parameters:
+      - in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        description: The immutable data stream key
+      responses:
+        '200':
+          description: Health snapshot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStreamHealth'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Data stream not found
+      tags:
+      - Data Streams
+  /data_streams/{key}/operations/{id}:
+    get:
+      summary: Get a data stream operation
+      description: Poll a delete or reset operation kicked off against this data stream. Returns the serialized `DataStreamOperation`.
+      parameters:
+      - in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        description: The immutable data stream key
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The operation ID returned by DELETE /data_streams/{key} or POST /data_streams/{key}/reset
+      responses:
+        '200':
+          description: The operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStreamOperation'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Operation not found or does not belong to this data stream
+      tags:
+      - Data Streams
+  /data_streams/{key}/import_batches:
+    get:
+      summary: List import batches
+      description: Returns a paginated list of import batches for a data stream.
+      parameters:
+      - in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        description: The immutable data stream key
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 100
+      - in: query
+        name: offset
+        schema:
+          type: integer
+          default: 0
+        description: Pagination offset
+      responses:
+        '200':
+          description: Paginated list of import batches
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ImportBatch'
+                  has_more:
+                    type: boolean
+                  offset:
+                    type: number
+        '401':
+          description: Unauthorized
+        '404':
+          description: Data stream not found
+      tags:
+      - Data Streams
+components:
+  schemas:
+    DataStreamOperation:
+      type: object
+      description: Async operation against a data stream (delete or reset). Poll via GET /data_streams/{key}/operations/{id}.
+      properties:
+        id:
+          type: integer
+        data_stream_id:
+          type: integer
+        data_stream_key:
+          type: string
+        kind:
+          type: string
+          enum:
+          - delete
+          - reset
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+        progress:
+          type: integer
+          description: Percentage 0-100
+        error_message:
+          type: string
+          nullable: true
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        requested_by_user_id:
+          type: integer
+          nullable: true
+    DataStream:
+      type: object
+      required:
+      - key
+      - name
+      properties:
+        id:
+          type: integer
+          description: Unique numeric identifier
+        key:
+          type: string
+          description: Unique immutable identifier
+        name:
+          type: string
+          description: Human readable name
+        description:
+          type: string
+          description: Optional description of the data stream
+        type:
+          type: string
+          description: The type of data stream (e.g. api, csv, stripe, bank_feed)
+    ImportBatch:
+      type: object
+      properties:
+        id:
+          type: integer
+        data_stream_key:
+          type: string
+          description: Key of the data stream this import batch belongs to
+        source:
+          type: string
+          enum:
+          - csv_upload
+          - nacha_upload
+          - bulk_api
+          description: How the records were imported
+        filename:
+          type: string
+          nullable: true
+          description: Original filename for CSV uploads
+        record_count:
+          type: integer
+          description: Number of records in this batch
+        total_credits:
+          type: integer
+          description: Sum of credit amounts in cents
+        total_debits:
+          type: integer
+          description: Sum of debit amounts in cents
+        net_amount:
+          type: integer
+          description: Net amount in cents (credits minus debits)
+        decimal_places:
+          type: integer
+          description: Number of decimal places (2 for USD)
+          default: 2
+        date_range_start:
+          type: string
+          format: date
+          nullable: true
+          description: Earliest record date in the batch
+        date_range_end:
+          type: string
+          format: date
+          nullable: true
+          description: Latest record date in the batch
+        created_at:
+          type: string
+          format: date-time
+        records_url:
+          type: string
+          description: URL to fetch records belonging to this batch
+    DataStreamHealth:
+      type: object
+      description: Ingestion health snapshot for a data stream. All counts are indexed lookups; safe to poll.
+      properties:
+        records_count:
+          type: integer
+        import_batches_count:
+          type: integer
+        import_batches_record_sum:
+          type: integer
+          description: Sum of `record_count` across all import batches. Drift from `records_count` indicates orphaned or extra records.
+        orphan_records_count:
+          type: integer
+          description: Records on this stream with no `import_batch_id` (typically created via POST /records or POST /records/bulk)
+        bulk_requests:
+          type: object
+          properties:
+            pending:
+              type: integer
+            processing:
+              type: integer
+            completed:
+              type: integer
+            failed:
+              type: integer
+            cancelled:
+              type: integer
+            stuck:
+              type: integer
+              description: Currently `processing` with no heartbeat for >5 minutes
+        last_ingestion_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Most recent record `created_at` on this stream
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

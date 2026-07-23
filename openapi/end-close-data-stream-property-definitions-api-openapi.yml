@@ -1,0 +1,150 @@
+openapi: 3.1.0
+info:
+  title: End Close Bank Account Balances Data Stream Property Definitions API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Data Stream Property Definitions
+paths:
+  /data_stream_property_definitions:
+    get:
+      summary: List property definitions
+      parameters:
+      - in: query
+        name: data_stream_key
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of property definitions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecordPropertyDefinition'
+      tags:
+      - Data Stream Property Definitions
+    post:
+      summary: Create a property definition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordPropertyDefinition'
+      responses:
+        '201':
+          description: Property definition created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordPropertyDefinition'
+      tags:
+      - Data Stream Property Definitions
+  /data_stream_property_definitions/{id}:
+    get:
+      summary: Retrieve a property definition
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Property definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordPropertyDefinition'
+      tags:
+      - Data Stream Property Definitions
+    patch:
+      summary: Update a property definition
+      description: Update the name or optional flag of a property definition.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                optional:
+                  type: boolean
+      responses:
+        '200':
+          description: Property definition updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordPropertyDefinition'
+      tags:
+      - Data Stream Property Definitions
+    delete:
+      summary: Delete a property definition
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Property definition deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Property definition not found
+      tags:
+      - Data Stream Property Definitions
+components:
+  schemas:
+    RecordPropertyDefinition:
+      type: object
+      required:
+      - key
+      - name
+      - type
+      - data_stream_key
+      properties:
+        id:
+          type: integer
+        key:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - number
+          - date
+          - datetime
+          - string
+          - boolean
+        optional:
+          type: boolean
+          default: false
+        data_stream_key:
+          type: string
+          description: Must match an existing DataStream.key
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

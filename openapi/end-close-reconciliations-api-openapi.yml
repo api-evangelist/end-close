@@ -1,0 +1,499 @@
+openapi: 3.1.0
+info:
+  title: End Close Bank Account Balances Reconciliations API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Reconciliations
+paths:
+  /reconciliations/{reconciliation_id}/records/{record_id}/mark_overdue:
+    post:
+      summary: Mark a record as overdue
+      description: Flags a record as overdue within a specific reconciliation by setting the `overdue_at` timestamp on its reconciliation entry. The reconciliation and record are both named in the path — the subject is the (reconciliation, record) entry, so the same record can be overdue in one reconciliation and matched in another. The record's data stream must be part of the reconciliation. If no entry exists yet for the record and reconciliation, one is created so unmatched records can be flagged as overdue. Records already matched in this reconciliation cannot be marked overdue. Once overdue, the record is picked up by the exceptions sweeper and rolled into the data-stream-scoped exception for that reconciliation.
+      parameters:
+      - in: path
+        name: reconciliation_id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the reconciliation the record should be marked overdue in
+      - in: path
+        name: record_id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the record
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                overdue_at:
+                  type: string
+                  format: date-time
+                  description: When the record should be considered overdue. Defaults to the current time.
+      responses:
+        '200':
+          description: The record's entry in the given reconciliation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReconciliationEntry'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Record or reconciliation not found
+        '409':
+          description: Record is already matched in this reconciliation and cannot be marked overdue
+        '422':
+          description: Record's data stream is not part of the reconciliation, or invalid `overdue_at`
+      tags:
+      - Reconciliations
+  /reconciliations:
+    get:
+      summary: List reconciliations
+      description: Returns a paginated list of reconciliations with their associated data streams, newest first.
+      parameters:
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+        description: Opaque cursor from a previous response's `next_cursor`. Omit for the first page.
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+      responses:
+        '200':
+          description: Paginated list of reconciliations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Reconciliation'
+                  next_cursor:
+                    type: string
+                    nullable: true
+                    description: Opaque cursor for the next page. Null when no more pages.
+                  limit:
+                    type: integer
+      tags:
+      - Reconciliations
+    post:
+      summary: Create a reconciliation
+      description: Create a new reconciliation with optional side A and side B data stream associations.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                run_type:
+                  type: string
+                  enum:
+                  - continuous
+                  - batch
+                  default: continuous
+                side_a_stream_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: IDs of data streams to assign to side A
+                side_b_stream_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: IDs of data streams to assign to side B
+      responses:
+        '201':
+          description: Reconciliation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reconciliation'
+        '422':
+          description: Validation error
+      tags:
+      - Reconciliations
+  /reconciliations/{id}:
+    get:
+      summary: Retrieve a reconciliation
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Reconciliation retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reconciliation'
+        '404':
+          description: Reconciliation not found
+      tags:
+      - Reconciliations
+    patch:
+      summary: Update a reconciliation
+      description: Update reconciliation name, run type, or reassign data streams. If stream IDs are provided, all existing stream associations are replaced.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                run_type:
+                  type: string
+                  enum:
+                  - continuous
+                  - batch
+                side_a_stream_ids:
+                  type: array
+                  items:
+                    type: string
+                side_b_stream_ids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Reconciliation updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reconciliation'
+        '404':
+          description: Reconciliation not found
+      tags:
+      - Reconciliations
+    delete:
+      summary: Delete a reconciliation
+      description: Permanently deletes a reconciliation and all associated rules, matches, and data stream associations.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Reconciliation deleted successfully
+        '404':
+          description: Reconciliation not found
+      tags:
+      - Reconciliations
+  /reconciliations/{id}/agent_status:
+    get:
+      summary: Get reconciliation agent status
+      description: Returns the current status of the reconciliation agent, which automatically creates and refines matching rules. The agent runs automatically when records are uploaded or manually matched — no manual triggering is needed.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The reconciliation ID
+      responses:
+        '200':
+          description: Agent status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - idle
+                    - running
+                    - failed
+                    description: Current agent status
+                  last_run_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                    description: When the agent last ran
+                  progress:
+                    type: array
+                    description: Ordered list of progress steps from the last run
+                    items:
+                      type: object
+                      properties:
+                        step:
+                          type: string
+                        message:
+                          type: string
+                        at:
+                          type: string
+                          format: date-time
+                  reasoning:
+                    type: string
+                    nullable: true
+                    description: AI reasoning from the last rule analysis
+                  rules_count:
+                    type: integer
+                    description: Number of active rules on this reconciliation
+                  unmatched_count:
+                    type: integer
+                    description: Number of unreconciled records across both sides
+        '404':
+          description: Reconciliation not found
+      tags:
+      - Reconciliations
+components:
+  schemas:
+    ReconciliationRun:
+      type: object
+      description: A single execution of a reconciliation's batch or continuous matching pipeline.
+      properties:
+        id:
+          type: integer
+        kind:
+          type: string
+          enum:
+          - batch
+          - continuous
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+        trigger:
+          type: string
+          enum:
+          - manual
+          - rule_activated
+          - agent
+          - record_created
+          description: What initiated this run
+        total_records:
+          type: integer
+          description: Total records considered by the run
+        processed_records:
+          type: integer
+          description: Records processed so far
+        matched_records:
+          type: integer
+          description: Records that were matched during the run
+        rule_summary:
+          type: object
+          nullable: true
+          description: Per-rule match counts, populated as the run progresses
+        progress:
+          type: integer
+          description: Processing progress as a percentage (0-100)
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+    DataStream:
+      type: object
+      required:
+      - key
+      - name
+      properties:
+        id:
+          type: integer
+          description: Unique numeric identifier
+        key:
+          type: string
+          description: Unique immutable identifier
+        name:
+          type: string
+          description: Human readable name
+        description:
+          type: string
+          description: Optional description of the data stream
+        type:
+          type: string
+          description: The type of data stream (e.g. api, csv, stripe, bank_feed)
+    Record:
+      type: object
+      required:
+      - date
+      - data_stream_key
+      - amount
+      - direction
+      properties:
+        id:
+          type: integer
+        amount:
+          type: integer
+          description: The monetary amount in cents (e.g., 1234 = $12.34)
+        currency:
+          type: string
+          description: Three-letter ISO 4217 currency code (e.g. USD, EUR). **Optional on create — defaults to `USD` when omitted.** Case-insensitive on input; always returned uppercase.
+          pattern: ^[A-Za-z]{3}$
+          default: USD
+        decimal_places:
+          type: integer
+          description: Number of decimal places for this currency (2 for USD)
+          default: 2
+        direction:
+          type: string
+          enum:
+          - credit
+          - debit
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        metadata:
+          type: object
+          additionalProperties: true
+          default: {}
+        external_id:
+          type: string
+        data_stream_key:
+          type: string
+    ReconciliationEntry:
+      description: A record's entry in one reconciliation. Match status, escalation, and matched records are all scoped to that reconciliation; a record has one entry per reconciliation it participates in. `id` is the record id.
+      allOf:
+      - $ref: '#/components/schemas/Record'
+      - type: object
+        properties:
+          reconciliation_id:
+            type: integer
+          reconciliation_name:
+            type: string
+          status:
+            type: string
+            enum:
+            - reconciled
+            - unreconciled
+            description: Whether the record is matched in this reconciliation. Read-only.
+          escalated:
+            type: boolean
+            description: Unmatched and past its `overdue_at`.
+          overdue_at:
+            type: string
+            format: date-time
+            nullable: true
+          matched_records:
+            type: array
+            description: Records matched with this record in this reconciliation
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                amount:
+                  type: integer
+                  description: Amount in cents
+                currency:
+                  type: string
+                  description: Three-letter ISO 4217 currency code (e.g. USD, EUR)
+                  default: USD
+                decimal_places:
+                  type: integer
+                  default: 2
+                direction:
+                  type: string
+                  enum:
+                  - credit
+                  - debit
+                description:
+                  type: string
+                date:
+                  type: string
+                  format: date
+                external_id:
+                  type: string
+                data_stream_key:
+                  type: string
+                reconciliation_id:
+                  type: integer
+                  description: The reconciliation in which this match was made
+                reconciliation_name:
+                  type: string
+                  description: Name of the reconciliation in which this match was made
+          days_unreconciled:
+            type: integer
+            nullable: true
+            description: Number of days since the record's date. Null when the record is reconciled.
+          exception_id:
+            type: integer
+            nullable: true
+            description: Open exception covering this entry's data stream when the entry is escalated. Null otherwise.
+    Reconciliation:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: Human readable name for the reconciliation
+        run_type:
+          type: string
+          enum:
+          - continuous
+          - batch
+          default: continuous
+        side_a_streams:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataStream'
+          description: Data streams on side A of the reconciliation
+        side_b_streams:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataStream'
+          description: Data streams on side B of the reconciliation
+        created_at:
+          type: string
+          format: date-time
+        current_run:
+          $ref: '#/components/schemas/ReconciliationRun'
+          nullable: true
+          description: The currently pending or running batch run, if any
+        last_run:
+          $ref: '#/components/schemas/ReconciliationRun'
+          nullable: true
+          description: The most recent completed or failed batch run, if any
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

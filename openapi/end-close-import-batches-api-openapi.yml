@@ -1,0 +1,184 @@
+openapi: 3.1.0
+info:
+  title: End Close Bank Account Balances Import Batches API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Import Batches
+paths:
+  /import_batches/{id}:
+    get:
+      summary: Retrieve an import batch
+      description: Retrieve a single import batch by its unique ID.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the import batch
+      responses:
+        '200':
+          description: Import batch retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportBatch'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Import batch not found
+      tags:
+      - Import Batches
+  /import_batches/{id}/records:
+    get:
+      summary: List records for an import batch
+      description: Returns a paginated list of records belonging to a specific import batch.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the import batch
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 25
+      - in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+          default: 0
+        description: Pagination offset
+      responses:
+        '200':
+          description: Paginated list of records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Record'
+                  has_more:
+                    type: boolean
+                  offset:
+                    type: number
+        '401':
+          description: Unauthorized
+        '404':
+          description: Import batch not found
+      tags:
+      - Import Batches
+components:
+  schemas:
+    Record:
+      type: object
+      required:
+      - date
+      - data_stream_key
+      - amount
+      - direction
+      properties:
+        id:
+          type: integer
+        amount:
+          type: integer
+          description: The monetary amount in cents (e.g., 1234 = $12.34)
+        currency:
+          type: string
+          description: Three-letter ISO 4217 currency code (e.g. USD, EUR). **Optional on create — defaults to `USD` when omitted.** Case-insensitive on input; always returned uppercase.
+          pattern: ^[A-Za-z]{3}$
+          default: USD
+        decimal_places:
+          type: integer
+          description: Number of decimal places for this currency (2 for USD)
+          default: 2
+        direction:
+          type: string
+          enum:
+          - credit
+          - debit
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        metadata:
+          type: object
+          additionalProperties: true
+          default: {}
+        external_id:
+          type: string
+        data_stream_key:
+          type: string
+    ImportBatch:
+      type: object
+      properties:
+        id:
+          type: integer
+        data_stream_key:
+          type: string
+          description: Key of the data stream this import batch belongs to
+        source:
+          type: string
+          enum:
+          - csv_upload
+          - nacha_upload
+          - bulk_api
+          description: How the records were imported
+        filename:
+          type: string
+          nullable: true
+          description: Original filename for CSV uploads
+        record_count:
+          type: integer
+          description: Number of records in this batch
+        total_credits:
+          type: integer
+          description: Sum of credit amounts in cents
+        total_debits:
+          type: integer
+          description: Sum of debit amounts in cents
+        net_amount:
+          type: integer
+          description: Net amount in cents (credits minus debits)
+        decimal_places:
+          type: integer
+          description: Number of decimal places (2 for USD)
+          default: 2
+        date_range_start:
+          type: string
+          format: date
+          nullable: true
+          description: Earliest record date in the batch
+        date_range_end:
+          type: string
+          format: date
+          nullable: true
+          description: Latest record date in the batch
+        created_at:
+          type: string
+          format: date-time
+        records_url:
+          type: string
+          description: URL to fetch records belonging to this batch
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
