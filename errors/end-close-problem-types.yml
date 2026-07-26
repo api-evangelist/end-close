@@ -1,0 +1,83 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/end-close-openapi-original.json (4xx/5xx responses)
+format: json
+note: End Close returns standard HTTP status codes with JSON bodies (not RFC 9457 problem+json). Titles
+  are standard HTTP reason phrases; example_conditions are drawn verbatim from the spec response descriptions.
+problems:
+- status: 400
+  title: Bad Request
+  example_conditions:
+  - Invalid `on_conflict` value
+  occurrences: 1
+  sample_operations:
+  - POST /records/bulk
+- status: 401
+  title: Unauthorized
+  example_conditions:
+  - Unauthorized
+  occurrences: 30
+  sample_operations:
+  - DELETE /bank_accounts/{id}
+  - DELETE /data_stream_property_definitions/{id}
+  - DELETE /data_streams/{key}
+  - DELETE /records/{id}
+  - GET /bank_account_balances
+  - GET /bank_accounts
+- status: 404
+  title: Not Found
+  example_conditions:
+  - Bank account not found
+  - Bulk request not found
+  - Data stream not found
+  - Exception not found
+  - Import batch not found
+  - Match not found
+  - Operation not found or does not belong to this data stream
+  - Property definition not found
+  occurrences: 36
+  sample_operations:
+  - DELETE /bank_accounts/{id}
+  - DELETE /data_stream_property_definitions/{id}
+  - DELETE /data_streams/{key}
+  - DELETE /reconciliation_exceptions/{id}
+  - DELETE /reconciliation_matches/{id}
+  - DELETE /reconciliation_rules/{id}
+- status: 409
+  title: Conflict
+  example_conditions:
+  - Bulk request is not in a cancellable status (must be `pending` or `processing`)
+  - Bulk request is not in a retryable status (must be `failed` or `cancelled`)
+  - Cannot delete bank account because it has linked data streams
+  - Either (a) the stream is linked to reconciliations and cannot be deleted, or (b) it has more than
+    10,000 records and `?async=true` was not provided.
+  - Record cannot be deleted because it is already reconciled or partially reconciled
+  - Record cannot be modified because it has already been reconciled
+  - Record is already matched in this reconciliation and cannot be marked overdue
+  occurrences: 7
+  sample_operations:
+  - DELETE /bank_accounts/{id}
+  - DELETE /data_streams/{key}
+  - DELETE /records/{id}
+  - PATCH /records/{id}
+  - POST /bulk_requests/{id}/cancel
+  - POST /bulk_requests/{id}/retry
+- status: 422
+  title: Unprocessable Entity
+  example_conditions:
+  - Invalid `status`, `created_after`, or `created_before`
+  - Invalid request (e.g. records is not an array, empty, or exceeds 1,000 items)
+  - No scoping filter provided, or invalid `status`, `created_after`, or `created_before`
+  - Record's data stream is not part of the reconciliation, or invalid `overdue_at`
+  - Validation error
+  - Validation error (e.g. exceeds 1,000 balances)
+  - Validation error (e.g. missing required fields, duplicate key, bank_account_id not found)
+  - Validation error (records not found, already reconciled, or not in reconciliation)
+  occurrences: 15
+  sample_operations:
+  - GET /bank_account_balances
+  - GET /bulk_requests
+  - GET /records
+  - PATCH /reconciliation_stories/{id}
+  - POST /bank_account_balances
+  - POST /bank_account_balances/bulk

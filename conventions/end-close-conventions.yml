@@ -1,0 +1,68 @@
+generated: '2026-07-19'
+method: searched
+source: https://endclose.com/docs/ + openapi/end-close-openapi-original.json
+summary: Cross-cutting request/response semantics for the End Close reconciliation API.
+authentication:
+  style: api-key
+  location: header
+  parameter: X-API-KEY
+  docs: https://endclose.com/docs/authentication.md
+  see: authentication/end-close-authentication.yml
+idempotency:
+  supported: true
+  header: Idempotency-Key
+  scope: environment
+  applies_to:
+  - POST /records/bulk
+  behavior: >-
+    Optional idempotency key. If a bulk request with this key already exists for your
+    environment, the existing request is returned instead of creating a new one. Several
+    mutating operations are additionally idempotent by design (e.g. cancel/retry a bulk
+    request re-applies cleanly; create-or-update balance is an upsert).
+  source: openapi Idempotency-Key parameter on POST /records/bulk
+pagination:
+  style: cursor-and-offset
+  request_params:
+  - cursor
+  - offset
+  - limit
+  response_fields:
+  - data
+  - has_more
+  - offset
+  envelope_schema: PaginatedResponse
+  source: openapi components.schemas.PaginatedResponse + list operation parameters
+filtering:
+  supported: true
+  common_params:
+  - status
+  - source
+  - direction
+  - created_after
+  - created_before
+  - date_from
+  - date_to
+  - amount_min
+  - amount_max
+  - counterparty
+  - external_id
+error_envelope:
+  media_type: application/json
+  format: json
+  note: >-
+    Errors return standard HTTP status codes (400/401/404/409/422) with JSON bodies;
+    not RFC 9457 problem+json. See errors/end-close-problem-types.yml.
+  see: errors/end-close-problem-types.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  base_url: https://api.endclose.com/v1
+  see: lifecycle/end-close-lifecycle.yml
+bulk_and_async:
+  bulk_endpoints:
+  - POST /records/bulk
+  - POST /bank_account_balances/bulk
+  max_items_per_request: 1000
+  async_query_param: async
+  status_tracking: GET /bulk_requests/{id}
+  conflict_field: on_conflict

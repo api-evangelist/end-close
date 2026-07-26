@@ -1,0 +1,31 @@
+generated: '2026-07-19'
+method: searched
+source: https://endclose.com/docs/webhooks/getting_started.md + openapi/end-close-openapi-original.json (webhooks{})
+type: Webhooks
+transport: https-post
+delivery: End Close sends webhook events to your app as a JSON payload over HTTPS POST. One endpoint can handle several event types.
+docs:
+  getting_started: https://endclose.com/docs/webhooks/getting_started.md
+  events:
+  - https://endclose.com/docs/webhooks/events/record_reconciled.md
+  - https://endclose.com/docs/webhooks/events/record_reconciliation_overdue.md
+envelope:
+  schema: WebhookEvent
+  fields:
+  - id
+  - event_type
+  - timestamp
+  - data
+events:
+- name: record.reconciled
+  description: A record has been reconciled.
+  payload_schema: RecordWebhookEvent
+  data: Record
+  docs: https://endclose.com/docs/webhooks/events/record_reconciled.md
+- name: record.reconciliation_overdue
+  description: A record's reconciliation is overdue.
+  payload_schema: RecordWebhookEvent
+  data: Record
+  docs: https://endclose.com/docs/webhooks/events/record_reconciliation_overdue.md
+security:
+  note: Webhook endpoints should be secured/verified per the getting-started guide.

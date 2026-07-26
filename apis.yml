@@ -1,22 +1,268 @@
 aid: end-close
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/end-close.png
 name: End Close
-description: End Close is a company surfaced as a portfolio company of y-combinator and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  End Close is an automated reconciliation platform for payments companies and other
+  high-volume transaction businesses. Its REST API connects payment processors, bank
+  accounts, and accounting systems, continuously matches transactions across those
+  sources into reconciliations, surfaces exceptions with full context, and automates
+  their resolution using rules and agents. The v1 API covers data streams, records,
+  reconciliations, matches, rules, stories, exceptions, bank accounts and balances,
+  bulk/async ingestion, and webhooks. Backed by Y Combinator.
 url: https://raw.githubusercontent.com/api-evangelist/end-close/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - y-combinator
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: enriched
+x-tier-reason: enrichment-pipeline
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Reconciliation
+- Payments
+- Financial Operations
+- Accounting
+- Banking
+- Data Integration
+- Webhooks
+- Fintech
+apis:
+- aid: end-close:end-close-bank-account-balances-api
+  name: End Close Bank Account Balances API
+  description: The Bank Account Balances API from End Close — 2 operation(s) for bank account balances.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Bank Account Balances
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-bank-account-balances-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-bank-accounts-api
+  name: End Close Bank Accounts API
+  description: The Bank Accounts API from End Close — 2 operation(s) for bank accounts.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Bank Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-bank-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-bulk-requests-api
+  name: End Close Bulk Requests API
+  description: The Bulk Requests API from End Close — 4 operation(s) for bulk requests.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Bulk Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-bulk-requests-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-data-stream-property-definitions-api
+  name: End Close Data Stream Property Definitions API
+  description: >-
+    The Data Stream Property Definitions API from End Close — 2 operation(s) for data stream property
+    definitions.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Data Stream Property Definitions
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-data-stream-property-definitions-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-data-streams-api
+  name: End Close Data Streams API
+  description: The Data Streams API from End Close — 6 operation(s) for data streams.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Data Streams
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-data-streams-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-import-batches-api
+  name: End Close Import Batches API
+  description: The Import Batches API from End Close — 2 operation(s) for import batches.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Import Batches
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-import-batches-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-reconciliation-exceptions-api
+  name: End Close Reconciliation Exceptions API
+  description: >-
+    The Reconciliation Exceptions API from End Close — 2 operation(s) for reconciliation exceptions.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Reconciliation Exceptions
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-reconciliation-exceptions-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-reconciliation-matches-api
+  name: End Close Reconciliation Matches API
+  description: >-
+    The Reconciliation Matches API from End Close — 2 operation(s) for reconciliation matches.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Reconciliation Matches
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-reconciliation-matches-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-reconciliation-rules-api
+  name: End Close Reconciliation Rules API
+  description: The Reconciliation Rules API from End Close — 2 operation(s) for reconciliation rules.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Reconciliation Rules
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-reconciliation-rules-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-reconciliation-stories-api
+  name: End Close Reconciliation Stories API
+  description: >-
+    The Reconciliation Stories API from End Close — 2 operation(s) for reconciliation stories.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Reconciliation Stories
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-reconciliation-stories-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-reconciliations-api
+  name: End Close Reconciliations API
+  description: The Reconciliations API from End Close — 4 operation(s) for reconciliations.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Reconciliations
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-reconciliations-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-records-api
+  name: End Close Records API
+  description: The Records API from End Close — 3 operation(s) for records.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Records
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-records-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: DeveloperPortal
+  url: https://endclose.com/docs
+- type: Login
+  url: https://app.endclose.com
+- type: Authentication
+  url: authentication/end-close-authentication.yml
+- type: Idempotency
+  url: conventions/end-close-conventions.yml
+- type: Conventions
+  url: conventions/end-close-conventions.yml
+- type: ErrorCatalog
+  url: errors/end-close-problem-types.yml
+- type: Webhooks
+  url: asyncapi/end-close-webhooks.yml
+- type: MCPServer
+  url: mcp/end-close-mcp.yml
+- type: LLMsTxt
+  url: llms/end-close-llms.txt
+- type: Overlay
+  url: overlays/end-close-openapi-overlay.yaml
+- type: Conformance
+  url: conformance/end-close-conformance.yml
+- type: Lifecycle
+  url: lifecycle/end-close-lifecycle.yml
+- type: DataModel
+  url: data-model/end-close-data-model.yml
+- type: WellKnown
+  url: well-known/end-close-well-known.yml
+- type: SecurityTxt
+  url: well-known/end-close-security.txt
+- type: DomainSecurity
+  url: security/end-close-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/end-close-vulnerability-disclosure.yml
+- type: Security
+  url: https://www.endclose.com/security
+- type: TrustCenter
+  url: security/end-close-trust-center.yml
+- type: AgenticAccess
+  url: agentic-access/end-close-agentic-access.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

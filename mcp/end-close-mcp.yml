@@ -1,0 +1,192 @@
+generated: '2026-07-19'
+method: derived
+status: candidate
+note: No official hosted MCP server found. Candidate tool list derived one-per-operation from the End
+  Close OpenAPI. The spec declares no operationIds, so tool names are synthesized from HTTP method + path;
+  source_operation cites method+path verbatim.
+server:
+  name: end-close
+  transport: http
+  auth: api-key (X-API-KEY header)
+  base_url: https://api.endclose.com/v1
+tools:
+- name: list_data_streams
+  description: List data streams
+  source_operation: openapi/end-close-openapi-original.json#GET /data_streams
+- name: create_data_streams
+  description: Create a data stream
+  source_operation: openapi/end-close-openapi-original.json#POST /data_streams
+- name: get_data_streams
+  description: Retrieve a data stream
+  source_operation: openapi/end-close-openapi-original.json#GET /data_streams/{key}
+- name: update_data_streams
+  description: Update a data stream
+  source_operation: openapi/end-close-openapi-original.json#PATCH /data_streams/{key}
+- name: delete_data_streams
+  description: Delete a data stream
+  source_operation: openapi/end-close-openapi-original.json#DELETE /data_streams/{key}
+- name: reset_data_streams
+  description: Reset a data stream
+  source_operation: openapi/end-close-openapi-original.json#POST /data_streams/{key}/reset
+- name: health_data_streams
+  description: Get data stream ingestion health
+  source_operation: openapi/end-close-openapi-original.json#GET /data_streams/{key}/health
+- name: get_data_streams_operations
+  description: Get a data stream operation
+  source_operation: openapi/end-close-openapi-original.json#GET /data_streams/{key}/operations/{id}
+- name: list_data_stream_property_definitions
+  description: List property definitions
+  source_operation: openapi/end-close-openapi-original.json#GET /data_stream_property_definitions
+- name: create_data_stream_property_definitions
+  description: Create a property definition
+  source_operation: openapi/end-close-openapi-original.json#POST /data_stream_property_definitions
+- name: get_data_stream_property_definitions
+  description: Retrieve a property definition
+  source_operation: openapi/end-close-openapi-original.json#GET /data_stream_property_definitions/{id}
+- name: update_data_stream_property_definitions
+  description: Update a property definition
+  source_operation: openapi/end-close-openapi-original.json#PATCH /data_stream_property_definitions/{id}
+- name: delete_data_stream_property_definitions
+  description: Delete a property definition
+  source_operation: openapi/end-close-openapi-original.json#DELETE /data_stream_property_definitions/{id}
+- name: list_records
+  description: List records
+  source_operation: openapi/end-close-openapi-original.json#GET /records
+- name: create_records
+  description: Create a record
+  source_operation: openapi/end-close-openapi-original.json#POST /records
+- name: create_records_bulk
+  description: Bulk create records
+  source_operation: openapi/end-close-openapi-original.json#POST /records/bulk
+- name: list_bulk_requests
+  description: List bulk requests
+  source_operation: openapi/end-close-openapi-original.json#GET /bulk_requests
+- name: get_bulk_requests
+  description: Get bulk request status
+  source_operation: openapi/end-close-openapi-original.json#GET /bulk_requests/{id}
+- name: cancel_bulk_requests
+  description: Cancel a bulk request
+  source_operation: openapi/end-close-openapi-original.json#POST /bulk_requests/{id}/cancel
+- name: retry_bulk_requests
+  description: Retry a bulk request
+  source_operation: openapi/end-close-openapi-original.json#POST /bulk_requests/{id}/retry
+- name: list_data_streams_import_batches
+  description: List import batches
+  source_operation: openapi/end-close-openapi-original.json#GET /data_streams/{key}/import_batches
+- name: get_import_batches
+  description: Retrieve an import batch
+  source_operation: openapi/end-close-openapi-original.json#GET /import_batches/{id}
+- name: list_import_batches_records
+  description: List records for an import batch
+  source_operation: openapi/end-close-openapi-original.json#GET /import_batches/{id}/records
+- name: get_records
+  description: Retrieve a record
+  source_operation: openapi/end-close-openapi-original.json#GET /records/{id}
+- name: update_records
+  description: Update a record
+  source_operation: openapi/end-close-openapi-original.json#PATCH /records/{id}
+- name: delete_records
+  description: Delete a record
+  source_operation: openapi/end-close-openapi-original.json#DELETE /records/{id}
+- name: mark_overdue_reconciliations_records
+  description: Mark a record as overdue
+  source_operation: openapi/end-close-openapi-original.json#POST /reconciliations/{reconciliation_id}/records/{record_id}/mark_overdue
+- name: list_reconciliations
+  description: List reconciliations
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliations
+- name: create_reconciliations
+  description: Create a reconciliation
+  source_operation: openapi/end-close-openapi-original.json#POST /reconciliations
+- name: get_reconciliations
+  description: Retrieve a reconciliation
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliations/{id}
+- name: update_reconciliations
+  description: Update a reconciliation
+  source_operation: openapi/end-close-openapi-original.json#PATCH /reconciliations/{id}
+- name: delete_reconciliations
+  description: Delete a reconciliation
+  source_operation: openapi/end-close-openapi-original.json#DELETE /reconciliations/{id}
+- name: list_reconciliation_rules
+  description: List reconciliation rules
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliation_rules
+- name: create_reconciliation_rules
+  description: Create a reconciliation rule
+  source_operation: openapi/end-close-openapi-original.json#POST /reconciliation_rules
+- name: get_reconciliation_rules
+  description: Retrieve a reconciliation rule
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliation_rules/{id}
+- name: update_reconciliation_rules
+  description: Update a reconciliation rule
+  source_operation: openapi/end-close-openapi-original.json#PATCH /reconciliation_rules/{id}
+- name: delete_reconciliation_rules
+  description: Delete a reconciliation rule
+  source_operation: openapi/end-close-openapi-original.json#DELETE /reconciliation_rules/{id}
+- name: agent_status_reconciliations
+  description: Get reconciliation agent status
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliations/{id}/agent_status
+- name: list_reconciliation_stories
+  description: List reconciliation stories
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliation_stories
+- name: create_reconciliation_stories
+  description: Create a reconciliation story
+  source_operation: openapi/end-close-openapi-original.json#POST /reconciliation_stories
+- name: get_reconciliation_stories
+  description: Retrieve a reconciliation story
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliation_stories/{id}
+- name: update_reconciliation_stories
+  description: Update a reconciliation story
+  source_operation: openapi/end-close-openapi-original.json#PATCH /reconciliation_stories/{id}
+- name: delete_reconciliation_stories
+  description: Delete a reconciliation story
+  source_operation: openapi/end-close-openapi-original.json#DELETE /reconciliation_stories/{id}
+- name: list_reconciliation_matches
+  description: List reconciliation matches
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliation_matches
+- name: create_reconciliation_matches
+  description: Create a reconciliation match
+  source_operation: openapi/end-close-openapi-original.json#POST /reconciliation_matches
+- name: get_reconciliation_matches
+  description: Retrieve a reconciliation match
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliation_matches/{id}
+- name: delete_reconciliation_matches
+  description: Delete a reconciliation match
+  source_operation: openapi/end-close-openapi-original.json#DELETE /reconciliation_matches/{id}
+- name: list_reconciliation_exceptions
+  description: List reconciliation exceptions
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliation_exceptions
+- name: create_reconciliation_exceptions
+  description: Create a reconciliation exception
+  source_operation: openapi/end-close-openapi-original.json#POST /reconciliation_exceptions
+- name: get_reconciliation_exceptions
+  description: Retrieve a reconciliation exception
+  source_operation: openapi/end-close-openapi-original.json#GET /reconciliation_exceptions/{id}
+- name: update_reconciliation_exceptions
+  description: Update a reconciliation exception
+  source_operation: openapi/end-close-openapi-original.json#PATCH /reconciliation_exceptions/{id}
+- name: delete_reconciliation_exceptions
+  description: Delete a reconciliation exception
+  source_operation: openapi/end-close-openapi-original.json#DELETE /reconciliation_exceptions/{id}
+- name: list_bank_accounts
+  description: List bank accounts
+  source_operation: openapi/end-close-openapi-original.json#GET /bank_accounts
+- name: create_bank_accounts
+  description: Create a bank account
+  source_operation: openapi/end-close-openapi-original.json#POST /bank_accounts
+- name: get_bank_accounts
+  description: Retrieve a bank account
+  source_operation: openapi/end-close-openapi-original.json#GET /bank_accounts/{id}
+- name: update_bank_accounts
+  description: Update a bank account
+  source_operation: openapi/end-close-openapi-original.json#PATCH /bank_accounts/{id}
+- name: delete_bank_accounts
+  description: Delete a bank account
+  source_operation: openapi/end-close-openapi-original.json#DELETE /bank_accounts/{id}
+- name: list_bank_account_balances
+  description: List bank account balances
+  source_operation: openapi/end-close-openapi-original.json#GET /bank_account_balances
+- name: create_bank_account_balances
+  description: Create or update a bank account balance
+  source_operation: openapi/end-close-openapi-original.json#POST /bank_account_balances
+- name: create_bank_account_balances_bulk
+  description: Bulk create or update bank account balances
+  source_operation: openapi/end-close-openapi-original.json#POST /bank_account_balances/bulk

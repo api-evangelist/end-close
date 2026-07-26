@@ -1,0 +1,26 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for End Close API
+  version: 1.0.0
+extends: openapi/end-close-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-rating: 3
+    x-apievangelist-notes: >-
+      Rich resource-oriented REST spec (60 operations, OpenAPI 3.1.0) with in-spec
+      webhooks and a documented Idempotency-Key. Primary gaps: operations declare no
+      operationId and no tags, which weakens programmatic tooling, SDK generation, and
+      agent grounding. Recommend adding unique operationIds and resource tags.
+    x-apievangelist-category:
+    - Financial Reconciliation
+    - Payments Operations
+    - Data Integration
+- target: $.components.securitySchemes.ApiKeyAuth
+  update:
+    x-apievangelist-auth: API key via X-API-KEY header; keys managed in the End Close dashboard.
+- target: $
+  update:
+    x-apievangelist-conventions: conventions/end-close-conventions.yml
+    x-apievangelist-errors: errors/end-close-problem-types.yml
+    x-apievangelist-webhooks: asyncapi/end-close-webhooks.yml

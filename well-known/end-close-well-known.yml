@@ -1,0 +1,30 @@
+generated: '2026-07-19'
+method: searched
+source: live probes of /.well-known/ on End Close hosts
+hosts:
+- host: https://api.endclose.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: end-close-security.txt
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 301
+    note: redirects to https://signin.endclose.com/.well-known/oauth-authorization-server (dashboard sign-in, not the API-key API surface)
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://endclose.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: end-close-security.txt
+  - path: /.well-known/openid-configuration
+    status: 307
+    note: redirects to marketing host www.endclose.com (no OIDC document served)
+  - path: /.well-known/api-catalog
+    status: 307
+  - path: /.well-known/ai-plugin.json
+    status: 307

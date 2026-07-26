@@ -1,0 +1,36 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/end-close-openapi-original.json + https://endclose.com/docs/
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: openapi field is 3.1.0
+- id: rest
+  conforms: true
+  evidence: docs state the API is built around REST with resource-oriented URLs and standard HTTP verbs/status codes
+- id: api-key-auth
+  conforms: true
+  evidence: securitySchemes ApiKeyAuth (apiKey, header, X-API-KEY)
+- id: oauth2
+  conforms: false
+  evidence: no oauth2 security scheme; API uses API keys
+- id: openid-connect
+  conforms: false
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: error responses use application/json, not application/problem+json
+- id: idempotency
+  conforms: true
+  evidence: Idempotency-Key header on POST /records/bulk (scoped per environment)
+- id: pagination
+  conforms: true
+  evidence: cursor/offset/limit params and PaginatedResponse (data/has_more/offset)
+- id: webhooks
+  conforms: true
+  evidence: OpenAPI 3.1 webhooks{} declares record.reconciled and record.reconciliation_overdue
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: /.well-known/security.txt served (Contact mailto:security@endclose.com)
+- id: bulk-async
+  conforms: true
+  evidence: bulk endpoints accept up to 1,000 items with async processing and bulk_requests status tracking

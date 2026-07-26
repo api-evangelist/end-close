@@ -1,0 +1,73 @@
+# End Close - Documentation
+
+## Docs
+
+- [Bulk create or update bank account balances](https://endclose.com/docs/api-reference/bulk-create-or-update-bank-account-balances.md): Submit up to 1,000 balances for a bank account in a single request. Each balance is upserted — if a balance already exists for the same date and balance type, it will be updated with the new amount. All balances are processed in a single transaction.
+- [Bulk create records](https://endclose.com/docs/api-reference/bulk-create-records.md): Submit up to 1,000 records for asynchronous processing. Returns immediately with a bulk request ID. Each record is validated and inserted independently, so some records can succeed while others fail. Use the `GET /bulk_requests/{id}` endpoint to poll for results.
+- [Cancel a bulk request](https://endclose.com/docs/api-reference/cancel-a-bulk-request.md): Sets `cancellation_requested_at` so the running job exits cleanly to `cancelled` on its next heartbeat. Idempotent — re-cancelling just bumps the timestamp.
+- [Create a bank account](https://endclose.com/docs/api-reference/create-a-bank-account.md)
+- [Create a data stream](https://endclose.com/docs/api-reference/create-a-data-stream.md)
+- [Create a property definition](https://endclose.com/docs/api-reference/create-a-property-definition.md)
+- [Create a reconciliation](https://endclose.com/docs/api-reference/create-a-reconciliation.md): Create a new reconciliation with optional side A and side B data stream associations.
+- [Create a reconciliation exception](https://endclose.com/docs/api-reference/create-a-reconciliation-exception.md): Create an exception for a reconciliation and data stream. Only one `open` or `investigating` exception can exist per (data stream, reconciliation) pair at a time. `title` defaults to `"{data_stream_name} — overdue records"`, and `status` defaults to `open`. The system automatically creates exception…
+- [Create a reconciliation match](https://endclose.com/docs/api-reference/create-a-reconciliation-match.md): Manually match a set of records. All records must be unreconciled and belong to the specified reconciliation's data streams.
+- [Create a reconciliation rule](https://endclose.com/docs/api-reference/create-a-reconciliation-rule.md)
+- [Create a reconciliation story](https://endclose.com/docs/api-reference/create-a-reconciliation-story.md): Create a story and attach a chain of reconciliations. The first link must use role `origin` and have no shared_data_stream_id; subsequent links must use role `continuation` and specify the shared data stream linking them to the previous reconciliation.
+- [Create a record](https://endclose.com/docs/api-reference/create-a-record.md)
+- [Create or update a bank account balance](https://endclose.com/docs/api-reference/create-or-update-a-bank-account-balance.md): Creates a balance for the specified bank account. If a balance already exists for the same date and balance type, it will be updated with the new amount (upsert behavior).
+- [Delete a bank account](https://endclose.com/docs/api-reference/delete-a-bank-account.md): Permanently deletes a bank account. Returns 409 Conflict if the bank account has linked data streams.
+- [Delete a data stream](https://endclose.com/docs/api-reference/delete-a-data-stream.md): Permanently deletes a data stream and all associated records and property definitions.
+- [Delete a property definition](https://endclose.com/docs/api-reference/delete-a-property-definition.md)
+- [Delete a reconciliation](https://endclose.com/docs/api-reference/delete-a-reconciliation.md): Permanently deletes a reconciliation and all associated rules, matches, and data stream associations.
+- [Delete a reconciliation exception](https://endclose.com/docs/api-reference/delete-a-reconciliation-exception.md)
+- [Delete a reconciliation match](https://endclose.com/docs/api-reference/delete-a-reconciliation-match.md): Deletes a reconciliation match and resets all associated records to unreconciled status.
+- [Delete a reconciliation rule](https://endclose.com/docs/api-reference/delete-a-reconciliation-rule.md)
+- [Delete a reconciliation story](https://endclose.com/docs/api-reference/delete-a-reconciliation-story.md): Permanently deletes a story and unlinks it from all reconciliations. The reconciliations themselves are not deleted.
+- [Delete a record](https://endclose.com/docs/api-reference/delete-a-record.md): Deletes a single record by its ID. The record **must have a status of `unreconciled`**. Records that are partially or fully reconciled cannot be deleted.
+- [Get a data stream operation](https://endclose.com/docs/api-reference/get-a-data-stream-operation.md): Poll a delete or reset operation kicked off against this data stream. Returns the serialized `DataStreamOperation`.
+- [Get bulk request status](https://endclose.com/docs/api-reference/get-bulk-request-status.md): Poll the status of an asynchronous bulk request. Returns the bulk request payload plus paginated per-row results. Results grow as processing continues, so only non-pending items are included.
+- [Get data stream ingestion health](https://endclose.com/docs/api-reference/get-data-stream-ingestion-health.md): Cheap, indexed snapshot of ingestion health for the stream — record count, import batch totals, orphan records, bulk request counters by status, and last ingestion time. Safe to poll from the UI.
+- [Get reconciliation agent status](https://endclose.com/docs/api-reference/get-reconciliation-agent-status.md): Returns the current status of the reconciliation agent, which automatically creates and refines matching rules. The agent runs automatically when records are uploaded or manually matched — no manual triggering is needed.
+- [List bank account balances](https://endclose.com/docs/api-reference/list-bank-account-balances.md): Returns all balances for a bank account, ordered by date descending.
+- [List bank accounts](https://endclose.com/docs/api-reference/list-bank-accounts.md): Returns all bank accounts for the current environment, ordered by name.
+- [List bulk requests](https://endclose.com/docs/api-reference/list-bulk-requests.md): Cursor-paginated list of bulk requests in your environment, ordered by `created_at` descending. Filter by data stream, status, or source.
+- [List data streams](https://endclose.com/docs/api-reference/list-data-streams.md)
+- [List import batches](https://endclose.com/docs/api-reference/list-import-batches.md): Returns a paginated list of import batches for a data stream.
+- [List property definitions](https://endclose.com/docs/api-reference/list-property-definitions.md)
+- [List reconciliation exceptions](https://endclose.com/docs/api-reference/list-reconciliation-exceptions.md): Returns a paginated list of exceptions, optionally filtered by reconciliation or status. Each row includes data-stream metadata and an aggregates summary so you can render a queue without a follow-up request per row.
+- [List reconciliation matches](https://endclose.com/docs/api-reference/list-reconciliation-matches.md): Returns a paginated list of matches, optionally filtered by reconciliation or status.
+- [List reconciliation rules](https://endclose.com/docs/api-reference/list-reconciliation-rules.md): Returns all rules for a reconciliation, ordered by priority.
+- [List reconciliation stories](https://endclose.com/docs/api-reference/list-reconciliation-stories.md): Returns all reconciliation stories in the environment, newest first.
+- [List reconciliations](https://endclose.com/docs/api-reference/list-reconciliations.md): Returns a paginated list of reconciliations with their associated data streams, newest first.
+- [List records](https://endclose.com/docs/api-reference/list-records.md): Returns a paginated list of records, newest first. At least one of `data_stream_key`, `reconciliation_match_id`, `reconciliation_id`, `external_id`, `import_batch_id`, or `bulk_request_id` is required.
+- [Mark a record as overdue](https://endclose.com/docs/api-reference/mark-a-record-as-overdue.md): Flags a record as overdue within a specific reconciliation by setting the `overdue_at` timestamp on its reconciliation entry. The reconciliation and record are both named in the path — the subject is the (reconciliation, record) entry, so the same record can be overdue in one reconciliation and matc…
+- [Reset a data stream](https://endclose.com/docs/api-reference/reset-a-data-stream.md): Asynchronously wipes all records on the stream while preserving stream config, property definitions, and reconciliation links. Always async. Poll the returned operation.
+- [Retrieve a bank account](https://endclose.com/docs/api-reference/retrieve-a-bank-account.md)
+- [Retrieve a data stream](https://endclose.com/docs/api-reference/retrieve-a-data-stream.md): Retrieve a data stream using its unique immutable key.
+- [Retrieve a property definition](https://endclose.com/docs/api-reference/retrieve-a-property-definition.md)
+- [Retrieve a reconciliation](https://endclose.com/docs/api-reference/retrieve-a-reconciliation.md)
+- [Retrieve a reconciliation exception](https://endclose.com/docs/api-reference/retrieve-a-reconciliation-exception.md): Returns the exception with assignees, comments, recent investigation sessions, `aggregates` for the entire overdue slice, and `filtered_aggregates` restricted to the supplied filter query parameters. All filter parameters are optional.
+- [Retrieve a reconciliation match](https://endclose.com/docs/api-reference/retrieve-a-reconciliation-match.md)
+- [Retrieve a reconciliation rule](https://endclose.com/docs/api-reference/retrieve-a-reconciliation-rule.md)
+- [Retrieve a reconciliation story](https://endclose.com/docs/api-reference/retrieve-a-reconciliation-story.md)
+- [Retrieve a record](https://endclose.com/docs/api-reference/retrieve-a-record.md): Retrieve a single record by its unique ID.
+- [Retrieve an import batch](https://endclose.com/docs/api-reference/retrieve-an-import-batch.md): Retrieve a single import batch by its unique ID.
+- [Retry a bulk request](https://endclose.com/docs/api-reference/retry-a-bulk-request.md): Creates a new bulk request that re-runs only the parent's failed and skipped items. The new request's `parent_bulk_request_id` points at the original.
+- [Update a bank account](https://endclose.com/docs/api-reference/update-a-bank-account.md)
+- [Update a data stream](https://endclose.com/docs/api-reference/update-a-data-stream.md): Update the name of a data stream.
+- [Update a property definition](https://endclose.com/docs/api-reference/update-a-property-definition.md): Update the name or optional flag of a property definition.
+- [Update a reconciliation](https://endclose.com/docs/api-reference/update-a-reconciliation.md): Update reconciliation name, run type, or reassign data streams. If stream IDs are provided, all existing stream associations are replaced.
+- [Update a reconciliation exception](https://endclose.com/docs/api-reference/update-a-reconciliation-exception.md): Update the title, description, or status of an exception.
+- [Update a reconciliation rule](https://endclose.com/docs/api-reference/update-a-reconciliation-rule.md)
+- [Update a reconciliation story](https://endclose.com/docs/api-reference/update-a-reconciliation-story.md): Update the story name and/or replace its links. If `links` is provided, all existing links are replaced with the new chain. If `links` is omitted, only the name is updated.
+- [Update a record](https://endclose.com/docs/api-reference/update-a-record.md): Update a record's fields. The record **must have a status of `unreconciled`**. Records that are partially or fully reconciled cannot be modified.
+- [Authentication](https://endclose.com/docs/authentication.md)
+- [Concepts](https://endclose.com/docs/concepts.md): Learn about the core resources in End Close
+- [Introduction](https://endclose.com/docs/index.md): Learn everything you need to know to get started with End Close
+- [record.reconciled](https://endclose.com/docs/webhooks/events/record_reconciled.md): When a record is reconciled
+- [record.reconciliation_overdue](https://endclose.com/docs/webhooks/events/record_reconciliation_overdue.md): When a record has gone beyond its expected reconciliation date
+- [Getting started](https://endclose.com/docs/webhooks/getting_started.md): Learn about the events that are available for webhooks
+
+## OpenAPI Specs
+
+- [openapi](https://endclose.com/docs/openapi.json)

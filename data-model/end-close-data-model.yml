@@ -1,0 +1,232 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/end-close-openapi-original.json (components.schemas $ref links + id-reference fields)
+id_style: numeric integer ids (id) plus immutable string keys (key) on data streams
+entities:
+- name: DataStream
+  fields:
+  - id
+  - key
+  - name
+  - description
+  - type
+  relationships: []
+- name: RecordPropertyDefinition
+  fields:
+  - id
+  - key
+  - name
+  - type
+  - optional
+  - data_stream_key
+  relationships:
+  - target: DataStream
+    kind: belongs_to
+    via: data_stream_key
+- name: Record
+  fields:
+  - id
+  - amount
+  - currency
+  - decimal_places
+  - direction
+  - description
+  - date
+  - metadata
+  - external_id
+  - data_stream_key
+  relationships:
+  - target: DataStream
+    kind: belongs_to
+    via: data_stream_key
+- name: Reconciliation
+  fields:
+  - id
+  - name
+  - run_type
+  - side_a_streams
+  - side_b_streams
+  - created_at
+  - current_run
+  - last_run
+  relationships:
+  - target: DataStream
+    kind: has_many
+    via: side_a_streams
+  - target: DataStream
+    kind: has_many
+    via: side_b_streams
+  - target: ReconciliationRun
+    kind: has_one
+    via: current_run
+  - target: ReconciliationRun
+    kind: has_one
+    via: last_run
+- name: ReconciliationRule
+  fields:
+  - id
+  - priority
+  - filters
+  - group_by
+  - cardinality
+  - rollup
+  - description
+  - source
+  - status
+  - confidence
+  - sample_match_rate
+  - reconciliation_id
+  - created_at
+  relationships:
+  - target: Reconciliation
+    kind: belongs_to
+    via: reconciliation_id
+- name: ReconciliationMatch
+  fields:
+  - id
+  - status
+  - group_key
+  - reconciliation_id
+  - reconciliation_rule_id
+  - created_at
+  - record_count
+  relationships:
+  - target: Reconciliation
+    kind: belongs_to
+    via: reconciliation_id
+  - target: ReconciliationRule
+    kind: belongs_to
+    via: reconciliation_rule_id
+- name: ReconciliationStory
+  fields:
+  - id
+  - name
+  - created_at
+  - links
+  relationships:
+  - target: ReconciliationStoryLink
+    kind: has_many
+    via: links
+- name: ReconciliationException
+  fields:
+  - id
+  - reconciliation_id
+  - reconciliation_name
+  - data_stream_id
+  - data_stream_name
+  - data_stream_key
+  - title
+  - description
+  - status
+  - created_at
+  - updated_at
+  - opened_at
+  - closed_at
+  - assignees
+  - decimal_places
+  - aggregates
+  - filtered_aggregates
+  - comments
+  - investigation
+  - investigation_sessions
+  relationships:
+  - target: Reconciliation
+    kind: belongs_to
+    via: reconciliation_id
+  - target: DataStream
+    kind: belongs_to
+    via: data_stream_id
+  - target: DataStream
+    kind: belongs_to
+    via: data_stream_key
+  - target: AgentInvestigationSession
+    kind: has_many
+    via: investigation_sessions
+- name: BankAccount
+  fields:
+  - id
+  - name
+  - currency
+  - created_at
+  - updated_at
+  relationships: []
+- name: BankAccountBalance
+  fields:
+  - id
+  - bank_account_id
+  - date
+  - balance_type
+  - amount_cents
+  - created_at
+  - updated_at
+  relationships:
+  - target: BankAccount
+    kind: belongs_to
+    via: bank_account_id
+- name: ImportBatch
+  fields:
+  - id
+  - data_stream_key
+  - source
+  - filename
+  - record_count
+  - total_credits
+  - total_debits
+  - net_amount
+  - decimal_places
+  - date_range_start
+  - date_range_end
+  - created_at
+  - records_url
+  relationships:
+  - target: DataStream
+    kind: belongs_to
+    via: data_stream_key
+- name: BulkRequest
+  fields:
+  - id
+  - status
+  - source
+  - total_items
+  - processed_items
+  - successful_items
+  - failed_items
+  - skipped_items
+  - progress
+  - filename
+  - created_at
+  - started_at
+  - completed_at
+  - last_progress_at
+  - cancellation_requested_at
+  - parsing
+  - stuck
+  - error_message
+  - error_details
+  - parent_bulk_request_id
+  - on_conflict
+  - data_stream_id
+  relationships:
+  - target: DataStream
+    kind: belongs_to
+    via: data_stream_id
+- name: DataStreamOperation
+  fields:
+  - id
+  - data_stream_id
+  - data_stream_key
+  - kind
+  - status
+  - progress
+  - error_message
+  - started_at
+  - completed_at
+  - created_at
+  - requested_by_user_id
+  relationships:
+  - target: DataStream
+    kind: belongs_to
+    via: data_stream_id
+  - target: DataStream
+    kind: belongs_to
+    via: data_stream_key

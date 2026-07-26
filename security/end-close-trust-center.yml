@@ -1,0 +1,23 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.endclose.com/security
+url: https://trust.endclose.com/
+vanta_url: https://app.vanta.com/endclose.com/trust/ba0ll62r94o1q1w595oe3
+platform: Vanta
+certifications:
+- name: SOC 2 Type 2
+  status: audit pending
+  note: >-
+    Controls are in place and continuously monitored via Vanta; the SOC 2 Type 2 audit is
+    described as pending. Not yet an achieved/published certification.
+security_practices:
+- AES-256 encryption
+- Single-tenant AWS infrastructure
+- 24/7 threat detection via AWS GuardDuty
+- Penetration testing
+- Continuous control monitoring (Vanta)
+contact: security@endclose.com
+notes: >-
+  Trust Center (trust.endclose.com) is a live Vanta-hosted compliance dashboard. Because the
+  only named framework (SOC 2 Type 2) is audit-pending rather than achieved, no `Compliance`
+  pointer is emitted (compliance_published rewards a published/achieved program).

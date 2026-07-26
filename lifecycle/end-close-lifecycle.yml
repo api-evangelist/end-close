@@ -1,0 +1,20 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/end-close-openapi-original.json + https://endclose.com/docs/
+versioning:
+  scheme: uri-path
+  current: v1
+  base_url: https://api.endclose.com/v1
+  docs: https://endclose.com/docs/index.md
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No deprecation policy or Sunset/Deprecation header support documented; no operations marked deprecated in the spec.
+sla:
+  url: null
+status_page: null
+deprecated_operations: []
+notes: >-
+  End Close is an early-stage (Y Combinator) provider on a single v1 URI-versioned API. No
+  public status page, SLA, or formal deprecation policy was found at time of enrichment;
+  re-probe on future runs.
