@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "End Close Bank Account Balances Reconciliation Stories API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reconciliation Stories",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List reconciliation stories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliation_stories"
+          },
+          "docs": "Returns all reconciliation stories in the environment, newest first."
+        },
+        {
+          "info": {
+            "name": "Create a reconciliation story",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/reconciliation_stories",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a story and attach a chain of reconciliations. The first link must use role `origin` and have no shared_data_stream_id; subsequent links must use role `continuation` and specify the shared data stream linking them to the previous reconciliation."
+        },
+        {
+          "info": {
+            "name": "Retrieve a reconciliation story",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliation_stories/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a reconciliation story"
+        },
+        {
+          "info": {
+            "name": "Update a reconciliation story",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.endclose.com/v1/reconciliation_stories/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the story name and/or replace its links. If `links` is provided, all existing links are replaced with the new chain. If `links` is omitted, only the name is updated."
+        },
+        {
+          "info": {
+            "name": "Delete a reconciliation story",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.endclose.com/v1/reconciliation_stories/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Permanently deletes a story and unlinks it from all reconciliations. The reconciliations themselves are not deleted."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

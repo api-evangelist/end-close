@@ -1,0 +1,171 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "End Close Bank Account Balances Reconciliations API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reconciliations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Mark a record as overdue",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/reconciliations/:reconciliation_id/records/:record_id/mark_overdue",
+            "params": [
+              {
+                "name": "reconciliation_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the reconciliation the record should be marked overdue in"
+              },
+              {
+                "name": "record_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the record"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Flags a record as overdue within a specific reconciliation by setting the `overdue_at` timestamp on its reconciliation entry. The reconciliation and record are both named in the path — the subject is the (reconciliation, record) entry, so the same record can be overdue in one reconciliation and matched in another. The record's data stream must be part of the reconciliation. If no entry exists yet for the record and reconciliation, one is created so unmatched records can be flagged as overdue. Re"
+        },
+        {
+          "info": {
+            "name": "List reconciliations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliations",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor from a previous response's `next_cursor`. Omit for the first page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of reconciliations with their associated data streams, newest first."
+        },
+        {
+          "info": {
+            "name": "Create a reconciliation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/reconciliations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new reconciliation with optional side A and side B data stream associations."
+        },
+        {
+          "info": {
+            "name": "Retrieve a reconciliation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a reconciliation"
+        },
+        {
+          "info": {
+            "name": "Update a reconciliation",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.endclose.com/v1/reconciliations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update reconciliation name, run type, or reassign data streams. If stream IDs are provided, all existing stream associations are replaced."
+        },
+        {
+          "info": {
+            "name": "Delete a reconciliation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.endclose.com/v1/reconciliations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Permanently deletes a reconciliation and all associated rules, matches, and data stream associations."
+        },
+        {
+          "info": {
+            "name": "Get reconciliation agent status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliations/:id/agent_status",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The reconciliation ID"
+              }
+            ]
+          },
+          "docs": "Returns the current status of the reconciliation agent, which automatically creates and refines matching rules. The agent runs automatically when records are uploaded or manually matched — no manual triggering is needed."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

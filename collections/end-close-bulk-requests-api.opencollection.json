@@ -1,0 +1,147 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "End Close Bank Account Balances Bulk Requests API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Bulk Requests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List bulk requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/bulk_requests",
+            "params": [
+              {
+                "name": "data_stream_key",
+                "value": "",
+                "type": "query",
+                "description": "Filter to bulk requests targeting this data stream"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filter by request source (e.g. `bulk_api`, `csv`, `nacha`)"
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "ISO8601 lower bound on `created_at`"
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "ISO8601 upper bound on `created_at`"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor returned by a previous call's `next_cursor`. Omit for the first page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Cursor-paginated list of bulk requests in your environment, ordered by `created_at` descending. Filter by data stream, status, or source."
+        },
+        {
+          "info": {
+            "name": "Get bulk request status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/bulk_requests/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The bulk request ID returned from POST /records/bulk"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of result items to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Pagination offset for result items"
+              }
+            ]
+          },
+          "docs": "Poll the status of an asynchronous bulk request. Returns the bulk request payload plus paginated per-row results. Results grow as processing continues, so only non-pending items are included."
+        },
+        {
+          "info": {
+            "name": "Cancel a bulk request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/bulk_requests/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Sets `cancellation_requested_at` so the running job exits cleanly to `cancelled` on its next heartbeat. Idempotent — re-cancelling just bumps the timestamp."
+        },
+        {
+          "info": {
+            "name": "Retry a bulk request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/bulk_requests/:id/retry",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the failed or cancelled bulk request to retry"
+              }
+            ]
+          },
+          "docs": "Creates a new bulk request that re-runs only the parent's failed and skipped items. The new request's `parent_bulk_request_id` points at the original."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

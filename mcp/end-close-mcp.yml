@@ -190,3 +190,9 @@ tools:
 - name: create_bank_account_balances_bulk
   description: Bulk create or update bank account balances
   source_operation: openapi/end-close-openapi-original.json#POST /bank_account_balances/bulk
+deployment:
+  mode: none
+  verified: derived
+  tools: 60
+  checked: '2026-08-12'
+  source: catalog MCP census

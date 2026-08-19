@@ -1,0 +1,1422 @@
+{
+  "item": [
+    {
+      "id": "f0df378a-8821-445a-a74e-c6e2d75b3b56",
+      "name": "Records",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0b0ab43e-2720-42d7-856c-2da3c96d379b",
+          "name": "List records",
+          "request": {
+            "name": "List records",
+            "description": {
+              "content": "Returns a paginated list of records, newest first. At least one of `data_stream_key`, `reconciliation_match_id`, `reconciliation_id`, `external_id`, `import_batch_id`, or `bulk_request_id` is required.\n\nPagination is cursor-based: pass each response's `next_cursor` back as `cursor` until `next_cursor` is null. The legacy `offset` parameter and its `has_more`/`offset`/`total_count` response shape have been removed.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "records"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "data_stream_key",
+                  "value": "<string>",
+                  "description": "Filter by data stream key"
+                },
+                {
+                  "disabled": false,
+                  "key": "reconciliation_match_id",
+                  "value": "<string>",
+                  "description": "Filter to records that belong to the given match"
+                },
+                {
+                  "disabled": false,
+                  "key": "reconciliation_id",
+                  "value": "<string>",
+                  "description": "Filter to records that have a status row in the given reconciliation"
+                },
+                {
+                  "disabled": false,
+                  "key": "external_id",
+                  "value": "<string>",
+                  "description": "Filter to records with this exact `external_id`"
+                },
+                {
+                  "disabled": false,
+                  "key": "import_batch_id",
+                  "value": "<integer>",
+                  "description": "Filter to records created by this import batch"
+                },
+                {
+                  "disabled": false,
+                  "key": "bulk_request_id",
+                  "value": "<integer>",
+                  "description": "Filter to records created by this bulk request"
+                },
+                {
+                  "disabled": false,
+                  "key": "created_after",
+                  "value": "<dateTime>",
+                  "description": "ISO8601 lower bound on `created_at`"
+                },
+                {
+                  "disabled": false,
+                  "key": "created_before",
+                  "value": "<dateTime>",
+                  "description": "ISO8601 upper bound on `created_at`"
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "<string>",
+                  "description": "Filter via the joined import batch's `source`"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by match status"
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Opaque cursor from a previous response's `next_cursor`. Omit for the first page."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5ac4742d-895d-447c-9fb7-f82dbe332599",
+              "name": "Paginated list of records",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "data_stream_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "reconciliation_match_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "reconciliation_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "external_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "import_batch_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "bulk_request_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"date\": \"2025-10-06\",\n      \"data_stream_key\": \"string\",\n      \"amount\": 780,\n      \"direction\": \"debit\",\n      \"id\": 557,\n      \"currency\": \"USD\",\n      \"decimal_places\": 2,\n      \"description\": \"string\",\n      \"metadata\": {},\n      \"external_id\": \"string\"\n    },\n    {\n      \"date\": \"2025-11-27\",\n      \"data_stream_key\": \"string\",\n      \"amount\": 5831,\n      \"direction\": \"debit\",\n      \"id\": 6074,\n      \"currency\": \"USD\",\n      \"decimal_places\": 2,\n      \"description\": \"string\",\n      \"metadata\": {},\n      \"external_id\": \"string\"\n    }\n  ],\n  \"next_cursor\": \"string\",\n  \"limit\": 1475\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56769964-ea25-4265-9e10-c724ad232b38",
+              "name": "No scoping filter provided, or invalid `status`, `created_after`, or `created_before`",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "data_stream_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "reconciliation_match_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "reconciliation_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "external_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "import_batch_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "bulk_request_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6e464913-48c4-4c0c-86ac-02c30703f8aa",
+          "name": "Create a record",
+          "request": {
+            "name": "Create a record",
+            "description": {},
+            "url": {
+              "path": [
+                "records"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"<date>\",\n  \"data_stream_key\": \"<string>\",\n  \"amount\": \"<integer>\",\n  \"direction\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"currency\": \"USD\",\n  \"decimal_places\": 2,\n  \"description\": \"<string>\",\n  \"metadata\": {},\n  \"external_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8b8fe0de-09b2-49b7-bd9e-835a370136ca",
+              "name": "Record created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"date\": \"<date>\",\n  \"data_stream_key\": \"<string>\",\n  \"amount\": \"<integer>\",\n  \"direction\": \"<string>\",\n  \"id\": \"<integer>\",\n  \"currency\": \"USD\",\n  \"decimal_places\": 2,\n  \"description\": \"<string>\",\n  \"metadata\": {},\n  \"external_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"date\": \"2011-11-22\",\n  \"data_stream_key\": \"string\",\n  \"amount\": 6151,\n  \"direction\": \"credit\",\n  \"id\": 7094,\n  \"currency\": \"USD\",\n  \"decimal_places\": 2,\n  \"description\": \"string\",\n  \"metadata\": {},\n  \"external_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "96e5fee4-9cda-41e4-b40e-9f8d23a21ccb",
+          "name": "Bulk create records",
+          "request": {
+            "name": "Bulk create records",
+            "description": {
+              "content": "Submit up to 1,000 records for asynchronous processing. Returns immediately with a bulk request ID. Each record is validated and inserted independently, so some records can succeed while others fail. Use the `GET /bulk_requests/{id}` endpoint to poll for results.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "records",
+                "bulk"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Optional idempotency key. If a bulk request with this key already exists for your environment, the existing request is returned instead of creating a new one.",
+                "key": "Idempotency-Key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"records\": [\n    {\n      \"date\": \"<date>\",\n      \"data_stream_key\": \"<string>\",\n      \"amount\": \"<integer>\",\n      \"direction\": \"<string>\",\n      \"currency\": \"USD\",\n      \"description\": \"<string>\",\n      \"external_id\": \"<string>\",\n      \"metadata\": {}\n    }\n  ],\n  \"on_conflict\": \"skip\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3fb1b035-14c2-48b0-9474-511c225bfef3",
+              "name": "Bulk request accepted for processing",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional idempotency key. If a bulk request with this key already exists for your environment, the existing request is returned instead of creating a new one.",
+                    "key": "Idempotency-Key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"records\": [\n    {\n      \"date\": \"<date>\",\n      \"data_stream_key\": \"<string>\",\n      \"amount\": \"<integer>\",\n      \"direction\": \"<string>\",\n      \"currency\": \"USD\",\n      \"description\": \"<string>\",\n      \"external_id\": \"<string>\",\n      \"metadata\": {}\n    }\n  ],\n  \"on_conflict\": \"skip\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 5543,\n  \"status\": \"processing\",\n  \"total_items\": 3287,\n  \"processed_items\": 2677,\n  \"successful_items\": 1950,\n  \"failed_items\": 4208,\n  \"skipped_items\": 7936,\n  \"url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e888e3fc-3877-499c-9acd-af14e89fab1d",
+              "name": "Invalid `on_conflict` value",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional idempotency key. If a bulk request with this key already exists for your environment, the existing request is returned instead of creating a new one.",
+                    "key": "Idempotency-Key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"records\": [\n    {\n      \"date\": \"<date>\",\n      \"data_stream_key\": \"<string>\",\n      \"amount\": \"<integer>\",\n      \"direction\": \"<string>\",\n      \"currency\": \"USD\",\n      \"description\": \"<string>\",\n      \"external_id\": \"<string>\",\n      \"metadata\": {}\n    }\n  ],\n  \"on_conflict\": \"skip\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "460b34cb-b0c2-415a-bf59-fb91c9947236",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional idempotency key. If a bulk request with this key already exists for your environment, the existing request is returned instead of creating a new one.",
+                    "key": "Idempotency-Key",
+                    "value": "<string>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"records\": [\n    {\n      \"date\": \"<date>\",\n      \"data_stream_key\": \"<string>\",\n      \"amount\": \"<integer>\",\n      \"direction\": \"<string>\",\n      \"currency\": \"USD\",\n      \"description\": \"<string>\",\n      \"external_id\": \"<string>\",\n      \"metadata\": {}\n    }\n  ],\n  \"on_conflict\": \"skip\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "52ae3753-ec12-4032-8e6e-9ffcc192e604",
+              "name": "Invalid request (e.g. records is not an array, empty, or exceeds 1,000 items)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Optional idempotency key. If a bulk request with this key already exists for your environment, the existing request is returned instead of creating a new one.",
+                    "key": "Idempotency-Key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"records\": [\n    {\n      \"date\": \"<date>\",\n      \"data_stream_key\": \"<string>\",\n      \"amount\": \"<integer>\",\n      \"direction\": \"<string>\",\n      \"currency\": \"USD\",\n      \"description\": \"<string>\",\n      \"external_id\": \"<string>\",\n      \"metadata\": {}\n    }\n  ],\n  \"on_conflict\": \"skip\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "50922c70-dfd2-44ff-81a5-b9516bccc071",
+          "name": "Retrieve a record",
+          "request": {
+            "name": "Retrieve a record",
+            "description": {
+              "content": "Retrieve a single record by its unique ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "records",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique identifier of the record"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "013ff6f4-74bc-450a-8675-7cc5f6addb94",
+              "name": "Record retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"date\": \"2011-11-22\",\n  \"data_stream_key\": \"string\",\n  \"amount\": 6151,\n  \"direction\": \"credit\",\n  \"id\": 7094,\n  \"currency\": \"USD\",\n  \"decimal_places\": 2,\n  \"description\": \"string\",\n  \"metadata\": {},\n  \"external_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b74107c8-922a-4cc8-bab2-6ded53dbdb23",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ec6950e8-9f10-4a66-98c9-d6dc277c987a",
+              "name": "Record not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f51ab078-9435-43c8-acf2-803600d44013",
+          "name": "Update a record",
+          "request": {
+            "name": "Update a record",
+            "description": {
+              "content": "Update a record's fields. The record **must have a status of `unreconciled`**. Records that are partially or fully reconciled cannot be modified.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "records",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique identifier of the record"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<integer>\",\n  \"direction\": \"<string>\",\n  \"description\": \"<string>\",\n  \"date\": \"<date>\",\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"string\",\n    \"key_1\": 4224,\n    \"key_2\": 9052.07497915059,\n    \"key_3\": false\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "35dea5f4-99f4-4389-9701-7eb959a40d93",
+              "name": "Record updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<integer>\",\n  \"direction\": \"<string>\",\n  \"description\": \"<string>\",\n  \"date\": \"<date>\",\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": 5134.993130782212,\n    \"key_1\": 1927\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"date\": \"2011-11-22\",\n  \"data_stream_key\": \"string\",\n  \"amount\": 6151,\n  \"direction\": \"credit\",\n  \"id\": 7094,\n  \"currency\": \"USD\",\n  \"decimal_places\": 2,\n  \"description\": \"string\",\n  \"metadata\": {},\n  \"external_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8902d84d-79d1-439d-b880-7b5b2370539a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<integer>\",\n  \"direction\": \"<string>\",\n  \"description\": \"<string>\",\n  \"date\": \"<date>\",\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": 5134.993130782212,\n    \"key_1\": 1927\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5d232b90-d7a4-4c93-bf8f-7ed2b0ed8925",
+              "name": "Record not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<integer>\",\n  \"direction\": \"<string>\",\n  \"description\": \"<string>\",\n  \"date\": \"<date>\",\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": 5134.993130782212,\n    \"key_1\": 1927\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4d5b8afa-fba8-4562-be99-499a0b6613de",
+              "name": "Record cannot be modified because it has already been reconciled",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<integer>\",\n  \"direction\": \"<string>\",\n  \"description\": \"<string>\",\n  \"date\": \"<date>\",\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": 5134.993130782212,\n    \"key_1\": 1927\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9b4e2f75-75d1-46dd-a25b-08b1be952705",
+          "name": "Delete a record",
+          "request": {
+            "name": "Delete a record",
+            "description": {
+              "content": "Deletes a single record by its ID. The record **must have a status of `unreconciled`**. Records that are partially or fully reconciled cannot be deleted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "records",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique identifier of the record"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "905d42de-cc65-44b1-a3ab-2d19134d422f",
+              "name": "Record deleted successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "df20b87e-2e43-454b-ae95-80ae9310216d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e08fd8ff-5db7-4030-8d71-71e56a685a22",
+              "name": "Record not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8035728b-e2ba-46c4-94e4-dbd86393504a",
+              "name": "Record cannot be deleted because it is already reconciled or partially reconciled",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "records",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.endclose.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-KEY"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0537e779-a081-4e1c-bcc3-089f5dbe94a8",
+    "name": "End Close Bank Account Balances Records API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API is used to interact with the End Close platform.",
+      "type": "text/plain"
+    }
+  }
+}

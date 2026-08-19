@@ -1,0 +1,1290 @@
+{
+  "item": [
+    {
+      "id": "254c13a8-b624-48d9-9130-cd819651494e",
+      "name": "Reconciliations",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b7f46725-02dd-4151-89e0-241abfcc2024",
+          "name": "Mark a record as overdue",
+          "request": {
+            "name": "Mark a record as overdue",
+            "description": {
+              "content": "Flags a record as overdue within a specific reconciliation by setting the `overdue_at` timestamp on its reconciliation entry. The reconciliation and record are both named in the path — the subject is the (reconciliation, record) entry, so the same record can be overdue in one reconciliation and matched in another. The record's data stream must be part of the reconciliation. If no entry exists yet for the record and reconciliation, one is created so unmatched records can be flagged as overdue. Records already matched in this reconciliation cannot be marked overdue. Once overdue, the record is picked up by the exceptions sweeper and rolled into the data-stream-scoped exception for that reconciliation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliations",
+                ":reconciliation_id",
+                "records",
+                ":record_id",
+                "mark_overdue"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "reconciliation_id",
+                  "description": "(Required) The unique identifier of the reconciliation the record should be marked overdue in"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "record_id",
+                  "description": "(Required) The unique identifier of the record"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"overdue_at\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7d785e33-4b51-4c5f-8e1d-356dbddde8e3",
+              "name": "The record's entry in the given reconciliation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":reconciliation_id",
+                    "records",
+                    ":record_id",
+                    "mark_overdue"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reconciliation_id",
+                      "description": "(Required) The unique identifier of the reconciliation the record should be marked overdue in"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "record_id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"overdue_at\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"date\": \"1976-04-21\",\n  \"data_stream_key\": \"string\",\n  \"amount\": 8307,\n  \"direction\": \"credit\",\n  \"id\": 2560,\n  \"currency\": \"USD\",\n  \"decimal_places\": 2,\n  \"description\": \"string\",\n  \"metadata\": {},\n  \"external_id\": \"string\",\n  \"reconciliation_id\": 6512,\n  \"reconciliation_name\": \"string\",\n  \"status\": \"reconciled\",\n  \"escalated\": true,\n  \"overdue_at\": \"2001-10-07T11:09:24.001Z\",\n  \"matched_records\": [\n    {\n      \"id\": 3135,\n      \"amount\": 8969,\n      \"currency\": \"USD\",\n      \"decimal_places\": 2,\n      \"direction\": \"debit\",\n      \"description\": \"string\",\n      \"date\": \"1971-12-21\",\n      \"external_id\": \"string\",\n      \"data_stream_key\": \"string\",\n      \"reconciliation_id\": 233,\n      \"reconciliation_name\": \"string\"\n    },\n    {\n      \"id\": 3057,\n      \"amount\": 5968,\n      \"currency\": \"USD\",\n      \"decimal_places\": 2,\n      \"direction\": \"credit\",\n      \"description\": \"string\",\n      \"date\": \"1948-08-15\",\n      \"external_id\": \"string\",\n      \"data_stream_key\": \"string\",\n      \"reconciliation_id\": 5612,\n      \"reconciliation_name\": \"string\"\n    }\n  ],\n  \"days_unreconciled\": 9958,\n  \"exception_id\": 2030\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ff1a4a6-48d1-45fa-ab7f-edd8d6b7af6e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":reconciliation_id",
+                    "records",
+                    ":record_id",
+                    "mark_overdue"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reconciliation_id",
+                      "description": "(Required) The unique identifier of the reconciliation the record should be marked overdue in"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "record_id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"overdue_at\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3fee0d90-5ec9-4bb8-8412-c9da59cfcc65",
+              "name": "Record or reconciliation not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":reconciliation_id",
+                    "records",
+                    ":record_id",
+                    "mark_overdue"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reconciliation_id",
+                      "description": "(Required) The unique identifier of the reconciliation the record should be marked overdue in"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "record_id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"overdue_at\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "800603ee-20de-417f-8ee8-edbe62f625bf",
+              "name": "Record is already matched in this reconciliation and cannot be marked overdue",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":reconciliation_id",
+                    "records",
+                    ":record_id",
+                    "mark_overdue"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reconciliation_id",
+                      "description": "(Required) The unique identifier of the reconciliation the record should be marked overdue in"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "record_id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"overdue_at\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3f5c5600-ac2a-4ae0-8470-01f4e6198d6f",
+              "name": "Record's data stream is not part of the reconciliation, or invalid `overdue_at`",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":reconciliation_id",
+                    "records",
+                    ":record_id",
+                    "mark_overdue"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reconciliation_id",
+                      "description": "(Required) The unique identifier of the reconciliation the record should be marked overdue in"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "record_id",
+                      "description": "(Required) The unique identifier of the record"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"overdue_at\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b420920a-0a4f-4604-a0b4-97e6f19aba39",
+          "name": "List reconciliations",
+          "request": {
+            "name": "List reconciliations",
+            "description": {
+              "content": "Returns a paginated list of reconciliations with their associated data streams, newest first.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Opaque cursor from a previous response's `next_cursor`. Omit for the first page."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "37e7f851-869e-4aa9-906b-1bb193c3bfd8",
+              "name": "Paginated list of reconciliations",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"name\": \"string\",\n      \"id\": 5444,\n      \"run_type\": \"continuous\",\n      \"side_a_streams\": [\n        {\n          \"key\": \"string\",\n          \"name\": \"string\",\n          \"id\": 5656,\n          \"description\": \"string\",\n          \"type\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"name\": \"string\",\n          \"id\": 1594,\n          \"description\": \"string\",\n          \"type\": \"string\"\n        }\n      ],\n      \"side_b_streams\": [\n        {\n          \"key\": \"string\",\n          \"name\": \"string\",\n          \"id\": 1362,\n          \"description\": \"string\",\n          \"type\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"name\": \"string\",\n          \"id\": 3081,\n          \"description\": \"string\",\n          \"type\": \"string\"\n        }\n      ],\n      \"created_at\": \"1996-06-30T05:18:33.862Z\",\n      \"current_run\": {\n        \"id\": 8140,\n        \"kind\": \"continuous\",\n        \"status\": \"running\",\n        \"trigger\": \"agent\",\n        \"total_records\": 6960,\n        \"processed_records\": 3898,\n        \"matched_records\": 9841,\n        \"rule_summary\": {},\n        \"progress\": 4222,\n        \"started_at\": \"1983-09-12T18:08:36.949Z\",\n        \"completed_at\": \"1988-03-17T01:48:37.645Z\"\n      },\n      \"last_run\": {\n        \"id\": 1262,\n        \"kind\": \"continuous\",\n        \"status\": \"pending\",\n        \"trigger\": \"agent\",\n        \"total_records\": 3479,\n        \"processed_records\": 2634,\n        \"matched_records\": 8201,\n        \"rule_summary\": {},\n        \"progress\": 7180,\n        \"started_at\": \"1978-07-24T18:33:50.287Z\",\n        \"completed_at\": \"1980-10-25T15:31:46.166Z\"\n      }\n    },\n    {\n      \"name\": \"string\",\n      \"id\": 3963,\n      \"run_type\": \"continuous\",\n      \"side_a_streams\": [\n        {\n          \"key\": \"string\",\n          \"name\": \"string\",\n          \"id\": 6030,\n          \"description\": \"string\",\n          \"type\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"name\": \"string\",\n          \"id\": 7784,\n          \"description\": \"string\",\n          \"type\": \"string\"\n        }\n      ],\n      \"side_b_streams\": [\n        {\n          \"key\": \"string\",\n          \"name\": \"string\",\n          \"id\": 4713,\n          \"description\": \"string\",\n          \"type\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"name\": \"string\",\n          \"id\": 912,\n          \"description\": \"string\",\n          \"type\": \"string\"\n        }\n      ],\n      \"created_at\": \"2005-03-09T16:58:04.765Z\",\n      \"current_run\": {\n        \"id\": 8866,\n        \"kind\": \"batch\",\n        \"status\": \"pending\",\n        \"trigger\": \"agent\",\n        \"total_records\": 326,\n        \"processed_records\": 948,\n        \"matched_records\": 5489,\n        \"rule_summary\": {},\n        \"progress\": 7585,\n        \"started_at\": \"1956-07-17T19:45:47.973Z\",\n        \"completed_at\": \"1983-03-04T18:14:41.223Z\"\n      },\n      \"last_run\": {\n        \"id\": 9262,\n        \"kind\": \"continuous\",\n        \"status\": \"pending\",\n        \"trigger\": \"manual\",\n        \"total_records\": 8559,\n        \"processed_records\": 7335,\n        \"matched_records\": 4266,\n        \"rule_summary\": {},\n        \"progress\": 1369,\n        \"started_at\": \"1959-04-01T16:42:53.766Z\",\n        \"completed_at\": \"1946-10-23T12:30:07.016Z\"\n      }\n    }\n  ],\n  \"next_cursor\": \"string\",\n  \"limit\": 292\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fda6e196-b349-42b9-92ca-4688dc45fd47",
+          "name": "Create a reconciliation",
+          "request": {
+            "name": "Create a reconciliation",
+            "description": {
+              "content": "Create a new reconciliation with optional side A and side B data stream associations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"run_type\": \"continuous\",\n  \"side_a_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"side_b_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "43185adf-5c44-41f2-ab27-632c47a02713",
+              "name": "Reconciliation created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"run_type\": \"continuous\",\n  \"side_a_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"side_b_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"id\": 9234,\n  \"run_type\": \"continuous\",\n  \"side_a_streams\": [\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 2037,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 3285,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    }\n  ],\n  \"side_b_streams\": [\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 9743,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 9936,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    }\n  ],\n  \"created_at\": \"1974-07-30T22:51:05.693Z\",\n  \"current_run\": {\n    \"id\": 5200,\n    \"kind\": \"batch\",\n    \"status\": \"running\",\n    \"trigger\": \"agent\",\n    \"total_records\": 7504,\n    \"processed_records\": 2329,\n    \"matched_records\": 5960,\n    \"rule_summary\": {},\n    \"progress\": 650,\n    \"started_at\": \"1962-03-09T19:17:56.933Z\",\n    \"completed_at\": \"1993-01-25T19:48:54.185Z\"\n  },\n  \"last_run\": {\n    \"id\": 5426,\n    \"kind\": \"continuous\",\n    \"status\": \"running\",\n    \"trigger\": \"record_created\",\n    \"total_records\": 3125,\n    \"processed_records\": 3786,\n    \"matched_records\": 4216,\n    \"rule_summary\": {},\n    \"progress\": 1815,\n    \"started_at\": \"1974-09-17T23:39:03.814Z\",\n    \"completed_at\": \"1977-02-28T03:00:47.087Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a904ad8-e3e4-4bf1-a7c4-3761a71420fd",
+              "name": "Validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"run_type\": \"continuous\",\n  \"side_a_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"side_b_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ba676eb3-00c1-4e6e-b88f-ef9d2d0b7f26",
+          "name": "Retrieve a reconciliation",
+          "request": {
+            "name": "Retrieve a reconciliation",
+            "description": {},
+            "url": {
+              "path": [
+                "reconciliations",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fe97bf17-8070-4991-896a-ec3077ca8ba1",
+              "name": "Reconciliation retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"id\": 9234,\n  \"run_type\": \"continuous\",\n  \"side_a_streams\": [\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 2037,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 3285,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    }\n  ],\n  \"side_b_streams\": [\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 9743,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 9936,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    }\n  ],\n  \"created_at\": \"1974-07-30T22:51:05.693Z\",\n  \"current_run\": {\n    \"id\": 5200,\n    \"kind\": \"batch\",\n    \"status\": \"running\",\n    \"trigger\": \"agent\",\n    \"total_records\": 7504,\n    \"processed_records\": 2329,\n    \"matched_records\": 5960,\n    \"rule_summary\": {},\n    \"progress\": 650,\n    \"started_at\": \"1962-03-09T19:17:56.933Z\",\n    \"completed_at\": \"1993-01-25T19:48:54.185Z\"\n  },\n  \"last_run\": {\n    \"id\": 5426,\n    \"kind\": \"continuous\",\n    \"status\": \"running\",\n    \"trigger\": \"record_created\",\n    \"total_records\": 3125,\n    \"processed_records\": 3786,\n    \"matched_records\": 4216,\n    \"rule_summary\": {},\n    \"progress\": 1815,\n    \"started_at\": \"1974-09-17T23:39:03.814Z\",\n    \"completed_at\": \"1977-02-28T03:00:47.087Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29eaa2ff-0e5b-4b73-acb9-08a05d13d132",
+              "name": "Reconciliation not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6372cefe-513e-4bf1-b8b6-8051d3291812",
+          "name": "Update a reconciliation",
+          "request": {
+            "name": "Update a reconciliation",
+            "description": {
+              "content": "Update reconciliation name, run type, or reassign data streams. If stream IDs are provided, all existing stream associations are replaced.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliations",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"run_type\": \"<string>\",\n  \"side_a_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"side_b_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "47d93e46-1ac0-4db0-8116-270ab10992c3",
+              "name": "Reconciliation updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"run_type\": \"<string>\",\n  \"side_a_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"side_b_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"id\": 9234,\n  \"run_type\": \"continuous\",\n  \"side_a_streams\": [\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 2037,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 3285,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    }\n  ],\n  \"side_b_streams\": [\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 9743,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"id\": 9936,\n      \"description\": \"string\",\n      \"type\": \"string\"\n    }\n  ],\n  \"created_at\": \"1974-07-30T22:51:05.693Z\",\n  \"current_run\": {\n    \"id\": 5200,\n    \"kind\": \"batch\",\n    \"status\": \"running\",\n    \"trigger\": \"agent\",\n    \"total_records\": 7504,\n    \"processed_records\": 2329,\n    \"matched_records\": 5960,\n    \"rule_summary\": {},\n    \"progress\": 650,\n    \"started_at\": \"1962-03-09T19:17:56.933Z\",\n    \"completed_at\": \"1993-01-25T19:48:54.185Z\"\n  },\n  \"last_run\": {\n    \"id\": 5426,\n    \"kind\": \"continuous\",\n    \"status\": \"running\",\n    \"trigger\": \"record_created\",\n    \"total_records\": 3125,\n    \"processed_records\": 3786,\n    \"matched_records\": 4216,\n    \"rule_summary\": {},\n    \"progress\": 1815,\n    \"started_at\": \"1974-09-17T23:39:03.814Z\",\n    \"completed_at\": \"1977-02-28T03:00:47.087Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "069081eb-8725-4de3-a4a0-8bef1ecef8f5",
+              "name": "Reconciliation not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"run_type\": \"<string>\",\n  \"side_a_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"side_b_stream_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e39d47e-fcc7-4c43-a5ac-a44624e84345",
+          "name": "Delete a reconciliation",
+          "request": {
+            "name": "Delete a reconciliation",
+            "description": {
+              "content": "Permanently deletes a reconciliation and all associated rules, matches, and data stream associations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliations",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e63349ce-d621-4997-8d85-c7208105075d",
+              "name": "Reconciliation deleted successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "009f4887-c5f3-4f55-818d-bc1868ac062e",
+              "name": "Reconciliation not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d319deee-8d15-4e75-a544-40f866666107",
+          "name": "Get reconciliation agent status",
+          "request": {
+            "name": "Get reconciliation agent status",
+            "description": {
+              "content": "Returns the current status of the reconciliation agent, which automatically creates and refines matching rules. The agent runs automatically when records are uploaded or manually matched — no manual triggering is needed.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliations",
+                ":id",
+                "agent_status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The reconciliation ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e61e5da7-d0f7-459d-8a89-e58a7335a81c",
+              "name": "Agent status",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":id",
+                    "agent_status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The reconciliation ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"idle\",\n  \"last_run_at\": \"1986-11-28T08:07:01.927Z\",\n  \"progress\": [\n    {\n      \"step\": \"string\",\n      \"message\": \"string\",\n      \"at\": \"2022-10-27T13:19:54.422Z\"\n    },\n    {\n      \"step\": \"string\",\n      \"message\": \"string\",\n      \"at\": \"1966-03-18T16:24:22.083Z\"\n    }\n  ],\n  \"reasoning\": \"string\",\n  \"rules_count\": 1267,\n  \"unmatched_count\": 4754\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe44c8b3-f6e9-4871-9a4d-67f615b56fa7",
+              "name": "Reconciliation not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliations",
+                    ":id",
+                    "agent_status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The reconciliation ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.endclose.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-KEY"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f111c637-306e-49af-8705-76bec1bd663d",
+    "name": "End Close Bank Account Balances Reconciliations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API is used to interact with the End Close platform.",
+      "type": "text/plain"
+    }
+  }
+}

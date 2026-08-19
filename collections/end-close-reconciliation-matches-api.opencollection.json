@@ -1,0 +1,113 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "End Close Bank Account Balances Reconciliation Matches API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reconciliation Matches",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List reconciliation matches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliation_matches",
+            "params": [
+              {
+                "name": "reconciliation_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by reconciliation"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by match status"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Pagination offset"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of matches, optionally filtered by reconciliation or status."
+        },
+        {
+          "info": {
+            "name": "Create a reconciliation match",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/reconciliation_matches",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Manually match a set of records. All records must be unreconciled and belong to the specified reconciliation's data streams."
+        },
+        {
+          "info": {
+            "name": "Retrieve a reconciliation match",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliation_matches/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a reconciliation match"
+        },
+        {
+          "info": {
+            "name": "Delete a reconciliation match",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.endclose.com/v1/reconciliation_matches/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a reconciliation match and resets all associated records to unreconciled status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,118 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "End Close Bank Account Balances Reconciliation Rules API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reconciliation Rules",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List reconciliation rules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliation_rules",
+            "params": [
+              {
+                "name": "reconciliation_id",
+                "value": "",
+                "type": "query",
+                "description": "The reconciliation to list rules for"
+              }
+            ]
+          },
+          "docs": "Returns all rules for a reconciliation, ordered by priority."
+        },
+        {
+          "info": {
+            "name": "Create a reconciliation rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/reconciliation_rules",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a reconciliation rule"
+        },
+        {
+          "info": {
+            "name": "Retrieve a reconciliation rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliation_rules/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a reconciliation rule"
+        },
+        {
+          "info": {
+            "name": "Update a reconciliation rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.endclose.com/v1/reconciliation_rules/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a reconciliation rule"
+        },
+        {
+          "info": {
+            "name": "Delete a reconciliation rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.endclose.com/v1/reconciliation_rules/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a reconciliation rule"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

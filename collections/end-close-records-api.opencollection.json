@@ -1,0 +1,207 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "End Close Bank Account Balances Records API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Records",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List records",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/records",
+            "params": [
+              {
+                "name": "data_stream_key",
+                "value": "",
+                "type": "query",
+                "description": "Filter by data stream key"
+              },
+              {
+                "name": "reconciliation_match_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to records that belong to the given match"
+              },
+              {
+                "name": "reconciliation_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to records that have a status row in the given reconciliation"
+              },
+              {
+                "name": "external_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to records with this exact `external_id`"
+              },
+              {
+                "name": "import_batch_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to records created by this import batch"
+              },
+              {
+                "name": "bulk_request_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter to records created by this bulk request"
+              },
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "ISO8601 lower bound on `created_at`"
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "ISO8601 upper bound on `created_at`"
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Filter via the joined import batch's `source`"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by match status"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque cursor from a previous response's `next_cursor`. Omit for the first page."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of records, newest first. At least one of `data_stream_key`, `reconciliation_match_id`, `reconciliation_id`, `external_id`, `import_batch_id`, or `bulk_request_id` is required.\n\nPagination is cursor-based: pass each response's `next_cursor` back as `cursor` until `next_cursor` is null. The legacy `offset` parameter and its `has_more`/`offset`/`total_count` response shape have been removed."
+        },
+        {
+          "info": {
+            "name": "Create a record",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/records",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a record"
+        },
+        {
+          "info": {
+            "name": "Bulk create records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/records/bulk",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit up to 1,000 records for asynchronous processing. Returns immediately with a bulk request ID. Each record is validated and inserted independently, so some records can succeed while others fail. Use the `GET /bulk_requests/{id}` endpoint to poll for results."
+        },
+        {
+          "info": {
+            "name": "Retrieve a record",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/records/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the record"
+              }
+            ]
+          },
+          "docs": "Retrieve a single record by its unique ID."
+        },
+        {
+          "info": {
+            "name": "Update a record",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.endclose.com/v1/records/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the record"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a record's fields. The record **must have a status of `unreconciled`**. Records that are partially or fully reconciled cannot be modified."
+        },
+        {
+          "info": {
+            "name": "Delete a record",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.endclose.com/v1/records/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the record"
+              }
+            ]
+          },
+          "docs": "Deletes a single record by its ID. The record **must have a status of `unreconciled`**. Records that are partially or fully reconciled cannot be deleted."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

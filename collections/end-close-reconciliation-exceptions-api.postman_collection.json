@@ -1,0 +1,1090 @@
+{
+  "item": [
+    {
+      "id": "cd9e203e-cee5-4025-aabc-f21f57b009dd",
+      "name": "Reconciliation Exceptions",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6d93398c-dd64-42d2-b879-e5678c93600d",
+          "name": "List reconciliation exceptions",
+          "request": {
+            "name": "List reconciliation exceptions",
+            "description": {
+              "content": "Returns a paginated list of exceptions, optionally filtered by reconciliation or status. Each row includes data-stream metadata and an aggregates summary so you can render a queue without a follow-up request per row.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliation_exceptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "reconciliation_id",
+                  "value": "<string>",
+                  "description": "Filter by reconciliation"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by exception status"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "Pagination offset"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a8f97d8c-520c-4f6c-a9c9-c58d17c71fda",
+              "name": "Paginated list of exceptions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "reconciliation_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"title\": \"string\",\n      \"reconciliation_id\": 6510,\n      \"data_stream_id\": 6072,\n      \"id\": 2131,\n      \"reconciliation_name\": \"string\",\n      \"data_stream_name\": \"string\",\n      \"data_stream_key\": \"string\",\n      \"description\": \"string\",\n      \"status\": \"open\",\n      \"created_at\": \"1956-08-17T10:56:24.693Z\",\n      \"updated_at\": \"2003-02-11T14:47:35.573Z\",\n      \"opened_at\": \"1965-06-27T01:42:08.528Z\",\n      \"closed_at\": \"1966-06-03T23:40:41.151Z\",\n      \"assignees\": [\n        {\n          \"id\": 926,\n          \"workos_user_id\": \"string\"\n        },\n        {\n          \"id\": 7603,\n          \"workos_user_id\": \"string\"\n        }\n      ],\n      \"decimal_places\": 2,\n      \"aggregates\": {\n        \"record_count\": 8577,\n        \"total_amount\": 2956,\n        \"debit_count\": 4883,\n        \"debit_sum\": 5585,\n        \"credit_count\": 1840,\n        \"credit_sum\": 4296,\n        \"avg_age_days\": 8789.896269774761,\n        \"oldest_at\": \"1999-07-03T06:04:24.284Z\",\n        \"newest_at\": \"1985-07-04T20:02:59.604Z\"\n      },\n      \"filtered_aggregates\": {\n        \"record_count\": 7508,\n        \"total_amount\": 9897,\n        \"debit_count\": 4550,\n        \"debit_sum\": 4065,\n        \"credit_count\": 3424,\n        \"credit_sum\": 3876,\n        \"avg_age_days\": 5587.04041049828,\n        \"oldest_at\": \"2001-06-03T00:09:14.591Z\",\n        \"newest_at\": \"2011-05-16T23:01:20.568Z\"\n      },\n      \"comments\": [\n        {\n          \"id\": 6714,\n          \"body\": \"string\",\n          \"author_workos_id\": \"string\",\n          \"mentions\": [\n            3023,\n            186\n          ],\n          \"created_at\": \"1983-10-18T16:51:17.698Z\"\n        },\n        {\n          \"id\": 4293,\n          \"body\": \"string\",\n          \"author_workos_id\": \"string\",\n          \"mentions\": [\n            4913,\n            661\n          ],\n          \"created_at\": \"2014-09-16T17:26:51.388Z\"\n        }\n      ],\n      \"investigation\": {\n        \"id\": 4537,\n        \"status\": \"string\",\n        \"outcome\": \"match_found\",\n        \"recommendation_text\": \"string\",\n        \"confidence_score\": 814.6712075750895,\n        \"candidate_records_searched\": 8625,\n        \"suggested_record_ids\": [\n          6107,\n          6806\n        ],\n        \"filter_params\": {\n          \"key_0\": false\n        },\n        \"completed_at\": \"1957-11-20T00:16:13.087Z\",\n        \"created_at\": \"2004-01-25T06:54:14.932Z\"\n      },\n      \"investigation_sessions\": [\n        {\n          \"id\": 3367,\n          \"status\": \"string\",\n          \"outcome\": \"no_match\",\n          \"recommendation_text\": \"string\",\n          \"confidence_score\": 8267.545277982468,\n          \"candidate_records_searched\": 6911,\n          \"suggested_record_ids\": [\n            2203,\n            2742\n          ],\n          \"filter_params\": {\n            \"key_0\": \"string\"\n          },\n          \"completed_at\": \"2012-11-09T01:31:40.775Z\",\n          \"created_at\": \"1973-03-18T15:14:12.730Z\"\n        },\n        {\n          \"id\": 1796,\n          \"status\": \"string\",\n          \"outcome\": \"match_found\",\n          \"recommendation_text\": \"string\",\n          \"confidence_score\": 7984.263029560935,\n          \"candidate_records_searched\": 8318,\n          \"suggested_record_ids\": [\n            4133,\n            9381\n          ],\n          \"filter_params\": {\n            \"key_0\": \"string\"\n          },\n          \"completed_at\": \"2001-04-13T09:59:32.806Z\",\n          \"created_at\": \"1949-06-27T21:48:55.198Z\"\n        }\n      ]\n    },\n    {\n      \"title\": \"string\",\n      \"reconciliation_id\": 8059,\n      \"data_stream_id\": 8841,\n      \"id\": 7302,\n      \"reconciliation_name\": \"string\",\n      \"data_stream_name\": \"string\",\n      \"data_stream_key\": \"string\",\n      \"description\": \"string\",\n      \"status\": \"open\",\n      \"created_at\": \"1992-03-01T22:23:09.458Z\",\n      \"updated_at\": \"2003-08-30T06:26:48.224Z\",\n      \"opened_at\": \"1962-02-13T10:28:29.148Z\",\n      \"closed_at\": \"1959-10-13T19:54:54.465Z\",\n      \"assignees\": [\n        {\n          \"id\": 3095,\n          \"workos_user_id\": \"string\"\n        },\n        {\n          \"id\": 5343,\n          \"workos_user_id\": \"string\"\n        }\n      ],\n      \"decimal_places\": 2,\n      \"aggregates\": {\n        \"record_count\": 6877,\n        \"total_amount\": 8743,\n        \"debit_count\": 9345,\n        \"debit_sum\": 3116,\n        \"credit_count\": 4279,\n        \"credit_sum\": 7581,\n        \"avg_age_days\": 1002.5032133139622,\n        \"oldest_at\": \"2005-07-17T22:52:13.246Z\",\n        \"newest_at\": \"1973-11-21T05:28:31.088Z\"\n      },\n      \"filtered_aggregates\": {\n        \"record_count\": 6009,\n        \"total_amount\": 6125,\n        \"debit_count\": 5091,\n        \"debit_sum\": 3101,\n        \"credit_count\": 7803,\n        \"credit_sum\": 2725,\n        \"avg_age_days\": 2648.948345741583,\n        \"oldest_at\": \"1961-09-20T02:35:08.176Z\",\n        \"newest_at\": \"2004-02-03T09:04:39.540Z\"\n      },\n      \"comments\": [\n        {\n          \"id\": 6219,\n          \"body\": \"string\",\n          \"author_workos_id\": \"string\",\n          \"mentions\": [\n            576,\n            1000\n          ],\n          \"created_at\": \"1967-04-30T10:48:00.503Z\"\n        },\n        {\n          \"id\": 5198,\n          \"body\": \"string\",\n          \"author_workos_id\": \"string\",\n          \"mentions\": [\n            6087,\n            7566\n          ],\n          \"created_at\": \"1960-07-30T07:16:21.325Z\"\n        }\n      ],\n      \"investigation\": {\n        \"id\": 872,\n        \"status\": \"string\",\n        \"outcome\": \"no_match\",\n        \"recommendation_text\": \"string\",\n        \"confidence_score\": 6955.139220678415,\n        \"candidate_records_searched\": 4087,\n        \"suggested_record_ids\": [\n          3453,\n          7299\n        ],\n        \"filter_params\": {\n          \"key_0\": 8257.589816514492,\n          \"key_1\": 6570.6899925315065\n        },\n        \"completed_at\": \"1961-11-14T20:42:20.993Z\",\n        \"created_at\": \"2013-09-19T08:56:45.973Z\"\n      },\n      \"investigation_sessions\": [\n        {\n          \"id\": 1311,\n          \"status\": \"string\",\n          \"outcome\": \"no_match\",\n          \"recommendation_text\": \"string\",\n          \"confidence_score\": 2726.0504803976505,\n          \"candidate_records_searched\": 6325,\n          \"suggested_record_ids\": [\n            2333,\n            4188\n          ],\n          \"filter_params\": {\n            \"key_0\": 1923.2194579903205,\n            \"key_1\": 7797.775278292739\n          },\n          \"completed_at\": \"1958-11-28T09:03:30.431Z\",\n          \"created_at\": \"1998-06-21T21:02:04.584Z\"\n        },\n        {\n          \"id\": 1457,\n          \"status\": \"string\",\n          \"outcome\": null,\n          \"recommendation_text\": \"string\",\n          \"confidence_score\": 9180.68113968231,\n          \"candidate_records_searched\": 1043,\n          \"suggested_record_ids\": [\n            6521,\n            4495\n          ],\n          \"filter_params\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\"\n          },\n          \"completed_at\": \"1994-04-08T19:45:37.518Z\",\n          \"created_at\": \"1980-01-26T00:35:53.315Z\"\n        }\n      ]\n    }\n  ],\n  \"has_more\": false,\n  \"offset\": 6574.615178903251\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7356d303-5e32-493b-9e9b-33c4581987fb",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "reconciliation_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dc7b0633-1bf2-4424-94c8-5c8c76daadc6",
+          "name": "Create a reconciliation exception",
+          "request": {
+            "name": "Create a reconciliation exception",
+            "description": {
+              "content": "Create an exception for a reconciliation and data stream. Only one `open` or `investigating` exception can exist per (data stream, reconciliation) pair at a time. `title` defaults to `\"{data_stream_name} — overdue records\"`, and `status` defaults to `open`. The system automatically creates exceptions via its overdue sweeper — use this endpoint when you want to open one manually.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliation_exceptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reconciliation_id\": \"<string>\",\n  \"data_stream_id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"open\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7bbc324f-9ad7-48be-a80b-7a9d8bbeee35",
+              "name": "Exception created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reconciliation_id\": \"<string>\",\n  \"data_stream_id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"open\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"reconciliation_id\": 8582,\n  \"data_stream_id\": 8727,\n  \"id\": 8424,\n  \"reconciliation_name\": \"string\",\n  \"data_stream_name\": \"string\",\n  \"data_stream_key\": \"string\",\n  \"description\": \"string\",\n  \"status\": \"open\",\n  \"created_at\": \"1965-09-11T05:34:28.281Z\",\n  \"updated_at\": \"1963-04-11T20:21:41.630Z\",\n  \"opened_at\": \"1995-06-22T00:10:35.903Z\",\n  \"closed_at\": \"2025-03-27T21:00:17.415Z\",\n  \"assignees\": [\n    {\n      \"id\": 773,\n      \"workos_user_id\": \"string\"\n    },\n    {\n      \"id\": 4381,\n      \"workos_user_id\": \"string\"\n    }\n  ],\n  \"decimal_places\": 2,\n  \"aggregates\": {\n    \"record_count\": 9671,\n    \"total_amount\": 8388,\n    \"debit_count\": 5721,\n    \"debit_sum\": 5381,\n    \"credit_count\": 4583,\n    \"credit_sum\": 4970,\n    \"avg_age_days\": 8748.109004687998,\n    \"oldest_at\": \"1962-10-11T15:33:28.658Z\",\n    \"newest_at\": \"2021-05-21T15:05:25.363Z\"\n  },\n  \"filtered_aggregates\": {\n    \"record_count\": 223,\n    \"total_amount\": 4812,\n    \"debit_count\": 2491,\n    \"debit_sum\": 4009,\n    \"credit_count\": 4350,\n    \"credit_sum\": 1947,\n    \"avg_age_days\": 9524.968870907202,\n    \"oldest_at\": \"1965-05-17T17:33:44.681Z\",\n    \"newest_at\": \"1959-02-25T23:28:04.808Z\"\n  },\n  \"comments\": [\n    {\n      \"id\": 4666,\n      \"body\": \"string\",\n      \"author_workos_id\": \"string\",\n      \"mentions\": [\n        9903,\n        8544\n      ],\n      \"created_at\": \"1949-06-21T14:36:37.279Z\"\n    },\n    {\n      \"id\": 3812,\n      \"body\": \"string\",\n      \"author_workos_id\": \"string\",\n      \"mentions\": [\n        290,\n        442\n      ],\n      \"created_at\": \"2007-10-11T01:26:35.708Z\"\n    }\n  ],\n  \"investigation\": {\n    \"id\": 761,\n    \"status\": \"string\",\n    \"outcome\": \"needs_review\",\n    \"recommendation_text\": \"string\",\n    \"confidence_score\": 1526.3789490730628,\n    \"candidate_records_searched\": 1982,\n    \"suggested_record_ids\": [\n      8719,\n      2007\n    ],\n    \"filter_params\": {\n      \"key_0\": \"string\",\n      \"key_1\": true,\n      \"key_2\": 9683\n    },\n    \"completed_at\": \"1980-07-10T14:45:47.305Z\",\n    \"created_at\": \"1969-10-13T16:49:35.024Z\"\n  },\n  \"investigation_sessions\": [\n    {\n      \"id\": 7627,\n      \"status\": \"string\",\n      \"outcome\": \"needs_review\",\n      \"recommendation_text\": \"string\",\n      \"confidence_score\": 8561.849580361039,\n      \"candidate_records_searched\": 8977,\n      \"suggested_record_ids\": [\n        8975,\n        1861\n      ],\n      \"filter_params\": {\n        \"key_0\": 8884.269460499192\n      },\n      \"completed_at\": \"1951-11-18T15:49:36.612Z\",\n      \"created_at\": \"1959-02-11T00:49:54.458Z\"\n    },\n    {\n      \"id\": 406,\n      \"status\": \"string\",\n      \"outcome\": \"match_found\",\n      \"recommendation_text\": \"string\",\n      \"confidence_score\": 6516.730558392925,\n      \"candidate_records_searched\": 8639,\n      \"suggested_record_ids\": [\n        4913,\n        1417\n      ],\n      \"filter_params\": {\n        \"key_0\": 2391.177167331885,\n        \"key_1\": 1024,\n        \"key_2\": 8999.2568888658,\n        \"key_3\": 6792\n      },\n      \"completed_at\": \"1978-11-14T02:48:47.256Z\",\n      \"created_at\": \"1973-02-12T16:39:49.299Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9f77635-dee6-49a9-8cf5-a9900600e608",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reconciliation_id\": \"<string>\",\n  \"data_stream_id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"open\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "296a472d-8ef5-48d3-b7cd-8979efded5ce",
+              "name": "Reconciliation or data stream not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reconciliation_id\": \"<string>\",\n  \"data_stream_id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"open\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c06544a3-b85c-4a14-a222-1029a293b7ac",
+              "name": "Validation failed, or a duplicate open/investigating exception already exists for this (data stream, reconciliation)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reconciliation_id\": \"<string>\",\n  \"data_stream_id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"open\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cc3c24e0-aa5f-4a69-9f52-bfe970f44fe3",
+          "name": "Retrieve a reconciliation exception",
+          "request": {
+            "name": "Retrieve a reconciliation exception",
+            "description": {
+              "content": "Returns the exception with assignees, comments, recent investigation sessions, `aggregates` for the entire overdue slice, and `filtered_aggregates` restricted to the supplied filter query parameters. All filter parameters are optional.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliation_exceptions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "amount_min",
+                  "value": "<integer>",
+                  "description": "Include records with signed amount >= amount_min (cents)"
+                },
+                {
+                  "disabled": false,
+                  "key": "amount_max",
+                  "value": "<integer>",
+                  "description": "Include records with signed amount <= amount_max (cents)"
+                },
+                {
+                  "disabled": false,
+                  "key": "date_from",
+                  "value": "<date>",
+                  "description": "Include records with transaction date >= date_from"
+                },
+                {
+                  "disabled": false,
+                  "key": "date_to",
+                  "value": "<date>",
+                  "description": "Include records with transaction date <= date_to"
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "<string>",
+                  "description": "Include only debits (amount < 0) or credits (amount > 0)"
+                },
+                {
+                  "disabled": false,
+                  "key": "counterparty",
+                  "value": "<string>",
+                  "description": "Case-insensitive substring match on record description"
+                },
+                {
+                  "disabled": false,
+                  "key": "age_bucket",
+                  "value": "<string>",
+                  "description": "Convenience age filter on time since `overdue_at`"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e9f5b16a-9037-4722-84ca-65b35c9fb2dd",
+              "name": "Exception retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "amount_min",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "amount_max",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "date_from",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "counterparty",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "age_bucket",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"reconciliation_id\": 8582,\n  \"data_stream_id\": 8727,\n  \"id\": 8424,\n  \"reconciliation_name\": \"string\",\n  \"data_stream_name\": \"string\",\n  \"data_stream_key\": \"string\",\n  \"description\": \"string\",\n  \"status\": \"open\",\n  \"created_at\": \"1965-09-11T05:34:28.281Z\",\n  \"updated_at\": \"1963-04-11T20:21:41.630Z\",\n  \"opened_at\": \"1995-06-22T00:10:35.903Z\",\n  \"closed_at\": \"2025-03-27T21:00:17.415Z\",\n  \"assignees\": [\n    {\n      \"id\": 773,\n      \"workos_user_id\": \"string\"\n    },\n    {\n      \"id\": 4381,\n      \"workos_user_id\": \"string\"\n    }\n  ],\n  \"decimal_places\": 2,\n  \"aggregates\": {\n    \"record_count\": 9671,\n    \"total_amount\": 8388,\n    \"debit_count\": 5721,\n    \"debit_sum\": 5381,\n    \"credit_count\": 4583,\n    \"credit_sum\": 4970,\n    \"avg_age_days\": 8748.109004687998,\n    \"oldest_at\": \"1962-10-11T15:33:28.658Z\",\n    \"newest_at\": \"2021-05-21T15:05:25.363Z\"\n  },\n  \"filtered_aggregates\": {\n    \"record_count\": 223,\n    \"total_amount\": 4812,\n    \"debit_count\": 2491,\n    \"debit_sum\": 4009,\n    \"credit_count\": 4350,\n    \"credit_sum\": 1947,\n    \"avg_age_days\": 9524.968870907202,\n    \"oldest_at\": \"1965-05-17T17:33:44.681Z\",\n    \"newest_at\": \"1959-02-25T23:28:04.808Z\"\n  },\n  \"comments\": [\n    {\n      \"id\": 4666,\n      \"body\": \"string\",\n      \"author_workos_id\": \"string\",\n      \"mentions\": [\n        9903,\n        8544\n      ],\n      \"created_at\": \"1949-06-21T14:36:37.279Z\"\n    },\n    {\n      \"id\": 3812,\n      \"body\": \"string\",\n      \"author_workos_id\": \"string\",\n      \"mentions\": [\n        290,\n        442\n      ],\n      \"created_at\": \"2007-10-11T01:26:35.708Z\"\n    }\n  ],\n  \"investigation\": {\n    \"id\": 761,\n    \"status\": \"string\",\n    \"outcome\": \"needs_review\",\n    \"recommendation_text\": \"string\",\n    \"confidence_score\": 1526.3789490730628,\n    \"candidate_records_searched\": 1982,\n    \"suggested_record_ids\": [\n      8719,\n      2007\n    ],\n    \"filter_params\": {\n      \"key_0\": \"string\",\n      \"key_1\": true,\n      \"key_2\": 9683\n    },\n    \"completed_at\": \"1980-07-10T14:45:47.305Z\",\n    \"created_at\": \"1969-10-13T16:49:35.024Z\"\n  },\n  \"investigation_sessions\": [\n    {\n      \"id\": 7627,\n      \"status\": \"string\",\n      \"outcome\": \"needs_review\",\n      \"recommendation_text\": \"string\",\n      \"confidence_score\": 8561.849580361039,\n      \"candidate_records_searched\": 8977,\n      \"suggested_record_ids\": [\n        8975,\n        1861\n      ],\n      \"filter_params\": {\n        \"key_0\": 8884.269460499192\n      },\n      \"completed_at\": \"1951-11-18T15:49:36.612Z\",\n      \"created_at\": \"1959-02-11T00:49:54.458Z\"\n    },\n    {\n      \"id\": 406,\n      \"status\": \"string\",\n      \"outcome\": \"match_found\",\n      \"recommendation_text\": \"string\",\n      \"confidence_score\": 6516.730558392925,\n      \"candidate_records_searched\": 8639,\n      \"suggested_record_ids\": [\n        4913,\n        1417\n      ],\n      \"filter_params\": {\n        \"key_0\": 2391.177167331885,\n        \"key_1\": 1024,\n        \"key_2\": 8999.2568888658,\n        \"key_3\": 6792\n      },\n      \"completed_at\": \"1978-11-14T02:48:47.256Z\",\n      \"created_at\": \"1973-02-12T16:39:49.299Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac840d23-aac8-466b-8302-988ef83974b7",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "amount_min",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "amount_max",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "date_from",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "counterparty",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "age_bucket",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8555778a-84bf-4955-bded-3c7028c23e93",
+              "name": "Exception not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "amount_min",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "amount_max",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "date_from",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "counterparty",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "age_bucket",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7fbb2733-6b25-4ffd-a113-92f48a7dd33e",
+          "name": "Update a reconciliation exception",
+          "request": {
+            "name": "Update a reconciliation exception",
+            "description": {
+              "content": "Update the title, description, or status of an exception.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliation_exceptions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "39e828e3-cca5-4944-a094-8a7492fef075",
+              "name": "Exception updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"reconciliation_id\": 8582,\n  \"data_stream_id\": 8727,\n  \"id\": 8424,\n  \"reconciliation_name\": \"string\",\n  \"data_stream_name\": \"string\",\n  \"data_stream_key\": \"string\",\n  \"description\": \"string\",\n  \"status\": \"open\",\n  \"created_at\": \"1965-09-11T05:34:28.281Z\",\n  \"updated_at\": \"1963-04-11T20:21:41.630Z\",\n  \"opened_at\": \"1995-06-22T00:10:35.903Z\",\n  \"closed_at\": \"2025-03-27T21:00:17.415Z\",\n  \"assignees\": [\n    {\n      \"id\": 773,\n      \"workos_user_id\": \"string\"\n    },\n    {\n      \"id\": 4381,\n      \"workos_user_id\": \"string\"\n    }\n  ],\n  \"decimal_places\": 2,\n  \"aggregates\": {\n    \"record_count\": 9671,\n    \"total_amount\": 8388,\n    \"debit_count\": 5721,\n    \"debit_sum\": 5381,\n    \"credit_count\": 4583,\n    \"credit_sum\": 4970,\n    \"avg_age_days\": 8748.109004687998,\n    \"oldest_at\": \"1962-10-11T15:33:28.658Z\",\n    \"newest_at\": \"2021-05-21T15:05:25.363Z\"\n  },\n  \"filtered_aggregates\": {\n    \"record_count\": 223,\n    \"total_amount\": 4812,\n    \"debit_count\": 2491,\n    \"debit_sum\": 4009,\n    \"credit_count\": 4350,\n    \"credit_sum\": 1947,\n    \"avg_age_days\": 9524.968870907202,\n    \"oldest_at\": \"1965-05-17T17:33:44.681Z\",\n    \"newest_at\": \"1959-02-25T23:28:04.808Z\"\n  },\n  \"comments\": [\n    {\n      \"id\": 4666,\n      \"body\": \"string\",\n      \"author_workos_id\": \"string\",\n      \"mentions\": [\n        9903,\n        8544\n      ],\n      \"created_at\": \"1949-06-21T14:36:37.279Z\"\n    },\n    {\n      \"id\": 3812,\n      \"body\": \"string\",\n      \"author_workos_id\": \"string\",\n      \"mentions\": [\n        290,\n        442\n      ],\n      \"created_at\": \"2007-10-11T01:26:35.708Z\"\n    }\n  ],\n  \"investigation\": {\n    \"id\": 761,\n    \"status\": \"string\",\n    \"outcome\": \"needs_review\",\n    \"recommendation_text\": \"string\",\n    \"confidence_score\": 1526.3789490730628,\n    \"candidate_records_searched\": 1982,\n    \"suggested_record_ids\": [\n      8719,\n      2007\n    ],\n    \"filter_params\": {\n      \"key_0\": \"string\",\n      \"key_1\": true,\n      \"key_2\": 9683\n    },\n    \"completed_at\": \"1980-07-10T14:45:47.305Z\",\n    \"created_at\": \"1969-10-13T16:49:35.024Z\"\n  },\n  \"investigation_sessions\": [\n    {\n      \"id\": 7627,\n      \"status\": \"string\",\n      \"outcome\": \"needs_review\",\n      \"recommendation_text\": \"string\",\n      \"confidence_score\": 8561.849580361039,\n      \"candidate_records_searched\": 8977,\n      \"suggested_record_ids\": [\n        8975,\n        1861\n      ],\n      \"filter_params\": {\n        \"key_0\": 8884.269460499192\n      },\n      \"completed_at\": \"1951-11-18T15:49:36.612Z\",\n      \"created_at\": \"1959-02-11T00:49:54.458Z\"\n    },\n    {\n      \"id\": 406,\n      \"status\": \"string\",\n      \"outcome\": \"match_found\",\n      \"recommendation_text\": \"string\",\n      \"confidence_score\": 6516.730558392925,\n      \"candidate_records_searched\": 8639,\n      \"suggested_record_ids\": [\n        4913,\n        1417\n      ],\n      \"filter_params\": {\n        \"key_0\": 2391.177167331885,\n        \"key_1\": 1024,\n        \"key_2\": 8999.2568888658,\n        \"key_3\": 6792\n      },\n      \"completed_at\": \"1978-11-14T02:48:47.256Z\",\n      \"created_at\": \"1973-02-12T16:39:49.299Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93ffe5dd-7d1a-42a9-b825-4f07d026e05b",
+              "name": "Exception not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bce17ee2-b1c2-4baf-bf1e-edce5bdbf4d1",
+          "name": "Delete a reconciliation exception",
+          "request": {
+            "name": "Delete a reconciliation exception",
+            "description": {},
+            "url": {
+              "path": [
+                "reconciliation_exceptions",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a60a1539-00d5-4d01-9982-486fe440f784",
+              "name": "Exception deleted successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "393c46be-dc13-4084-bb0c-36ffd6710bf0",
+              "name": "Exception not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_exceptions",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.endclose.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-KEY"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f00da720-44fa-4926-8bfb-2562375c40e0",
+    "name": "End Close Bank Account Balances Reconciliation Exceptions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API is used to interact with the End Close platform.",
+      "type": "text/plain"
+    }
+  }
+}

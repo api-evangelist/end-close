@@ -1,0 +1,177 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "End Close Bank Account Balances Reconciliation Exceptions API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reconciliation Exceptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List reconciliation exceptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliation_exceptions",
+            "params": [
+              {
+                "name": "reconciliation_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by reconciliation"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by exception status"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Pagination offset"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of exceptions, optionally filtered by reconciliation or status. Each row includes data-stream metadata and an aggregates summary so you can render a queue without a follow-up request per row."
+        },
+        {
+          "info": {
+            "name": "Create a reconciliation exception",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/reconciliation_exceptions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an exception for a reconciliation and data stream. Only one `open` or `investigating` exception can exist per (data stream, reconciliation) pair at a time. `title` defaults to `\"{data_stream_name} — overdue records\"`, and `status` defaults to `open`. The system automatically creates exceptions via its overdue sweeper — use this endpoint when you want to open one manually."
+        },
+        {
+          "info": {
+            "name": "Retrieve a reconciliation exception",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/reconciliation_exceptions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "amount_min",
+                "value": "",
+                "type": "query",
+                "description": "Include records with signed amount >= amount_min (cents)"
+              },
+              {
+                "name": "amount_max",
+                "value": "",
+                "type": "query",
+                "description": "Include records with signed amount <= amount_max (cents)"
+              },
+              {
+                "name": "date_from",
+                "value": "",
+                "type": "query",
+                "description": "Include records with transaction date >= date_from"
+              },
+              {
+                "name": "date_to",
+                "value": "",
+                "type": "query",
+                "description": "Include records with transaction date <= date_to"
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Include only debits (amount < 0) or credits (amount > 0)"
+              },
+              {
+                "name": "counterparty",
+                "value": "",
+                "type": "query",
+                "description": "Case-insensitive substring match on record description"
+              },
+              {
+                "name": "age_bucket",
+                "value": "",
+                "type": "query",
+                "description": "Convenience age filter on time since `overdue_at`"
+              }
+            ]
+          },
+          "docs": "Returns the exception with assignees, comments, recent investigation sessions, `aggregates` for the entire overdue slice, and `filtered_aggregates` restricted to the supplied filter query parameters. All filter parameters are optional."
+        },
+        {
+          "info": {
+            "name": "Update a reconciliation exception",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.endclose.com/v1/reconciliation_exceptions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the title, description, or status of an exception."
+        },
+        {
+          "info": {
+            "name": "Delete a reconciliation exception",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.endclose.com/v1/reconciliation_exceptions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a reconciliation exception"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

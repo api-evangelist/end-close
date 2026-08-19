@@ -1,0 +1,777 @@
+{
+  "item": [
+    {
+      "id": "3a6b1a9c-a724-4177-8e12-248c1e6a4e5a",
+      "name": "Reconciliation Stories",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "101666ca-6173-4298-99c2-82fefc7f4dc2",
+          "name": "List reconciliation stories",
+          "request": {
+            "name": "List reconciliation stories",
+            "description": {
+              "content": "Returns all reconciliation stories in the environment, newest first.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliation_stories"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f6ce0632-2ebd-43ae-9f35-257723ec3ac9",
+              "name": "List of stories",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_stories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"name\": \"string\",\n      \"id\": 3529,\n      \"created_at\": \"1976-01-13T13:01:08.761Z\",\n      \"links\": [\n        {\n          \"reconciliation_id\": 8310,\n          \"position\": 5743,\n          \"role\": \"continuation\",\n          \"id\": 2846,\n          \"reconciliation_name\": \"string\",\n          \"shared_data_stream_id\": 777,\n          \"shared_data_stream_name\": \"string\",\n          \"side_a_streams\": [\n            {\n              \"id\": 3092,\n              \"name\": \"string\"\n            },\n            {\n              \"id\": 339,\n              \"name\": \"string\"\n            }\n          ],\n          \"side_b_streams\": [\n            {\n              \"id\": 1721,\n              \"name\": \"string\"\n            },\n            {\n              \"id\": 3798,\n              \"name\": \"string\"\n            }\n          ]\n        },\n        {\n          \"reconciliation_id\": 713,\n          \"position\": 2093,\n          \"role\": \"origin\",\n          \"id\": 519,\n          \"reconciliation_name\": \"string\",\n          \"shared_data_stream_id\": 8741,\n          \"shared_data_stream_name\": \"string\",\n          \"side_a_streams\": [\n            {\n              \"id\": 4725,\n              \"name\": \"string\"\n            },\n            {\n              \"id\": 1949,\n              \"name\": \"string\"\n            }\n          ],\n          \"side_b_streams\": [\n            {\n              \"id\": 1504,\n              \"name\": \"string\"\n            },\n            {\n              \"id\": 7743,\n              \"name\": \"string\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"id\": 1786,\n      \"created_at\": \"1986-08-19T13:36:40.098Z\",\n      \"links\": [\n        {\n          \"reconciliation_id\": 431,\n          \"position\": 5440,\n          \"role\": \"origin\",\n          \"id\": 3754,\n          \"reconciliation_name\": \"string\",\n          \"shared_data_stream_id\": 9174,\n          \"shared_data_stream_name\": \"string\",\n          \"side_a_streams\": [\n            {\n              \"id\": 8130,\n              \"name\": \"string\"\n            },\n            {\n              \"id\": 4258,\n              \"name\": \"string\"\n            }\n          ],\n          \"side_b_streams\": [\n            {\n              \"id\": 1314,\n              \"name\": \"string\"\n            },\n            {\n              \"id\": 8111,\n              \"name\": \"string\"\n            }\n          ]\n        },\n        {\n          \"reconciliation_id\": 9348,\n          \"position\": 371,\n          \"role\": \"origin\",\n          \"id\": 7534,\n          \"reconciliation_name\": \"string\",\n          \"shared_data_stream_id\": 7282,\n          \"shared_data_stream_name\": \"string\",\n          \"side_a_streams\": [\n            {\n              \"id\": 8302,\n              \"name\": \"string\"\n            },\n            {\n              \"id\": 6923,\n              \"name\": \"string\"\n            }\n          ],\n          \"side_b_streams\": [\n            {\n              \"id\": 4555,\n              \"name\": \"string\"\n            },\n            {\n              \"id\": 9598,\n              \"name\": \"string\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c7d7303d-c492-45b1-9c18-29d6a5d3981a",
+          "name": "Create a reconciliation story",
+          "request": {
+            "name": "Create a reconciliation story",
+            "description": {
+              "content": "Create a story and attach a chain of reconciliations. The first link must use role `origin` and have no shared_data_stream_id; subsequent links must use role `continuation` and specify the shared data stream linking them to the previous reconciliation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliation_stories"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"links\": [\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"origin\",\n      \"shared_data_stream_id\": \"<string>\"\n    },\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"origin\",\n      \"shared_data_stream_id\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "aa2c193f-7c67-4671-a604-fe0f241d28b3",
+              "name": "Story created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_stories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"links\": [\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"origin\",\n      \"shared_data_stream_id\": \"<string>\"\n    },\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"origin\",\n      \"shared_data_stream_id\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"id\": 3623,\n  \"created_at\": \"2014-09-30T18:01:23.178Z\",\n  \"links\": [\n    {\n      \"reconciliation_id\": 6421,\n      \"position\": 4206,\n      \"role\": \"origin\",\n      \"id\": 9001,\n      \"reconciliation_name\": \"string\",\n      \"shared_data_stream_id\": 3807,\n      \"shared_data_stream_name\": \"string\",\n      \"side_a_streams\": [\n        {\n          \"id\": 9800,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9214,\n          \"name\": \"string\"\n        }\n      ],\n      \"side_b_streams\": [\n        {\n          \"id\": 8006,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9561,\n          \"name\": \"string\"\n        }\n      ]\n    },\n    {\n      \"reconciliation_id\": 5159,\n      \"position\": 8943,\n      \"role\": \"continuation\",\n      \"id\": 5954,\n      \"reconciliation_name\": \"string\",\n      \"shared_data_stream_id\": 3889,\n      \"shared_data_stream_name\": \"string\",\n      \"side_a_streams\": [\n        {\n          \"id\": 8498,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 6356,\n          \"name\": \"string\"\n        }\n      ],\n      \"side_b_streams\": [\n        {\n          \"id\": 2803,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 4589,\n          \"name\": \"string\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7865da5f-2dcf-4ae6-b108-f6247cf2941f",
+              "name": "Validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_stories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"links\": [\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"origin\",\n      \"shared_data_stream_id\": \"<string>\"\n    },\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"origin\",\n      \"shared_data_stream_id\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "acbf4ef2-77d8-4721-8514-95ad7ea6d963",
+          "name": "Retrieve a reconciliation story",
+          "request": {
+            "name": "Retrieve a reconciliation story",
+            "description": {},
+            "url": {
+              "path": [
+                "reconciliation_stories",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "49d72787-6b99-4bd6-9549-e152c9c08c93",
+              "name": "Story retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_stories",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"id\": 3623,\n  \"created_at\": \"2014-09-30T18:01:23.178Z\",\n  \"links\": [\n    {\n      \"reconciliation_id\": 6421,\n      \"position\": 4206,\n      \"role\": \"origin\",\n      \"id\": 9001,\n      \"reconciliation_name\": \"string\",\n      \"shared_data_stream_id\": 3807,\n      \"shared_data_stream_name\": \"string\",\n      \"side_a_streams\": [\n        {\n          \"id\": 9800,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9214,\n          \"name\": \"string\"\n        }\n      ],\n      \"side_b_streams\": [\n        {\n          \"id\": 8006,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9561,\n          \"name\": \"string\"\n        }\n      ]\n    },\n    {\n      \"reconciliation_id\": 5159,\n      \"position\": 8943,\n      \"role\": \"continuation\",\n      \"id\": 5954,\n      \"reconciliation_name\": \"string\",\n      \"shared_data_stream_id\": 3889,\n      \"shared_data_stream_name\": \"string\",\n      \"side_a_streams\": [\n        {\n          \"id\": 8498,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 6356,\n          \"name\": \"string\"\n        }\n      ],\n      \"side_b_streams\": [\n        {\n          \"id\": 2803,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 4589,\n          \"name\": \"string\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db92375c-1fbc-4e0f-8ab0-443b816d5262",
+              "name": "Story not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_stories",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6d308e71-c96c-4bb7-bcb4-dc31de8c343c",
+          "name": "Update a reconciliation story",
+          "request": {
+            "name": "Update a reconciliation story",
+            "description": {
+              "content": "Update the story name and/or replace its links. If `links` is provided, all existing links are replaced with the new chain. If `links` is omitted, only the name is updated.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliation_stories",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"links\": [\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"<string>\",\n      \"shared_data_stream_id\": \"<string>\"\n    },\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"<string>\",\n      \"shared_data_stream_id\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "087112f6-8ece-4d2e-b972-86adbab0cdfd",
+              "name": "Story updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_stories",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"links\": [\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"<string>\",\n      \"shared_data_stream_id\": \"<string>\"\n    },\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"<string>\",\n      \"shared_data_stream_id\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"id\": 3623,\n  \"created_at\": \"2014-09-30T18:01:23.178Z\",\n  \"links\": [\n    {\n      \"reconciliation_id\": 6421,\n      \"position\": 4206,\n      \"role\": \"origin\",\n      \"id\": 9001,\n      \"reconciliation_name\": \"string\",\n      \"shared_data_stream_id\": 3807,\n      \"shared_data_stream_name\": \"string\",\n      \"side_a_streams\": [\n        {\n          \"id\": 9800,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9214,\n          \"name\": \"string\"\n        }\n      ],\n      \"side_b_streams\": [\n        {\n          \"id\": 8006,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9561,\n          \"name\": \"string\"\n        }\n      ]\n    },\n    {\n      \"reconciliation_id\": 5159,\n      \"position\": 8943,\n      \"role\": \"continuation\",\n      \"id\": 5954,\n      \"reconciliation_name\": \"string\",\n      \"shared_data_stream_id\": 3889,\n      \"shared_data_stream_name\": \"string\",\n      \"side_a_streams\": [\n        {\n          \"id\": 8498,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 6356,\n          \"name\": \"string\"\n        }\n      ],\n      \"side_b_streams\": [\n        {\n          \"id\": 2803,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 4589,\n          \"name\": \"string\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0fba905-93c3-4338-9057-e48530e56895",
+              "name": "Story not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_stories",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"links\": [\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"<string>\",\n      \"shared_data_stream_id\": \"<string>\"\n    },\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"<string>\",\n      \"shared_data_stream_id\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f21ed481-cc53-4ada-b1a4-6f032f22d5e4",
+              "name": "Validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_stories",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"links\": [\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"<string>\",\n      \"shared_data_stream_id\": \"<string>\"\n    },\n    {\n      \"reconciliation_id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"role\": \"<string>\",\n      \"shared_data_stream_id\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1bec2f3e-8774-4904-94e1-8870947fd9fd",
+          "name": "Delete a reconciliation story",
+          "request": {
+            "name": "Delete a reconciliation story",
+            "description": {
+              "content": "Permanently deletes a story and unlinks it from all reconciliations. The reconciliations themselves are not deleted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliation_stories",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c8820498-44b6-447d-bd3f-47d74d00958b",
+              "name": "Story deleted successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_stories",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f946c1cc-cce5-40e0-a626-5555e1fdb100",
+              "name": "Story not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_stories",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.endclose.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-KEY"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6632b801-1fbc-4769-af37-0f722fdaf8cc",
+    "name": "End Close Bank Account Balances Reconciliation Stories API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API is used to interact with the End Close platform.",
+      "type": "text/plain"
+    }
+  }
+}

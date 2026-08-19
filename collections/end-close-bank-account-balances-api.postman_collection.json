@@ -1,0 +1,621 @@
+{
+  "item": [
+    {
+      "id": "f2e30f6e-4eee-44c6-9778-43b863343e1a",
+      "name": "Bank Account Balances",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3a13ec40-4c26-4850-b1b5-d4da9627b444",
+          "name": "List bank account balances",
+          "request": {
+            "name": "List bank account balances",
+            "description": {
+              "content": "Returns all balances for a bank account, ordered by date descending.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bank_account_balances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "bank_account_id",
+                  "value": "<string>",
+                  "description": "(Required) The bank account to list balances for"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "11faabdb-07ea-4d4e-a161-cf644afa4153",
+              "name": "List of bank account balances",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank_account_balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "bank_account_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"bank_account_id\": 659,\n    \"date\": \"1957-12-18\",\n    \"balance_type\": \"opening_available_next_business_day\",\n    \"amount_cents\": 2674,\n    \"id\": 4434,\n    \"created_at\": \"1980-04-06T22:58:58.952Z\",\n    \"updated_at\": \"1999-11-29T12:53:31.849Z\"\n  },\n  {\n    \"bank_account_id\": 4756,\n    \"date\": \"2015-07-10\",\n    \"balance_type\": \"current_available\",\n    \"amount_cents\": 7755,\n    \"id\": 1092,\n    \"created_at\": \"1999-09-30T20:51:31.804Z\",\n    \"updated_at\": \"1986-08-02T23:28:42.715Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "010d2b6f-8eb7-4262-89fb-ad1a8d2bec8e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank_account_balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "bank_account_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7881b7e2-2fcc-4f4c-856e-b2a68ea88c8c",
+              "name": "bank_account_id is required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank_account_balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "bank_account_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e8e0b089-6f12-40a0-be55-ea6ef5c2104a",
+          "name": "Create or update a bank account balance",
+          "request": {
+            "name": "Create or update a bank account balance",
+            "description": {
+              "content": "Creates a balance for the specified bank account. If a balance already exists for the same date and balance type, it will be updated with the new amount (upsert behavior).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bank_account_balances"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bank_account_id\": \"<string>\",\n  \"date\": \"<date>\",\n  \"balance_type\": \"<string>\",\n  \"amount_cents\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4ca89b24-cf51-42b6-bbc6-e8be688430a8",
+              "name": "Balance created or updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank_account_balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bank_account_id\": \"<string>\",\n  \"date\": \"<date>\",\n  \"balance_type\": \"<string>\",\n  \"amount_cents\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"bank_account_id\": 7027,\n  \"date\": \"1972-09-30\",\n  \"balance_type\": \"closing_available\",\n  \"amount_cents\": 153,\n  \"id\": 9640,\n  \"created_at\": \"2010-07-20T01:25:55.745Z\",\n  \"updated_at\": \"1980-02-19T15:04:53.386Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8f87e19d-9f9d-4c54-b4bd-12564fa0fa05",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank_account_balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bank_account_id\": \"<string>\",\n  \"date\": \"<date>\",\n  \"balance_type\": \"<string>\",\n  \"amount_cents\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "12caeaa1-cc7a-4362-b1a8-96ca10d3387b",
+              "name": "Validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank_account_balances"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bank_account_id\": \"<string>\",\n  \"date\": \"<date>\",\n  \"balance_type\": \"<string>\",\n  \"amount_cents\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "21c45e0f-413f-4c1e-a967-11e334195257",
+          "name": "Bulk create or update bank account balances",
+          "request": {
+            "name": "Bulk create or update bank account balances",
+            "description": {
+              "content": "Submit up to 1,000 balances for a bank account in a single request. Each balance is upserted — if a balance already exists for the same date and balance type, it will be updated with the new amount. All balances are processed in a single transaction.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bank_account_balances",
+                "bulk"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bank_account_id\": \"<string>\",\n  \"balances\": [\n    {\n      \"date\": \"<date>\",\n      \"balance_type\": \"<string>\",\n      \"amount_cents\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "90016e6b-0fb7-45d9-99ac-a453cdb75d73",
+              "name": "Balances created or updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank_account_balances",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bank_account_id\": \"<string>\",\n  \"balances\": [\n    {\n      \"date\": \"<date>\",\n      \"balance_type\": \"<string>\",\n      \"amount_cents\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 725,\n  \"balances\": [\n    {\n      \"bank_account_id\": 3954,\n      \"date\": \"2013-11-18\",\n      \"balance_type\": \"opening_available\",\n      \"amount_cents\": 866,\n      \"id\": 3104,\n      \"created_at\": \"1953-12-06T04:30:28.574Z\",\n      \"updated_at\": \"1958-09-15T07:03:41.771Z\"\n    },\n    {\n      \"bank_account_id\": 6732,\n      \"date\": \"1991-08-11\",\n      \"balance_type\": \"opening_available_next_business_day\",\n      \"amount_cents\": 4936,\n      \"id\": 5637,\n      \"created_at\": \"2009-05-18T05:59:08.159Z\",\n      \"updated_at\": \"2015-07-16T10:43:00.858Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9397422f-ba40-403c-b1b2-4e67da3c3b28",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank_account_balances",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bank_account_id\": \"<string>\",\n  \"balances\": [\n    {\n      \"date\": \"<date>\",\n      \"balance_type\": \"<string>\",\n      \"amount_cents\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b45e0890-9432-43cb-882e-4fe71294f4af",
+              "name": "Validation error (e.g. exceeds 1,000 balances)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bank_account_balances",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bank_account_id\": \"<string>\",\n  \"balances\": [\n    {\n      \"date\": \"<date>\",\n      \"balance_type\": \"<string>\",\n      \"amount_cents\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.endclose.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-KEY"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6a9ee5af-05ea-44cc-8654-af6d42aebbc0",
+    "name": "End Close Bank Account Balances API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API is used to interact with the End Close platform.",
+      "type": "text/plain"
+    }
+  }
+}

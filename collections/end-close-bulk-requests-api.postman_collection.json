@@ -1,0 +1,1063 @@
+{
+  "item": [
+    {
+      "id": "accb44f2-de12-4e84-8247-7376e9609346",
+      "name": "Bulk Requests",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2e788435-965d-4f7a-b5b1-d60a0eefd4aa",
+          "name": "List bulk requests",
+          "request": {
+            "name": "List bulk requests",
+            "description": {
+              "content": "Cursor-paginated list of bulk requests in your environment, ordered by `created_at` descending. Filter by data stream, status, or source.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bulk_requests"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "data_stream_key",
+                  "value": "<string>",
+                  "description": "Filter to bulk requests targeting this data stream"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "<string>",
+                  "description": "Filter by request source (e.g. `bulk_api`, `csv`, `nacha`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "created_after",
+                  "value": "<dateTime>",
+                  "description": "ISO8601 lower bound on `created_at`"
+                },
+                {
+                  "disabled": false,
+                  "key": "created_before",
+                  "value": "<dateTime>",
+                  "description": "ISO8601 upper bound on `created_at`"
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Opaque cursor returned by a previous call's `next_cursor`. Omit for the first page."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "29fab382-89f6-4155-b772-cc76862666d4",
+              "name": "Paginated bulk requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "data_stream_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 7271,\n      \"status\": \"completed\",\n      \"source\": \"string\",\n      \"total_items\": 5223,\n      \"processed_items\": 4883,\n      \"successful_items\": 7119,\n      \"failed_items\": 1391,\n      \"skipped_items\": 3422,\n      \"progress\": 4204,\n      \"filename\": \"string\",\n      \"created_at\": \"1969-03-18T15:25:36.960Z\",\n      \"started_at\": \"1978-09-10T11:00:44.529Z\",\n      \"completed_at\": \"1947-12-02T12:21:23.683Z\",\n      \"last_progress_at\": \"1955-06-08T14:22:21.453Z\",\n      \"cancellation_requested_at\": \"2019-09-03T09:30:59.816Z\",\n      \"parsing\": true,\n      \"stuck\": false,\n      \"error_message\": \"string\",\n      \"error_details\": {\n        \"key_0\": 9492.27030433016\n      },\n      \"parent_bulk_request_id\": 5016,\n      \"on_conflict\": \"skip\",\n      \"data_stream_id\": 2660\n    },\n    {\n      \"id\": 3811,\n      \"status\": \"failed\",\n      \"source\": \"string\",\n      \"total_items\": 6456,\n      \"processed_items\": 5524,\n      \"successful_items\": 5716,\n      \"failed_items\": 1025,\n      \"skipped_items\": 3802,\n      \"progress\": 5940,\n      \"filename\": \"string\",\n      \"created_at\": \"1956-06-20T21:11:28.452Z\",\n      \"started_at\": \"1980-09-27T08:04:51.976Z\",\n      \"completed_at\": \"2010-08-31T11:44:54.857Z\",\n      \"last_progress_at\": \"1988-08-11T10:08:32.330Z\",\n      \"cancellation_requested_at\": \"1971-12-20T20:49:15.331Z\",\n      \"parsing\": false,\n      \"stuck\": false,\n      \"error_message\": \"string\",\n      \"error_details\": {\n        \"key_0\": \"string\",\n        \"key_1\": 9287,\n        \"key_2\": false,\n        \"key_3\": \"string\"\n      },\n      \"parent_bulk_request_id\": 6967,\n      \"on_conflict\": \"skip\",\n      \"data_stream_id\": 2068\n    }\n  ],\n  \"next_cursor\": \"string\",\n  \"limit\": 311\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f25af3a-5711-430c-ae57-700c66173f04",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "data_stream_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cb194e94-a53e-4573-b8bc-461cdcc4a13b",
+              "name": "Invalid `status`, `created_after`, or `created_before`",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "data_stream_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "source",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "created_after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "created_before",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9d21fc25-fc8c-45c0-a6f3-6d6b16fb7f94",
+          "name": "Get bulk request status",
+          "request": {
+            "name": "Get bulk request status",
+            "description": {
+              "content": "Poll the status of an asynchronous bulk request. Returns the bulk request payload plus paginated per-row results. Results grow as processing continues, so only non-pending items are included.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bulk_requests",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Number of result items to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Pagination offset for result items"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The bulk request ID returned from POST /records/bulk"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d9527f34-b6d9-4a4e-8da7-bfb00181d8b9",
+              "name": "Bulk request payload with paginated results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The bulk request ID returned from POST /records/bulk"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 4718,\n  \"status\": \"cancelled\",\n  \"source\": \"string\",\n  \"total_items\": 7058,\n  \"processed_items\": 5004,\n  \"successful_items\": 9918,\n  \"failed_items\": 4443,\n  \"skipped_items\": 3065,\n  \"progress\": 5603,\n  \"filename\": \"string\",\n  \"created_at\": \"1987-06-26T00:31:02.745Z\",\n  \"started_at\": \"1981-04-13T20:36:46.935Z\",\n  \"completed_at\": \"1978-11-21T17:05:19.535Z\",\n  \"last_progress_at\": \"1966-04-26T00:06:06.463Z\",\n  \"cancellation_requested_at\": \"1966-05-07T22:44:59.953Z\",\n  \"parsing\": true,\n  \"stuck\": false,\n  \"error_message\": \"string\",\n  \"error_details\": {\n    \"key_0\": 7737.200202310512\n  },\n  \"parent_bulk_request_id\": 9291,\n  \"on_conflict\": \"skip\",\n  \"data_stream_id\": 7975,\n  \"results\": {\n    \"data\": [\n      {\n        \"index\": 6389,\n        \"status\": \"failed\",\n        \"record_id\": 3813,\n        \"error\": \"string\"\n      },\n      {\n        \"index\": 509,\n        \"status\": \"successful\",\n        \"record_id\": 3910,\n        \"error\": \"string\"\n      }\n    ],\n    \"has_more\": false,\n    \"offset\": 8801\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aec83322-fc9d-4657-a3c2-a1fa5bb129f6",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The bulk request ID returned from POST /records/bulk"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9c6e19b0-1b56-48ba-9d55-e587a8308fd1",
+              "name": "Bulk request not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The bulk request ID returned from POST /records/bulk"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bed445d5-d7ed-4281-98eb-491bdf6ca21d",
+          "name": "Cancel a bulk request",
+          "request": {
+            "name": "Cancel a bulk request",
+            "description": {
+              "content": "Sets `cancellation_requested_at` so the running job exits cleanly to `cancelled` on its next heartbeat. Idempotent — re-cancelling just bumps the timestamp.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bulk_requests",
+                ":id",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a293c6c2-4ec7-4386-aa49-8a18d5ec8c5c",
+              "name": "Cancellation requested",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 7066,\n  \"status\": \"completed\",\n  \"source\": \"string\",\n  \"total_items\": 2888,\n  \"processed_items\": 4641,\n  \"successful_items\": 2334,\n  \"failed_items\": 9486,\n  \"skipped_items\": 5646,\n  \"progress\": 3142,\n  \"filename\": \"string\",\n  \"created_at\": \"1998-12-21T07:27:10.034Z\",\n  \"started_at\": \"1995-04-17T04:32:23.505Z\",\n  \"completed_at\": \"2026-06-03T23:18:50.220Z\",\n  \"last_progress_at\": \"1979-04-10T06:19:48.761Z\",\n  \"cancellation_requested_at\": \"1955-11-15T20:06:34.055Z\",\n  \"parsing\": false,\n  \"stuck\": true,\n  \"error_message\": \"string\",\n  \"error_details\": {\n    \"key_0\": 5049,\n    \"key_1\": 2730.149551700134,\n    \"key_2\": 2095\n  },\n  \"parent_bulk_request_id\": 9973,\n  \"on_conflict\": \"error\",\n  \"data_stream_id\": 703\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77bea5b2-528e-4322-b31c-439c6d565f6d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4420928a-9456-458f-a977-b6659c67745c",
+              "name": "Bulk request not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9aa2c9ac-846d-48a2-b3fc-84315c57f179",
+              "name": "Bulk request is not in a cancellable status (must be `pending` or `processing`)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7b17e8d2-a2bf-46ce-9487-92897dc157ea",
+          "name": "Retry a bulk request",
+          "request": {
+            "name": "Retry a bulk request",
+            "description": {
+              "content": "Creates a new bulk request that re-runs only the parent's failed and skipped items. The new request's `parent_bulk_request_id` points at the original.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "bulk_requests",
+                ":id",
+                "retry"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID of the failed or cancelled bulk request to retry"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c7cb4e46-3aa8-4dce-840f-e62ee4bc55fb",
+              "name": "Retry created and enqueued. Returns the **new** bulk request, not the parent.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id",
+                    "retry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the failed or cancelled bulk request to retry"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 7066,\n  \"status\": \"completed\",\n  \"source\": \"string\",\n  \"total_items\": 2888,\n  \"processed_items\": 4641,\n  \"successful_items\": 2334,\n  \"failed_items\": 9486,\n  \"skipped_items\": 5646,\n  \"progress\": 3142,\n  \"filename\": \"string\",\n  \"created_at\": \"1998-12-21T07:27:10.034Z\",\n  \"started_at\": \"1995-04-17T04:32:23.505Z\",\n  \"completed_at\": \"2026-06-03T23:18:50.220Z\",\n  \"last_progress_at\": \"1979-04-10T06:19:48.761Z\",\n  \"cancellation_requested_at\": \"1955-11-15T20:06:34.055Z\",\n  \"parsing\": false,\n  \"stuck\": true,\n  \"error_message\": \"string\",\n  \"error_details\": {\n    \"key_0\": 5049,\n    \"key_1\": 2730.149551700134,\n    \"key_2\": 2095\n  },\n  \"parent_bulk_request_id\": 9973,\n  \"on_conflict\": \"error\",\n  \"data_stream_id\": 703\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fca9b9f9-5ece-4707-b91b-8a5b2b1440f9",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id",
+                    "retry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the failed or cancelled bulk request to retry"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "23771df6-6443-45ba-90e2-21b49cb03a1f",
+              "name": "Bulk request not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id",
+                    "retry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the failed or cancelled bulk request to retry"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9355a25f-c615-41bf-8cfe-5e9eebb8bd5b",
+              "name": "Bulk request is not in a retryable status (must be `failed` or `cancelled`)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "bulk_requests",
+                    ":id",
+                    "retry"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the failed or cancelled bulk request to retry"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.endclose.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-KEY"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c152cfce-4d07-4f9b-b3a5-7a176dd6c0f4",
+    "name": "End Close Bank Account Balances Bulk Requests API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API is used to interact with the End Close platform.",
+      "type": "text/plain"
+    }
+  }
+}

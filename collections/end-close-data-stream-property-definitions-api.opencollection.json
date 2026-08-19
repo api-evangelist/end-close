@@ -1,0 +1,117 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "End Close Bank Account Balances Data Stream Property Definitions API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Stream Property Definitions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List property definitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/data_stream_property_definitions",
+            "params": [
+              {
+                "name": "data_stream_key",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List property definitions"
+        },
+        {
+          "info": {
+            "name": "Create a property definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/data_stream_property_definitions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a property definition"
+        },
+        {
+          "info": {
+            "name": "Retrieve a property definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/data_stream_property_definitions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a property definition"
+        },
+        {
+          "info": {
+            "name": "Update a property definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.endclose.com/v1/data_stream_property_definitions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the name or optional flag of a property definition."
+        },
+        {
+          "info": {
+            "name": "Delete a property definition",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.endclose.com/v1/data_stream_property_definitions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a property definition"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

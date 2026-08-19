@@ -1,0 +1,212 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "End Close Bank Account Balances Data Streams API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Streams",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List data streams",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/data_streams"
+          },
+          "docs": "List data streams"
+        },
+        {
+          "info": {
+            "name": "Create a data stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/data_streams",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a data stream"
+        },
+        {
+          "info": {
+            "name": "Retrieve a data stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/data_streams/:key",
+            "params": [
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "The immutable data stream key"
+              }
+            ]
+          },
+          "docs": "Retrieve a data stream using its unique immutable key."
+        },
+        {
+          "info": {
+            "name": "Update a data stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.endclose.com/v1/data_streams/:key",
+            "params": [
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "The immutable data stream key"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the name of a data stream."
+        },
+        {
+          "info": {
+            "name": "Delete a data stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.endclose.com/v1/data_streams/:key",
+            "params": [
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "The immutable data stream key"
+              },
+              {
+                "name": "async",
+                "value": "",
+                "type": "query",
+                "description": "When `\"true\"`, run the delete asynchronously and return 202 + a `DataStreamOperation`. Required for streams with more than 10,000 records."
+              }
+            ]
+          },
+          "docs": "Permanently deletes a data stream and all associated records and property definitions.\n\n**Sync vs async:** Streams with at most 10,000 records are deleted synchronously and return 204. Streams above that threshold *must* be deleted asynchronously by passing `?async=true`; otherwise the request fails with 409. Callers may also opt into the async path explicitly for any size. The async path returns 202 with a `DataStreamOperation` payload; poll `GET /data_streams/{key}/operations/{id}` for progres"
+        },
+        {
+          "info": {
+            "name": "Reset a data stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.endclose.com/v1/data_streams/:key/reset",
+            "params": [
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "The immutable data stream key"
+              }
+            ]
+          },
+          "docs": "Asynchronously wipes all records on the stream while preserving stream config, property definitions, and reconciliation links. Always async. Poll the returned operation."
+        },
+        {
+          "info": {
+            "name": "Get data stream ingestion health",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/data_streams/:key/health",
+            "params": [
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "The immutable data stream key"
+              }
+            ]
+          },
+          "docs": "Cheap, indexed snapshot of ingestion health for the stream — record count, import batch totals, orphan records, bulk request counters by status, and last ingestion time. Safe to poll from the UI."
+        },
+        {
+          "info": {
+            "name": "Get a data stream operation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/data_streams/:key/operations/:id",
+            "params": [
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "The immutable data stream key"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The operation ID returned by DELETE /data_streams/{key} or POST /data_streams/{key}/reset"
+              }
+            ]
+          },
+          "docs": "Poll a delete or reset operation kicked off against this data stream. Returns the serialized `DataStreamOperation`."
+        },
+        {
+          "info": {
+            "name": "List import batches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.endclose.com/v1/data_streams/:key/import_batches",
+            "params": [
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "The immutable data stream key"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Pagination offset"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of import batches for a data stream."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

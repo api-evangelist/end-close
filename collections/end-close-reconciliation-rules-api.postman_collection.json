@@ -1,0 +1,724 @@
+{
+  "item": [
+    {
+      "id": "a2974cdf-82a0-4f22-a657-2ef001c3d34d",
+      "name": "Reconciliation Rules",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "78fa0407-6d52-4d9e-9219-c715673f9a9f",
+          "name": "List reconciliation rules",
+          "request": {
+            "name": "List reconciliation rules",
+            "description": {
+              "content": "Returns all rules for a reconciliation, ordered by priority.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reconciliation_rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "reconciliation_id",
+                  "value": "<string>",
+                  "description": "(Required) The reconciliation to list rules for"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "40984203-edae-45c2-9956-c3bd00deeff1",
+              "name": "List of rules",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "reconciliation_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"filters\": {\n      \"operand\": \"and\",\n      \"rules\": [\n        {\n          \"key\": \"string\",\n          \"operand\": \"lte\",\n          \"value\": \"string\",\n          \"tolerance_amount\": 350.48481658532916,\n          \"tolerance_unit\": \"month\",\n          \"transforms\": {\n            \"key\": {},\n            \"value\": {}\n          }\n        },\n        {\n          \"key\": \"string\",\n          \"operand\": \"gte\",\n          \"value\": \"string\",\n          \"tolerance_amount\": 5060.843047591284,\n          \"tolerance_unit\": \"day\",\n          \"transforms\": {\n            \"key\": {},\n            \"value\": {}\n          }\n        }\n      ]\n    },\n    \"reconciliation_id\": 3601,\n    \"id\": 3730,\n    \"priority\": 1694,\n    \"group_by\": [\n      \"string\",\n      \"string\"\n    ],\n    \"cardinality\": \"one_to_one\",\n    \"rollup\": {\n      \"lookback_days\": 5589,\n      \"date_field\": \"string\",\n      \"group_by_kind\": \"date\"\n    },\n    \"description\": \"string\",\n    \"source\": \"ai\",\n    \"status\": \"active\",\n    \"confidence\": \"medium\",\n    \"sample_match_rate\": \"string\",\n    \"created_at\": \"1976-02-04T18:50:55.297Z\"\n  },\n  {\n    \"filters\": {\n      \"operand\": \"or\",\n      \"rules\": [\n        {\n          \"key\": \"string\",\n          \"operand\": \"contains\",\n          \"value\": \"string\",\n          \"tolerance_amount\": 607.684518065541,\n          \"tolerance_unit\": \"day\",\n          \"transforms\": {\n            \"key\": {},\n            \"value\": {}\n          }\n        },\n        {\n          \"key\": \"string\",\n          \"operand\": \"gt\",\n          \"value\": \"string\",\n          \"tolerance_amount\": 9394.408329296008,\n          \"tolerance_unit\": \"month\",\n          \"transforms\": {\n            \"key\": {},\n            \"value\": {}\n          }\n        }\n      ]\n    },\n    \"reconciliation_id\": 4269,\n    \"id\": 6467,\n    \"priority\": 4926,\n    \"group_by\": [\n      \"string\",\n      \"string\"\n    ],\n    \"cardinality\": \"one_to_one\",\n    \"rollup\": {\n      \"lookback_days\": 6825,\n      \"date_field\": \"string\",\n      \"group_by_kind\": \"date\"\n    },\n    \"description\": \"string\",\n    \"source\": \"ai\",\n    \"status\": \"proposed\",\n    \"confidence\": \"high\",\n    \"sample_match_rate\": \"string\",\n    \"created_at\": \"2012-12-09T01:23:51.953Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "90e7b2d7-23af-45e3-b760-b9cfb82c5165",
+          "name": "Create a reconciliation rule",
+          "request": {
+            "name": "Create a reconciliation rule",
+            "description": {},
+            "url": {
+              "path": [
+                "reconciliation_rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reconciliation_id\": \"<string>\",\n  \"filters\": {\n    \"operand\": \"<string>\",\n    \"rules\": [\n      {\n        \"key\": \"<string>\",\n        \"operand\": \"<string>\",\n        \"value\": \"<string>\",\n        \"tolerance_amount\": \"<number>\",\n        \"tolerance_unit\": \"<string>\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      },\n      {\n        \"key\": \"<string>\",\n        \"operand\": \"<string>\",\n        \"value\": \"<string>\",\n        \"tolerance_amount\": \"<number>\",\n        \"tolerance_unit\": \"<string>\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      }\n    ]\n  },\n  \"priority\": 0,\n  \"group_by\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"cardinality\": \"one_to_one\",\n  \"rollup\": {\n    \"lookback_days\": \"<integer>\",\n    \"date_field\": \"<string>\",\n    \"group_by_kind\": \"date\"\n  },\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b43886d8-f6b1-481c-aaee-be6310c42577",
+              "name": "Rule created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reconciliation_id\": \"<string>\",\n  \"filters\": {\n    \"operand\": \"or\",\n    \"rules\": [\n      {\n        \"key\": \"string\",\n        \"operand\": \"lt\",\n        \"value\": \"string\",\n        \"tolerance_amount\": 2802.830222191438,\n        \"tolerance_unit\": \"month\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      },\n      {\n        \"key\": \"string\",\n        \"operand\": \"lt\",\n        \"value\": \"string\",\n        \"tolerance_amount\": 5825.437327868906,\n        \"tolerance_unit\": \"day\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      }\n    ]\n  },\n  \"priority\": 0,\n  \"group_by\": [\n    \"string\",\n    \"string\"\n  ],\n  \"cardinality\": \"one_to_one\",\n  \"rollup\": {\n    \"lookback_days\": 5299,\n    \"date_field\": \"string\",\n    \"group_by_kind\": \"date\"\n  },\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"filters\": {\n    \"operand\": \"or\",\n    \"rules\": [\n      {\n        \"key\": \"string\",\n        \"operand\": \"lte\",\n        \"value\": \"string\",\n        \"tolerance_amount\": 2174.234196402868,\n        \"tolerance_unit\": \"dollar\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      },\n      {\n        \"key\": \"string\",\n        \"operand\": \"gt\",\n        \"value\": \"string\",\n        \"tolerance_amount\": 7436.060128971081,\n        \"tolerance_unit\": \"dollar\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      }\n    ]\n  },\n  \"reconciliation_id\": 4396,\n  \"id\": 2351,\n  \"priority\": 1379,\n  \"group_by\": [\n    \"string\",\n    \"string\"\n  ],\n  \"cardinality\": \"one_to_one\",\n  \"rollup\": {\n    \"lookback_days\": 9401,\n    \"date_field\": \"string\",\n    \"group_by_kind\": \"date\"\n  },\n  \"description\": \"string\",\n  \"source\": \"default\",\n  \"status\": \"proposed\",\n  \"confidence\": \"low\",\n  \"sample_match_rate\": \"string\",\n  \"created_at\": \"2023-08-15T15:26:50.161Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3c4da11-b710-417f-ae97-3ee81119fe76",
+              "name": "Validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reconciliation_id\": \"<string>\",\n  \"filters\": {\n    \"operand\": \"or\",\n    \"rules\": [\n      {\n        \"key\": \"string\",\n        \"operand\": \"lt\",\n        \"value\": \"string\",\n        \"tolerance_amount\": 2802.830222191438,\n        \"tolerance_unit\": \"month\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      },\n      {\n        \"key\": \"string\",\n        \"operand\": \"lt\",\n        \"value\": \"string\",\n        \"tolerance_amount\": 5825.437327868906,\n        \"tolerance_unit\": \"day\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      }\n    ]\n  },\n  \"priority\": 0,\n  \"group_by\": [\n    \"string\",\n    \"string\"\n  ],\n  \"cardinality\": \"one_to_one\",\n  \"rollup\": {\n    \"lookback_days\": 5299,\n    \"date_field\": \"string\",\n    \"group_by_kind\": \"date\"\n  },\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "418c8c83-ca81-4bce-9e96-205592bc00e5",
+          "name": "Retrieve a reconciliation rule",
+          "request": {
+            "name": "Retrieve a reconciliation rule",
+            "description": {},
+            "url": {
+              "path": [
+                "reconciliation_rules",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6100f58c-8036-43f2-81ae-d629c9702d42",
+              "name": "Rule retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_rules",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"filters\": {\n    \"operand\": \"or\",\n    \"rules\": [\n      {\n        \"key\": \"string\",\n        \"operand\": \"lte\",\n        \"value\": \"string\",\n        \"tolerance_amount\": 2174.234196402868,\n        \"tolerance_unit\": \"dollar\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      },\n      {\n        \"key\": \"string\",\n        \"operand\": \"gt\",\n        \"value\": \"string\",\n        \"tolerance_amount\": 7436.060128971081,\n        \"tolerance_unit\": \"dollar\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      }\n    ]\n  },\n  \"reconciliation_id\": 4396,\n  \"id\": 2351,\n  \"priority\": 1379,\n  \"group_by\": [\n    \"string\",\n    \"string\"\n  ],\n  \"cardinality\": \"one_to_one\",\n  \"rollup\": {\n    \"lookback_days\": 9401,\n    \"date_field\": \"string\",\n    \"group_by_kind\": \"date\"\n  },\n  \"description\": \"string\",\n  \"source\": \"default\",\n  \"status\": \"proposed\",\n  \"confidence\": \"low\",\n  \"sample_match_rate\": \"string\",\n  \"created_at\": \"2023-08-15T15:26:50.161Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f35cf7a1-8cee-478d-8f14-0e8b115e5106",
+              "name": "Rule not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_rules",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5cc10777-5060-4802-8cd3-04fc0711b33b",
+          "name": "Update a reconciliation rule",
+          "request": {
+            "name": "Update a reconciliation rule",
+            "description": {},
+            "url": {
+              "path": [
+                "reconciliation_rules",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filters\": \"<object>\",\n  \"priority\": \"<integer>\",\n  \"group_by\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"cardinality\": \"one_to_one\",\n  \"rollup\": {\n    \"lookback_days\": \"<integer>\",\n    \"date_field\": \"<string>\",\n    \"group_by_kind\": \"date\"\n  },\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0c056630-6ead-4de6-94e4-e13e139c8533",
+              "name": "Rule updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_rules",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filters\": \"<object>\",\n  \"priority\": \"<integer>\",\n  \"group_by\": [\n    \"string\",\n    \"string\"\n  ],\n  \"cardinality\": \"one_to_one\",\n  \"rollup\": {\n    \"lookback_days\": 8524,\n    \"date_field\": \"string\",\n    \"group_by_kind\": \"date\"\n  },\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"filters\": {\n    \"operand\": \"or\",\n    \"rules\": [\n      {\n        \"key\": \"string\",\n        \"operand\": \"lte\",\n        \"value\": \"string\",\n        \"tolerance_amount\": 2174.234196402868,\n        \"tolerance_unit\": \"dollar\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      },\n      {\n        \"key\": \"string\",\n        \"operand\": \"gt\",\n        \"value\": \"string\",\n        \"tolerance_amount\": 7436.060128971081,\n        \"tolerance_unit\": \"dollar\",\n        \"transforms\": {\n          \"key\": {},\n          \"value\": {}\n        }\n      }\n    ]\n  },\n  \"reconciliation_id\": 4396,\n  \"id\": 2351,\n  \"priority\": 1379,\n  \"group_by\": [\n    \"string\",\n    \"string\"\n  ],\n  \"cardinality\": \"one_to_one\",\n  \"rollup\": {\n    \"lookback_days\": 9401,\n    \"date_field\": \"string\",\n    \"group_by_kind\": \"date\"\n  },\n  \"description\": \"string\",\n  \"source\": \"default\",\n  \"status\": \"proposed\",\n  \"confidence\": \"low\",\n  \"sample_match_rate\": \"string\",\n  \"created_at\": \"2023-08-15T15:26:50.161Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0af28540-40c1-4e83-9abc-3906e4c2934b",
+              "name": "Rule not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_rules",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filters\": \"<object>\",\n  \"priority\": \"<integer>\",\n  \"group_by\": [\n    \"string\",\n    \"string\"\n  ],\n  \"cardinality\": \"one_to_one\",\n  \"rollup\": {\n    \"lookback_days\": 8524,\n    \"date_field\": \"string\",\n    \"group_by_kind\": \"date\"\n  },\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "209ec8e2-206b-4c43-ad7f-1bc24c6b45df",
+          "name": "Delete a reconciliation rule",
+          "request": {
+            "name": "Delete a reconciliation rule",
+            "description": {},
+            "url": {
+              "path": [
+                "reconciliation_rules",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c8330d7a-1a24-48f8-92bb-a5b8c20a948d",
+              "name": "Rule deleted successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_rules",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "472b296c-5665-408b-83ef-dad7a5382a06",
+              "name": "Rule not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reconciliation_rules",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.endclose.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-KEY"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a60f872a-3764-4f67-aac5-258e0d03e598",
+    "name": "End Close Bank Account Balances Reconciliation Rules API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API is used to interact with the End Close platform.",
+      "type": "text/plain"
+    }
+  }
+}
