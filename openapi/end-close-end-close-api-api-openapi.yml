@@ -1,0 +1,114 @@
+openapi: 3.2.0
+info:
+  title: End Close API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: End Close API
+paths: {}
+webhooks:
+  record.reconciled:
+    post:
+      description: When a record is reconciled
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordWebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+      tags:
+      - End Close API
+  record.reconciliation_overdue:
+    post:
+      description: When a record has gone beyond its expected reconciliation date
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordWebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+      tags:
+      - End Close API
+components:
+  schemas:
+    Record:
+      type: object
+      required:
+      - date
+      - data_stream_key
+      - amount
+      - direction
+      properties:
+        id:
+          type: integer
+        amount:
+          type: integer
+          description: The monetary amount in cents (e.g., 1234 = $12.34)
+        currency:
+          type: string
+          description: Three-letter ISO 4217 currency code (e.g. USD, EUR). **Optional on create — defaults to `USD` when omitted.** Case-insensitive on input; always returned uppercase.
+          pattern: ^[A-Za-z]{3}$
+          default: USD
+        decimal_places:
+          type: integer
+          description: Number of decimal places for this currency (2 for USD)
+          default: 2
+        direction:
+          type: string
+          enum:
+          - credit
+          - debit
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        metadata:
+          type: object
+          additionalProperties: true
+          default: {}
+        external_id:
+          type: string
+        data_stream_key:
+          type: string
+    WebhookEvent:
+      type: object
+      required:
+      - id
+      - event_type
+      - data
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the event
+        event_type:
+          type: string
+          description: Description of the event (e.g. record.reconciled or record.reconciliation_overdue)
+        timestamp:
+          type: string
+          format: date-time
+        data:
+          type: object
+          description: Payload data for the event
+    RecordWebhookEvent:
+      allOf:
+      - $ref: '#/components/schemas/WebhookEvent'
+      - type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/Record'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

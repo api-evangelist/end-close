@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: End Close Bank Account Balances Records API
+  title: End Close Records API
   description: REST API is used to interact with the End Close platform.
   license:
     name: MIT
@@ -338,40 +338,6 @@ paths:
       - Records
 components:
   schemas:
-    BulkRequestSummary:
-      type: object
-      description: Summary returned when a bulk request is created or retrieved via idempotency key
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the bulk request
-        status:
-          type: string
-          enum:
-          - pending
-          - processing
-          - completed
-          - failed
-          - cancelled
-          description: Current processing status
-        total_items:
-          type: integer
-          description: Number of records submitted
-        processed_items:
-          type: integer
-          description: Number of records processed so far
-        successful_items:
-          type: integer
-          description: Number of records successfully created
-        failed_items:
-          type: integer
-          description: Number of records that failed
-        skipped_items:
-          type: integer
-          description: 'Number of records skipped due to `on_conflict: skip` matching an existing `external_id`'
-        url:
-          type: string
-          description: Polling URL to check progress (e.g. /v1/bulk_requests/123)
     Record:
       type: object
       required:
@@ -412,6 +378,40 @@ components:
           type: string
         data_stream_key:
           type: string
+    BulkRequestSummary:
+      type: object
+      description: Summary returned when a bulk request is created or retrieved via idempotency key
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the bulk request
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - completed
+          - failed
+          - cancelled
+          description: Current processing status
+        total_items:
+          type: integer
+          description: Number of records submitted
+        processed_items:
+          type: integer
+          description: Number of records processed so far
+        successful_items:
+          type: integer
+          description: Number of records successfully created
+        failed_items:
+          type: integer
+          description: Number of records that failed
+        skipped_items:
+          type: integer
+          description: 'Number of records skipped due to `on_conflict: skip` matching an existing `external_id`'
+        url:
+          type: string
+          description: Polling URL to check progress (e.g. /v1/bulk_requests/123)
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

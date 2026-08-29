@@ -237,6 +237,16 @@ apis:
     url: https://endclose.com/docs
   - type: APIReference
     url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-end-close-api-api
+  name: End Close End Close API
+  description: The End Close API API from End Close — 0 operation(s) for end close api.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - End Close API
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-end-close-api-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

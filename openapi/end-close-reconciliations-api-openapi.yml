@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: End Close Bank Account Balances Reconciliations API
+  title: End Close Reconciliations API
   description: REST API is used to interact with the End Close platform.
   license:
     name: MIT
@@ -275,6 +275,27 @@ paths:
       - Reconciliations
 components:
   schemas:
+    DataStream:
+      type: object
+      required:
+      - key
+      - name
+      properties:
+        id:
+          type: integer
+          description: Unique numeric identifier
+        key:
+          type: string
+          description: Unique immutable identifier
+        name:
+          type: string
+          description: Human readable name
+        description:
+          type: string
+          description: Optional description of the data stream
+        type:
+          type: string
+          description: The type of data stream (e.g. api, csv, stripe, bank_feed)
     ReconciliationRun:
       type: object
       description: A single execution of a reconciliation's batch or continuous matching pipeline.
@@ -325,27 +346,6 @@ components:
           type: string
           format: date-time
           nullable: true
-    DataStream:
-      type: object
-      required:
-      - key
-      - name
-      properties:
-        id:
-          type: integer
-          description: Unique numeric identifier
-        key:
-          type: string
-          description: Unique immutable identifier
-        name:
-          type: string
-          description: Human readable name
-        description:
-          type: string
-          description: Optional description of the data stream
-        type:
-          type: string
-          description: The type of data stream (e.g. api, csv, stripe, bank_feed)
     Record:
       type: object
       required:
@@ -386,6 +386,43 @@ components:
           type: string
         data_stream_key:
           type: string
+    Reconciliation:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: Human readable name for the reconciliation
+        run_type:
+          type: string
+          enum:
+          - continuous
+          - batch
+          default: continuous
+        side_a_streams:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataStream'
+          description: Data streams on side A of the reconciliation
+        side_b_streams:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataStream'
+          description: Data streams on side B of the reconciliation
+        created_at:
+          type: string
+          format: date-time
+        current_run:
+          $ref: '#/components/schemas/ReconciliationRun'
+          nullable: true
+          description: The currently pending or running batch run, if any
+        last_run:
+          $ref: '#/components/schemas/ReconciliationRun'
+          nullable: true
+          description: The most recent completed or failed batch run, if any
     ReconciliationEntry:
       description: A record's entry in one reconciliation. Match status, escalation, and matched records are all scoped to that reconciliation; a record has one entry per reconciliation it participates in. `id` is the record id.
       allOf:
@@ -455,43 +492,6 @@ components:
             type: integer
             nullable: true
             description: Open exception covering this entry's data stream when the entry is escalated. Null otherwise.
-    Reconciliation:
-      type: object
-      required:
-      - name
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          description: Human readable name for the reconciliation
-        run_type:
-          type: string
-          enum:
-          - continuous
-          - batch
-          default: continuous
-        side_a_streams:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataStream'
-          description: Data streams on side A of the reconciliation
-        side_b_streams:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataStream'
-          description: Data streams on side B of the reconciliation
-        created_at:
-          type: string
-          format: date-time
-        current_run:
-          $ref: '#/components/schemas/ReconciliationRun'
-          nullable: true
-          description: The currently pending or running batch run, if any
-        last_run:
-          $ref: '#/components/schemas/ReconciliationRun'
-          nullable: true
-          description: The most recent completed or failed batch run, if any
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
