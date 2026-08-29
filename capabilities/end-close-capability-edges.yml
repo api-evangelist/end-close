@@ -1,0 +1,45 @@
+slug: end-close
+provider: End Close
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Reconciliations
+  spec_file: end-close-reconciliations-api-openapi.yml
+  capability_id: BC-1380.70
+  capability_id_l1: BC-1380
+  capability_name: Reconciliation Management
+  confidence: 0.8
+  evidence: 'GET /reconciliations  List reconciliations ... schemas: ReconciliationRun, Reconciliation,
+    ReconciliationEntry'
+  reason: 'The core object of the platform: continuous matching of transactions across payment processors,
+    bank accounts and ledgers into reconciliations — cash/position reconciliation management.'
+- tag: Reconciliation Matches
+  spec_file: end-close-reconciliation-matches-api-openapi.yml
+  capability_id: BC-1380.70
+  capability_id_l1: BC-1380
+  capability_name: Reconciliation Management
+  confidence: 0.72
+  evidence: POST /reconciliation_matches  Create a reconciliation match
+  reason: Creating and removing matches between transactions from payment processors and bank accounts
+    is core cash reconciliation activity.
+- tag: Reconciliation Exceptions
+  spec_file: end-close-reconciliation-exceptions-api-openapi.yml
+  capability_id: BC-1380.70
+  capability_id_l1: BC-1380
+  capability_name: Reconciliation Management
+  confidence: 0.7
+  evidence: 'List reconciliation exceptions ... schemas: AgentInvestigationSession, ReconciliationException,
+    ExceptionAggregates'
+  reason: Exception (break) capture and investigation is the exception-handling half of transaction/cash
+    reconciliation, matching Reconciliation Management; some doubt because the vendor's scope is payments/accounting
+    rather than securities ops.

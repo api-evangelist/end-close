@@ -253,6 +253,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/end-close-capability-edges.yml
+  name: End Close Business Capability Map
 - type: DeveloperPortal
   url: https://endclose.com/docs
 - type: Login
