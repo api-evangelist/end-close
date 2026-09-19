@@ -216,6 +216,8 @@ apis:
   humanURL: https://endclose.com/docs
   baseURL: https://api.endclose.com/v1
   tags:
+  - Reconciliation
+  tags_raw:
   - Reconciliations
   properties:
   - type: OpenAPI
