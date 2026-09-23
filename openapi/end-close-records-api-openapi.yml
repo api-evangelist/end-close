@@ -125,6 +125,8 @@ paths:
           description: No scoping filter provided, or invalid `status`, `created_after`, or `created_before`
       tags:
       - Records
+      operationId: getRecords
+      x-operation-id-source: derived
     post:
       summary: Create a record
       requestBody:
@@ -142,6 +144,8 @@ paths:
                 $ref: '#/components/schemas/Record'
       tags:
       - Records
+      operationId: postRecords
+      x-operation-id-source: derived
   /records/bulk:
     post:
       summary: Bulk create records
@@ -241,6 +245,8 @@ paths:
                     type: string
       tags:
       - Records
+      operationId: postRecordsBulk
+      x-operation-id-source: derived
   /records/{id}:
     get:
       summary: Retrieve a record
@@ -265,6 +271,8 @@ paths:
           description: Record not found
       tags:
       - Records
+      operationId: getRecordsById
+      x-operation-id-source: derived
     patch:
       summary: Update a record
       description: Update a record's fields. The record **must have a status of `unreconciled`**. Records that are partially or fully reconciled cannot be modified.
@@ -315,6 +323,8 @@ paths:
           description: Record cannot be modified because it has already been reconciled
       tags:
       - Records
+      operationId: patchRecordsById
+      x-operation-id-source: derived
     delete:
       summary: Delete a record
       description: Deletes a single record by its ID. The record **must have a status of `unreconciled`**. Records that are partially or fully reconciled cannot be deleted.
@@ -336,8 +346,44 @@ paths:
           description: Record cannot be deleted because it is already reconciled or partially reconciled
       tags:
       - Records
+      operationId: deleteRecordsById
+      x-operation-id-source: derived
 components:
   schemas:
+    BulkRequestSummary:
+      type: object
+      description: Summary returned when a bulk request is created or retrieved via idempotency key
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the bulk request
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - completed
+          - failed
+          - cancelled
+          description: Current processing status
+        total_items:
+          type: integer
+          description: Number of records submitted
+        processed_items:
+          type: integer
+          description: Number of records processed so far
+        successful_items:
+          type: integer
+          description: Number of records successfully created
+        failed_items:
+          type: integer
+          description: Number of records that failed
+        skipped_items:
+          type: integer
+          description: 'Number of records skipped due to `on_conflict: skip` matching an existing `external_id`'
+        url:
+          type: string
+          description: Polling URL to check progress (e.g. /v1/bulk_requests/123)
     Record:
       type: object
       required:
@@ -378,40 +424,6 @@ components:
           type: string
         data_stream_key:
           type: string
-    BulkRequestSummary:
-      type: object
-      description: Summary returned when a bulk request is created or retrieved via idempotency key
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the bulk request
-        status:
-          type: string
-          enum:
-          - pending
-          - processing
-          - completed
-          - failed
-          - cancelled
-          description: Current processing status
-        total_items:
-          type: integer
-          description: Number of records submitted
-        processed_items:
-          type: integer
-          description: Number of records processed so far
-        successful_items:
-          type: integer
-          description: Number of records successfully created
-        failed_items:
-          type: integer
-          description: Number of records that failed
-        skipped_items:
-          type: integer
-          description: 'Number of records skipped due to `on_conflict: skip` matching an existing `external_id`'
-        url:
-          type: string
-          description: Polling URL to check progress (e.g. /v1/bulk_requests/123)
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

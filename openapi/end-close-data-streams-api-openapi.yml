@@ -26,6 +26,8 @@ paths:
                   $ref: '#/components/schemas/DataStream'
       tags:
       - Data Streams
+      operationId: getDataStreams
+      x-operation-id-source: derived
     post:
       summary: Create a data stream
       requestBody:
@@ -65,6 +67,8 @@ paths:
           description: Validation error (e.g. missing required fields, duplicate key, bank_account_id not found)
       tags:
       - Data Streams
+      operationId: postDataStreams
+      x-operation-id-source: derived
   /data_streams/{key}:
     get:
       summary: Retrieve a data stream
@@ -89,6 +93,8 @@ paths:
           description: Data stream not found
       tags:
       - Data Streams
+      operationId: getDataStreamsByKey
+      x-operation-id-source: derived
     patch:
       summary: Update a data stream
       description: Update the name of a data stream.
@@ -122,6 +128,8 @@ paths:
           description: Data stream not found
       tags:
       - Data Streams
+      operationId: patchDataStreamsByKey
+      x-operation-id-source: derived
     delete:
       summary: Delete a data stream
       description: 'Permanently deletes a data stream and all associated records and property definitions.
@@ -173,6 +181,8 @@ paths:
                     type: string
       tags:
       - Data Streams
+      operationId: deleteDataStreamsByKey
+      x-operation-id-source: derived
   /data_streams/{key}/reset:
     post:
       summary: Reset a data stream
@@ -202,6 +212,8 @@ paths:
           description: Data stream not found
       tags:
       - Data Streams
+      operationId: postDataStreamsByKeyReset
+      x-operation-id-source: derived
   /data_streams/{key}/health:
     get:
       summary: Get data stream ingestion health
@@ -226,6 +238,8 @@ paths:
           description: Data stream not found
       tags:
       - Data Streams
+      operationId: getDataStreamsByKeyHealth
+      x-operation-id-source: derived
   /data_streams/{key}/operations/{id}:
     get:
       summary: Get a data stream operation
@@ -256,6 +270,8 @@ paths:
           description: Operation not found or does not belong to this data stream
       tags:
       - Data Streams
+      operationId: getDataStreamsByKeyOperationsById
+      x-operation-id-source: derived
   /data_streams/{key}/import_batches:
     get:
       summary: List import batches
@@ -302,8 +318,103 @@ paths:
           description: Data stream not found
       tags:
       - Data Streams
+      operationId: getDataStreamsByKeyImportBatches
+      x-operation-id-source: derived
 components:
   schemas:
+    DataStreamOperation:
+      type: object
+      description: Async operation against a data stream (delete or reset). Poll via GET /data_streams/{key}/operations/{id}.
+      properties:
+        id:
+          type: integer
+        data_stream_id:
+          type: integer
+        data_stream_key:
+          type: string
+        kind:
+          type: string
+          enum:
+          - delete
+          - reset
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+        progress:
+          type: integer
+          description: Percentage 0-100
+        error_message:
+          type: string
+          nullable: true
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        requested_by_user_id:
+          type: integer
+          nullable: true
+    ImportBatch:
+      type: object
+      properties:
+        id:
+          type: integer
+        data_stream_key:
+          type: string
+          description: Key of the data stream this import batch belongs to
+        source:
+          type: string
+          enum:
+          - csv_upload
+          - nacha_upload
+          - bulk_api
+          description: How the records were imported
+        filename:
+          type: string
+          nullable: true
+          description: Original filename for CSV uploads
+        record_count:
+          type: integer
+          description: Number of records in this batch
+        total_credits:
+          type: integer
+          description: Sum of credit amounts in cents
+        total_debits:
+          type: integer
+          description: Sum of debit amounts in cents
+        net_amount:
+          type: integer
+          description: Net amount in cents (credits minus debits)
+        decimal_places:
+          type: integer
+          description: Number of decimal places (2 for USD)
+          default: 2
+        date_range_start:
+          type: string
+          format: date
+          nullable: true
+          description: Earliest record date in the batch
+        date_range_end:
+          type: string
+          format: date
+          nullable: true
+          description: Latest record date in the batch
+        created_at:
+          type: string
+          format: date-time
+        records_url:
+          type: string
+          description: URL to fetch records belonging to this batch
     DataStream:
       type: object
       required:
@@ -360,99 +471,6 @@ components:
           format: date-time
           nullable: true
           description: Most recent record `created_at` on this stream
-    ImportBatch:
-      type: object
-      properties:
-        id:
-          type: integer
-        data_stream_key:
-          type: string
-          description: Key of the data stream this import batch belongs to
-        source:
-          type: string
-          enum:
-          - csv_upload
-          - nacha_upload
-          - bulk_api
-          description: How the records were imported
-        filename:
-          type: string
-          nullable: true
-          description: Original filename for CSV uploads
-        record_count:
-          type: integer
-          description: Number of records in this batch
-        total_credits:
-          type: integer
-          description: Sum of credit amounts in cents
-        total_debits:
-          type: integer
-          description: Sum of debit amounts in cents
-        net_amount:
-          type: integer
-          description: Net amount in cents (credits minus debits)
-        decimal_places:
-          type: integer
-          description: Number of decimal places (2 for USD)
-          default: 2
-        date_range_start:
-          type: string
-          format: date
-          nullable: true
-          description: Earliest record date in the batch
-        date_range_end:
-          type: string
-          format: date
-          nullable: true
-          description: Latest record date in the batch
-        created_at:
-          type: string
-          format: date-time
-        records_url:
-          type: string
-          description: URL to fetch records belonging to this batch
-    DataStreamOperation:
-      type: object
-      description: Async operation against a data stream (delete or reset). Poll via GET /data_streams/{key}/operations/{id}.
-      properties:
-        id:
-          type: integer
-        data_stream_id:
-          type: integer
-        data_stream_key:
-          type: string
-        kind:
-          type: string
-          enum:
-          - delete
-          - reset
-        status:
-          type: string
-          enum:
-          - pending
-          - running
-          - completed
-          - failed
-        progress:
-          type: integer
-          description: Percentage 0-100
-        error_message:
-          type: string
-          nullable: true
-        started_at:
-          type: string
-          format: date-time
-          nullable: true
-        completed_at:
-          type: string
-          format: date-time
-          nullable: true
-        created_at:
-          type: string
-          format: date-time
-        requested_by_user_id:
-          type: integer
-          nullable: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

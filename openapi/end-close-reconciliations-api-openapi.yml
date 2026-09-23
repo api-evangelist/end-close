@@ -57,6 +57,8 @@ paths:
           description: Record's data stream is not part of the reconciliation, or invalid `overdue_at`
       tags:
       - Reconciliations
+      operationId: postReconciliationsByReconciliationIdRecordsByRecordIdMarkOverdue
+      x-operation-id-source: derived
   /reconciliations:
     get:
       summary: List reconciliations
@@ -96,6 +98,8 @@ paths:
                     type: integer
       tags:
       - Reconciliations
+      operationId: getReconciliations
+      x-operation-id-source: derived
     post:
       summary: Create a reconciliation
       description: Create a new reconciliation with optional side A and side B data stream associations.
@@ -137,6 +141,8 @@ paths:
           description: Validation error
       tags:
       - Reconciliations
+      operationId: postReconciliations
+      x-operation-id-source: derived
   /reconciliations/{id}:
     get:
       summary: Retrieve a reconciliation
@@ -157,6 +163,8 @@ paths:
           description: Reconciliation not found
       tags:
       - Reconciliations
+      operationId: getReconciliationsById
+      x-operation-id-source: derived
     patch:
       summary: Update a reconciliation
       description: Update reconciliation name, run type, or reassign data streams. If stream IDs are provided, all existing stream associations are replaced.
@@ -199,6 +207,8 @@ paths:
           description: Reconciliation not found
       tags:
       - Reconciliations
+      operationId: patchReconciliationsById
+      x-operation-id-source: derived
     delete:
       summary: Delete a reconciliation
       description: Permanently deletes a reconciliation and all associated rules, matches, and data stream associations.
@@ -215,6 +225,8 @@ paths:
           description: Reconciliation not found
       tags:
       - Reconciliations
+      operationId: deleteReconciliationsById
+      x-operation-id-source: derived
   /reconciliations/{id}/agent_status:
     get:
       summary: Get reconciliation agent status
@@ -273,6 +285,8 @@ paths:
           description: Reconciliation not found
       tags:
       - Reconciliations
+      operationId: getReconciliationsByIdAgentStatus
+      x-operation-id-source: derived
 components:
   schemas:
     DataStream:
@@ -296,6 +310,112 @@ components:
         type:
           type: string
           description: The type of data stream (e.g. api, csv, stripe, bank_feed)
+    ReconciliationEntry:
+      description: A record's entry in one reconciliation. Match status, escalation, and matched records are all scoped to that reconciliation; a record has one entry per reconciliation it participates in. `id` is the record id.
+      allOf:
+      - $ref: '#/components/schemas/Record'
+      - type: object
+        properties:
+          reconciliation_id:
+            type: integer
+          reconciliation_name:
+            type: string
+          status:
+            type: string
+            enum:
+            - reconciled
+            - unreconciled
+            description: Whether the record is matched in this reconciliation. Read-only.
+          escalated:
+            type: boolean
+            description: Unmatched and past its `overdue_at`.
+          overdue_at:
+            type: string
+            format: date-time
+            nullable: true
+          matched_records:
+            type: array
+            description: Records matched with this record in this reconciliation
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                amount:
+                  type: integer
+                  description: Amount in cents
+                currency:
+                  type: string
+                  description: Three-letter ISO 4217 currency code (e.g. USD, EUR)
+                  default: USD
+                decimal_places:
+                  type: integer
+                  default: 2
+                direction:
+                  type: string
+                  enum:
+                  - credit
+                  - debit
+                description:
+                  type: string
+                date:
+                  type: string
+                  format: date
+                external_id:
+                  type: string
+                data_stream_key:
+                  type: string
+                reconciliation_id:
+                  type: integer
+                  description: The reconciliation in which this match was made
+                reconciliation_name:
+                  type: string
+                  description: Name of the reconciliation in which this match was made
+          days_unreconciled:
+            type: integer
+            nullable: true
+            description: Number of days since the record's date. Null when the record is reconciled.
+          exception_id:
+            type: integer
+            nullable: true
+            description: Open exception covering this entry's data stream when the entry is escalated. Null otherwise.
+    Reconciliation:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: Human readable name for the reconciliation
+        run_type:
+          type: string
+          enum:
+          - continuous
+          - batch
+          default: continuous
+        side_a_streams:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataStream'
+          description: Data streams on side A of the reconciliation
+        side_b_streams:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataStream'
+          description: Data streams on side B of the reconciliation
+        created_at:
+          type: string
+          format: date-time
+        current_run:
+          $ref: '#/components/schemas/ReconciliationRun'
+          nullable: true
+          description: The currently pending or running batch run, if any
+        last_run:
+          $ref: '#/components/schemas/ReconciliationRun'
+          nullable: true
+          description: The most recent completed or failed batch run, if any
     ReconciliationRun:
       type: object
       description: A single execution of a reconciliation's batch or continuous matching pipeline.
@@ -386,112 +506,6 @@ components:
           type: string
         data_stream_key:
           type: string
-    Reconciliation:
-      type: object
-      required:
-      - name
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          description: Human readable name for the reconciliation
-        run_type:
-          type: string
-          enum:
-          - continuous
-          - batch
-          default: continuous
-        side_a_streams:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataStream'
-          description: Data streams on side A of the reconciliation
-        side_b_streams:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataStream'
-          description: Data streams on side B of the reconciliation
-        created_at:
-          type: string
-          format: date-time
-        current_run:
-          $ref: '#/components/schemas/ReconciliationRun'
-          nullable: true
-          description: The currently pending or running batch run, if any
-        last_run:
-          $ref: '#/components/schemas/ReconciliationRun'
-          nullable: true
-          description: The most recent completed or failed batch run, if any
-    ReconciliationEntry:
-      description: A record's entry in one reconciliation. Match status, escalation, and matched records are all scoped to that reconciliation; a record has one entry per reconciliation it participates in. `id` is the record id.
-      allOf:
-      - $ref: '#/components/schemas/Record'
-      - type: object
-        properties:
-          reconciliation_id:
-            type: integer
-          reconciliation_name:
-            type: string
-          status:
-            type: string
-            enum:
-            - reconciled
-            - unreconciled
-            description: Whether the record is matched in this reconciliation. Read-only.
-          escalated:
-            type: boolean
-            description: Unmatched and past its `overdue_at`.
-          overdue_at:
-            type: string
-            format: date-time
-            nullable: true
-          matched_records:
-            type: array
-            description: Records matched with this record in this reconciliation
-            items:
-              type: object
-              properties:
-                id:
-                  type: integer
-                amount:
-                  type: integer
-                  description: Amount in cents
-                currency:
-                  type: string
-                  description: Three-letter ISO 4217 currency code (e.g. USD, EUR)
-                  default: USD
-                decimal_places:
-                  type: integer
-                  default: 2
-                direction:
-                  type: string
-                  enum:
-                  - credit
-                  - debit
-                description:
-                  type: string
-                date:
-                  type: string
-                  format: date
-                external_id:
-                  type: string
-                data_stream_key:
-                  type: string
-                reconciliation_id:
-                  type: integer
-                  description: The reconciliation in which this match was made
-                reconciliation_name:
-                  type: string
-                  description: Name of the reconciliation in which this match was made
-          days_unreconciled:
-            type: integer
-            nullable: true
-            description: Number of days since the record's date. Null when the record is reconciled.
-          exception_id:
-            type: integer
-            nullable: true
-            description: Open exception covering this entry's data stream when the entry is escalated. Null otherwise.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

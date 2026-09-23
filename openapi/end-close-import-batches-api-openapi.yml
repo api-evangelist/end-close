@@ -36,6 +36,8 @@ paths:
           description: Import batch not found
       tags:
       - Import Batches
+      operationId: getImportBatchesById
+      x-operation-id-source: derived
   /import_batches/{id}/records:
     get:
       summary: List records for an import batch
@@ -84,6 +86,8 @@ paths:
           description: Import batch not found
       tags:
       - Import Batches
+      operationId: getImportBatchesByIdRecords
+      x-operation-id-source: derived
 components:
   schemas:
     Record:

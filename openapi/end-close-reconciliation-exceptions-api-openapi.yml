@@ -64,6 +64,8 @@ paths:
           description: Unauthorized
       tags:
       - Reconciliation Exceptions
+      operationId: getReconciliationExceptions
+      x-operation-id-source: derived
     post:
       summary: Create a reconciliation exception
       description: Create an exception for a reconciliation and data stream. Only one `open` or `investigating` exception can exist per (data stream, reconciliation) pair at a time. `title` defaults to `"{data_stream_name} — overdue records"`, and `status` defaults to `open`. The system automatically creates exceptions via its overdue sweeper — use this endpoint when you want to open one manually.
@@ -110,6 +112,8 @@ paths:
           description: Validation failed, or a duplicate open/investigating exception already exists for this (data stream, reconciliation)
       tags:
       - Reconciliation Exceptions
+      operationId: postReconciliationExceptions
+      x-operation-id-source: derived
   /reconciliation_exceptions/{id}:
     get:
       summary: Retrieve a reconciliation exception
@@ -178,6 +182,8 @@ paths:
           description: Exception not found
       tags:
       - Reconciliation Exceptions
+      operationId: getReconciliationExceptionsById
+      x-operation-id-source: derived
     patch:
       summary: Update a reconciliation exception
       description: Update the title, description, or status of an exception.
@@ -216,6 +222,8 @@ paths:
           description: Exception not found
       tags:
       - Reconciliation Exceptions
+      operationId: patchReconciliationExceptionsById
+      x-operation-id-source: derived
     delete:
       summary: Delete a reconciliation exception
       parameters:
@@ -231,56 +239,45 @@ paths:
           description: Exception not found
       tags:
       - Reconciliation Exceptions
+      operationId: deleteReconciliationExceptionsById
+      x-operation-id-source: derived
 components:
   schemas:
-    AgentInvestigationSession:
+    ExceptionAggregates:
       type: object
-      description: An agent-run investigation into an exception's record slice.
+      description: Summary statistics for the (filtered) set of unmatched overdue records behind an exception.
       properties:
-        id:
+        record_count:
           type: integer
-        status:
-          type: string
-          description: Investigation status (e.g. pending, running, completed, failed)
-        outcome:
-          type: string
-          nullable: true
-          enum:
-          - match_found
-          - no_match
-          - needs_review
-          - null
-          description: Standardized outcome of a completed investigation. `match_found` = confident candidate matches; `no_match` = thorough search returned nothing; `needs_review` = candidates found but signals are weak. Null when the session is not yet completed or failed.
-        recommendation_text:
-          type: string
-          nullable: true
-          description: Agent's recommendation once the investigation completes
-        confidence_score:
+          description: Number of matching overdue unmatched records
+        total_amount:
+          type: integer
+          description: Sum of signed amounts in cents (debits are negative)
+        debit_count:
+          type: integer
+          description: Count of records with amount < 0
+        debit_sum:
+          type: integer
+          description: Sum of debit amounts in cents (non-positive)
+        credit_count:
+          type: integer
+          description: Count of records with amount > 0
+        credit_sum:
+          type: integer
+          description: Sum of credit amounts in cents (non-negative)
+        avg_age_days:
           type: number
-          nullable: true
-          description: Agent confidence in its recommendation (0.0-1.0)
-        candidate_records_searched:
-          type: integer
-          nullable: true
-          description: Number of candidate records the agent evaluated
-        suggested_record_ids:
-          type: array
-          nullable: true
-          items:
-            type: integer
-          description: Records the agent suggests linking to this exception
-        filter_params:
-          type: object
-          nullable: true
-          additionalProperties: true
-          description: Filter parameters the session was scoped to, if any. Matches the filter shape on `GET /reconciliation_exceptions/{id}`.
-        completed_at:
+          description: Average age in days since each record's `overdue_at`
+        oldest_at:
           type: string
           format: date-time
           nullable: true
-        created_at:
+          description: Transaction date of the oldest record in the slice
+        newest_at:
           type: string
           format: date-time
+          nullable: true
+          description: Transaction date of the newest record in the slice
     ReconciliationException:
       type: object
       required:
@@ -385,41 +382,54 @@ components:
           description: Up to the five most recent investigation sessions, newest first. Exceptions may accumulate multiple sessions as the overdue set evolves.
           items:
             $ref: '#/components/schemas/AgentInvestigationSession'
-    ExceptionAggregates:
+    AgentInvestigationSession:
       type: object
-      description: Summary statistics for the (filtered) set of unmatched overdue records behind an exception.
+      description: An agent-run investigation into an exception's record slice.
       properties:
-        record_count:
+        id:
           type: integer
-          description: Number of matching overdue unmatched records
-        total_amount:
-          type: integer
-          description: Sum of signed amounts in cents (debits are negative)
-        debit_count:
-          type: integer
-          description: Count of records with amount < 0
-        debit_sum:
-          type: integer
-          description: Sum of debit amounts in cents (non-positive)
-        credit_count:
-          type: integer
-          description: Count of records with amount > 0
-        credit_sum:
-          type: integer
-          description: Sum of credit amounts in cents (non-negative)
-        avg_age_days:
+        status:
+          type: string
+          description: Investigation status (e.g. pending, running, completed, failed)
+        outcome:
+          type: string
+          nullable: true
+          enum:
+          - match_found
+          - no_match
+          - needs_review
+          - null
+          description: Standardized outcome of a completed investigation. `match_found` = confident candidate matches; `no_match` = thorough search returned nothing; `needs_review` = candidates found but signals are weak. Null when the session is not yet completed or failed.
+        recommendation_text:
+          type: string
+          nullable: true
+          description: Agent's recommendation once the investigation completes
+        confidence_score:
           type: number
-          description: Average age in days since each record's `overdue_at`
-        oldest_at:
+          nullable: true
+          description: Agent confidence in its recommendation (0.0-1.0)
+        candidate_records_searched:
+          type: integer
+          nullable: true
+          description: Number of candidate records the agent evaluated
+        suggested_record_ids:
+          type: array
+          nullable: true
+          items:
+            type: integer
+          description: Records the agent suggests linking to this exception
+        filter_params:
+          type: object
+          nullable: true
+          additionalProperties: true
+          description: Filter parameters the session was scoped to, if any. Matches the filter shape on `GET /reconciliation_exceptions/{id}`.
+        completed_at:
           type: string
           format: date-time
           nullable: true
-          description: Transaction date of the oldest record in the slice
-        newest_at:
+        created_at:
           type: string
           format: date-time
-          nullable: true
-          description: Transaction date of the newest record in the slice
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

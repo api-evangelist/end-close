@@ -60,6 +60,8 @@ paths:
                     description: Total number of matches matching the filters, across all pages
       tags:
       - Reconciliation Matches
+      operationId: getReconciliationMatches
+      x-operation-id-source: derived
     post:
       summary: Create a reconciliation match
       description: Manually match a set of records. All records must be unreconciled and belong to the specified reconciliation's data streams.
@@ -97,6 +99,8 @@ paths:
           description: Validation error (records not found, already reconciled, or not in reconciliation)
       tags:
       - Reconciliation Matches
+      operationId: postReconciliationMatches
+      x-operation-id-source: derived
   /reconciliation_matches/{id}:
     get:
       summary: Retrieve a reconciliation match
@@ -117,6 +121,8 @@ paths:
           description: Match not found
       tags:
       - Reconciliation Matches
+      operationId: getReconciliationMatchesById
+      x-operation-id-source: derived
     delete:
       summary: Delete a reconciliation match
       description: Deletes a reconciliation match and resets all associated records to unreconciled status.
@@ -133,6 +139,8 @@ paths:
           description: Match not found
       tags:
       - Reconciliation Matches
+      operationId: deleteReconciliationMatchesById
+      x-operation-id-source: derived
 components:
   schemas:
     ReconciliationMatch:

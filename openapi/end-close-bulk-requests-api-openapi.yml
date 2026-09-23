@@ -85,6 +85,8 @@ paths:
           description: Invalid `status`, `created_after`, or `created_before`
       tags:
       - Bulk Requests
+      operationId: getBulkRequests
+      x-operation-id-source: derived
   /bulk_requests/{id}:
     get:
       summary: Get bulk request status
@@ -153,6 +155,8 @@ paths:
           description: Bulk request not found
       tags:
       - Bulk Requests
+      operationId: getBulkRequestsById
+      x-operation-id-source: derived
   /bulk_requests/{id}/cancel:
     post:
       summary: Cancel a bulk request
@@ -185,6 +189,8 @@ paths:
                     type: string
       tags:
       - Bulk Requests
+      operationId: postBulkRequestsByIdCancel
+      x-operation-id-source: derived
   /bulk_requests/{id}/retry:
     post:
       summary: Retry a bulk request
@@ -218,6 +224,8 @@ paths:
                     type: string
       tags:
       - Bulk Requests
+      operationId: postBulkRequestsByIdRetry
+      x-operation-id-source: derived
 components:
   schemas:
     BulkRequest:

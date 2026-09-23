@@ -32,6 +32,8 @@ paths:
                   $ref: '#/components/schemas/RecordPropertyDefinition'
       tags:
       - Data Stream Property Definitions
+      operationId: getDataStreamPropertyDefinitions
+      x-operation-id-source: derived
     post:
       summary: Create a property definition
       requestBody:
@@ -49,6 +51,8 @@ paths:
                 $ref: '#/components/schemas/RecordPropertyDefinition'
       tags:
       - Data Stream Property Definitions
+      operationId: postDataStreamPropertyDefinitions
+      x-operation-id-source: derived
   /data_stream_property_definitions/{id}:
     get:
       summary: Retrieve a property definition
@@ -67,6 +71,8 @@ paths:
                 $ref: '#/components/schemas/RecordPropertyDefinition'
       tags:
       - Data Stream Property Definitions
+      operationId: getDataStreamPropertyDefinitionsById
+      x-operation-id-source: derived
     patch:
       summary: Update a property definition
       description: Update the name or optional flag of a property definition.
@@ -96,6 +102,8 @@ paths:
                 $ref: '#/components/schemas/RecordPropertyDefinition'
       tags:
       - Data Stream Property Definitions
+      operationId: patchDataStreamPropertyDefinitionsById
+      x-operation-id-source: derived
     delete:
       summary: Delete a property definition
       parameters:
@@ -113,6 +121,8 @@ paths:
           description: Property definition not found
       tags:
       - Data Stream Property Definitions
+      operationId: deleteDataStreamPropertyDefinitionsById
+      x-operation-id-source: derived
 components:
   schemas:
     RecordPropertyDefinition:

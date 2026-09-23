@@ -30,6 +30,8 @@ paths:
                       $ref: '#/components/schemas/ReconciliationStory'
       tags:
       - Reconciliation Stories
+      operationId: getReconciliationStories
+      x-operation-id-source: derived
     post:
       summary: Create a reconciliation story
       description: Create a story and attach a chain of reconciliations. The first link must use role `origin` and have no shared_data_stream_id; subsequent links must use role `continuation` and specify the shared data stream linking them to the previous reconciliation.
@@ -78,6 +80,8 @@ paths:
           description: Validation error
       tags:
       - Reconciliation Stories
+      operationId: postReconciliationStories
+      x-operation-id-source: derived
   /reconciliation_stories/{id}:
     get:
       summary: Retrieve a reconciliation story
@@ -98,6 +102,8 @@ paths:
           description: Story not found
       tags:
       - Reconciliation Stories
+      operationId: getReconciliationStoriesById
+      x-operation-id-source: derived
     patch:
       summary: Update a reconciliation story
       description: Update the story name and/or replace its links. If `links` is provided, all existing links are replaced with the new chain. If `links` is omitted, only the name is updated.
@@ -150,6 +156,8 @@ paths:
           description: Validation error
       tags:
       - Reconciliation Stories
+      operationId: patchReconciliationStoriesById
+      x-operation-id-source: derived
     delete:
       summary: Delete a reconciliation story
       description: Permanently deletes a story and unlinks it from all reconciliations. The reconciliations themselves are not deleted.
@@ -166,8 +174,29 @@ paths:
           description: Story not found
       tags:
       - Reconciliation Stories
+      operationId: deleteReconciliationStoriesById
+      x-operation-id-source: derived
 components:
   schemas:
+    ReconciliationStory:
+      type: object
+      required:
+      - name
+      description: A reconciliation story groups related reconciliations into an ordered chain so end-to-end flow can be tracked. Each link points to a reconciliation; non-origin links must specify the data stream that connects them to the previous reconciliation in the chain.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: Human readable name for the story
+        created_at:
+          type: string
+          format: date-time
+        links:
+          type: array
+          description: Ordered list of reconciliations participating in the story
+          items:
+            $ref: '#/components/schemas/ReconciliationStoryLink'
     ReconciliationStoryLink:
       type: object
       required:
@@ -216,25 +245,6 @@ components:
                 type: integer
               name:
                 type: string
-    ReconciliationStory:
-      type: object
-      required:
-      - name
-      description: A reconciliation story groups related reconciliations into an ordered chain so end-to-end flow can be tracked. Each link points to a reconciliation; non-origin links must specify the data stream that connects them to the previous reconciliation in the chain.
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          description: Human readable name for the story
-        created_at:
-          type: string
-          format: date-time
-        links:
-          type: array
-          description: Ordered list of reconciliations participating in the story
-          items:
-            $ref: '#/components/schemas/ReconciliationStoryLink'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

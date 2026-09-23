@@ -98,7 +98,8 @@
     "end-close-openapi-original.json: declared missing tag: Reconciliation Rules",
     "end-close-openapi-original.json: declared missing tag: Reconciliation Stories",
     "end-close-openapi-original.json: declared missing tag: Reconciliations",
-    "end-close-openapi-original.json: declared missing tag: Records"
+    "end-close-openapi-original.json: declared missing tag: Records",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "end-close-bank-account-balances-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -106,6 +107,7 @@
     "end-close-bulk-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "end-close-data-stream-property-definitions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "end-close-data-streams-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "end-close-end-close-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "end-close-import-batches-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "end-close-reconciliation-exceptions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "end-close-reconciliation-matches-api-openapi.yml: previously refined output, superseded by openapi/_original/",

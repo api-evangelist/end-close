@@ -29,6 +29,8 @@ paths:
           description: Unauthorized
       tags:
       - Bank Accounts
+      operationId: getBankAccounts
+      x-operation-id-source: derived
     post:
       summary: Create a bank account
       requestBody:
@@ -60,6 +62,8 @@ paths:
           description: Validation error
       tags:
       - Bank Accounts
+      operationId: postBankAccounts
+      x-operation-id-source: derived
   /bank_accounts/{id}:
     get:
       summary: Retrieve a bank account
@@ -83,6 +87,8 @@ paths:
           description: Bank account not found
       tags:
       - Bank Accounts
+      operationId: getBankAccountsById
+      x-operation-id-source: derived
     patch:
       summary: Update a bank account
       parameters:
@@ -119,6 +125,8 @@ paths:
           description: Bank account not found
       tags:
       - Bank Accounts
+      operationId: patchBankAccountsById
+      x-operation-id-source: derived
     delete:
       summary: Delete a bank account
       description: Permanently deletes a bank account. Returns 409 Conflict if the bank account has linked data streams.
@@ -140,6 +148,8 @@ paths:
           description: Cannot delete bank account because it has linked data streams
       tags:
       - Bank Accounts
+      operationId: deleteBankAccountsById
+      x-operation-id-source: derived
 components:
   schemas:
     BankAccount:

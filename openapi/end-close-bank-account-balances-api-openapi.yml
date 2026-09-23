@@ -38,6 +38,8 @@ paths:
           description: bank_account_id is required
       tags:
       - Bank Account Balances
+      operationId: getBankAccountBalances
+      x-operation-id-source: derived
     post:
       summary: Create or update a bank account balance
       description: Creates a balance for the specified bank account. If a balance already exists for the same date and balance type, it will be updated with the new amount (upsert behavior).
@@ -89,6 +91,8 @@ paths:
           description: Validation error
       tags:
       - Bank Account Balances
+      operationId: postBankAccountBalances
+      x-operation-id-source: derived
   /bank_account_balances/bulk:
     post:
       summary: Bulk create or update bank account balances
@@ -165,6 +169,8 @@ paths:
                     type: string
       tags:
       - Bank Account Balances
+      operationId: postBankAccountBalancesBulk
+      x-operation-id-source: derived
 components:
   schemas:
     BankAccountBalance:
