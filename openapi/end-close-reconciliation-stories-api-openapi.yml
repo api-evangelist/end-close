@@ -178,25 +178,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ReconciliationStory:
-      type: object
-      required:
-      - name
-      description: A reconciliation story groups related reconciliations into an ordered chain so end-to-end flow can be tracked. Each link points to a reconciliation; non-origin links must specify the data stream that connects them to the previous reconciliation in the chain.
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          description: Human readable name for the story
-        created_at:
-          type: string
-          format: date-time
-        links:
-          type: array
-          description: Ordered list of reconciliations participating in the story
-          items:
-            $ref: '#/components/schemas/ReconciliationStoryLink'
     ReconciliationStoryLink:
       type: object
       required:
@@ -245,6 +226,25 @@ components:
                 type: integer
               name:
                 type: string
+    ReconciliationStory:
+      type: object
+      required:
+      - name
+      description: A reconciliation story groups related reconciliations into an ordered chain so end-to-end flow can be tracked. Each link points to a reconciliation; non-origin links must specify the data stream that connects them to the previous reconciliation in the chain.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: Human readable name for the story
+        created_at:
+          type: string
+          format: date-time
+        links:
+          type: array
+          description: Ordered list of reconciliations participating in the story
+          items:
+            $ref: '#/components/schemas/ReconciliationStoryLink'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
