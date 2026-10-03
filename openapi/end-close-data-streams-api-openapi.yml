@@ -322,6 +322,83 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    DataStreamOperation:
+      type: object
+      description: Async operation against a data stream (delete or reset). Poll via GET /data_streams/{key}/operations/{id}.
+      properties:
+        id:
+          type: integer
+        data_stream_id:
+          type: integer
+        data_stream_key:
+          type: string
+        kind:
+          type: string
+          enum:
+          - delete
+          - reset
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+        progress:
+          type: integer
+          description: Percentage 0-100
+        error_message:
+          type: string
+          nullable: true
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        requested_by_user_id:
+          type: integer
+          nullable: true
+    DataStreamHealth:
+      type: object
+      description: Ingestion health snapshot for a data stream. All counts are indexed lookups; safe to poll.
+      properties:
+        records_count:
+          type: integer
+        import_batches_count:
+          type: integer
+        import_batches_record_sum:
+          type: integer
+          description: Sum of `record_count` across all import batches. Drift from `records_count` indicates orphaned or extra records.
+        orphan_records_count:
+          type: integer
+          description: Records on this stream with no `import_batch_id` (typically created via POST /records or POST /records/bulk)
+        bulk_requests:
+          type: object
+          properties:
+            pending:
+              type: integer
+            processing:
+              type: integer
+            completed:
+              type: integer
+            failed:
+              type: integer
+            cancelled:
+              type: integer
+            stuck:
+              type: integer
+              description: Currently `processing` with no heartbeat for >5 minutes
+        last_ingestion_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Most recent record `created_at` on this stream
     ImportBatch:
       type: object
       properties:
@@ -373,41 +450,6 @@ components:
         records_url:
           type: string
           description: URL to fetch records belonging to this batch
-    DataStreamHealth:
-      type: object
-      description: Ingestion health snapshot for a data stream. All counts are indexed lookups; safe to poll.
-      properties:
-        records_count:
-          type: integer
-        import_batches_count:
-          type: integer
-        import_batches_record_sum:
-          type: integer
-          description: Sum of `record_count` across all import batches. Drift from `records_count` indicates orphaned or extra records.
-        orphan_records_count:
-          type: integer
-          description: Records on this stream with no `import_batch_id` (typically created via POST /records or POST /records/bulk)
-        bulk_requests:
-          type: object
-          properties:
-            pending:
-              type: integer
-            processing:
-              type: integer
-            completed:
-              type: integer
-            failed:
-              type: integer
-            cancelled:
-              type: integer
-            stuck:
-              type: integer
-              description: Currently `processing` with no heartbeat for >5 minutes
-        last_ingestion_at:
-          type: string
-          format: date-time
-          nullable: true
-          description: Most recent record `created_at` on this stream
     DataStream:
       type: object
       required:
@@ -429,48 +471,6 @@ components:
         type:
           type: string
           description: The type of data stream (e.g. api, csv, stripe, bank_feed)
-    DataStreamOperation:
-      type: object
-      description: Async operation against a data stream (delete or reset). Poll via GET /data_streams/{key}/operations/{id}.
-      properties:
-        id:
-          type: integer
-        data_stream_id:
-          type: integer
-        data_stream_key:
-          type: string
-        kind:
-          type: string
-          enum:
-          - delete
-          - reset
-        status:
-          type: string
-          enum:
-          - pending
-          - running
-          - completed
-          - failed
-        progress:
-          type: integer
-          description: Percentage 0-100
-        error_message:
-          type: string
-          nullable: true
-        started_at:
-          type: string
-          format: date-time
-          nullable: true
-        completed_at:
-          type: string
-          format: date-time
-          nullable: true
-        created_at:
-          type: string
-          format: date-time
-        requested_by_user_id:
-          type: integer
-          nullable: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
