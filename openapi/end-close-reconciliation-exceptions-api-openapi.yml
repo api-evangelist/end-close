@@ -347,6 +347,41 @@ components:
           description: Up to the five most recent investigation sessions, newest first. Exceptions may accumulate multiple sessions as the overdue set evolves.
           items:
             $ref: '#/components/schemas/AgentInvestigationSession'
+    ExceptionAggregates:
+      type: object
+      description: Summary statistics for the (filtered) set of unmatched overdue records behind an exception.
+      properties:
+        record_count:
+          type: integer
+          description: Number of matching overdue unmatched records
+        total_amount:
+          type: integer
+          description: Sum of signed amounts in cents (debits are negative)
+        debit_count:
+          type: integer
+          description: Count of records with amount < 0
+        debit_sum:
+          type: integer
+          description: Sum of debit amounts in cents (non-positive)
+        credit_count:
+          type: integer
+          description: Count of records with amount > 0
+        credit_sum:
+          type: integer
+          description: Sum of credit amounts in cents (non-negative)
+        avg_age_days:
+          type: number
+          description: Average age in days since each record's `overdue_at`
+        oldest_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Transaction date of the oldest record in the slice
+        newest_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Transaction date of the newest record in the slice
     AgentInvestigationSession:
       type: object
       description: An agent-run investigation into an exception's record slice.
@@ -395,41 +430,6 @@ components:
         created_at:
           type: string
           format: date-time
-    ExceptionAggregates:
-      type: object
-      description: Summary statistics for the (filtered) set of unmatched overdue records behind an exception.
-      properties:
-        record_count:
-          type: integer
-          description: Number of matching overdue unmatched records
-        total_amount:
-          type: integer
-          description: Sum of signed amounts in cents (debits are negative)
-        debit_count:
-          type: integer
-          description: Count of records with amount < 0
-        debit_sum:
-          type: integer
-          description: Sum of debit amounts in cents (non-positive)
-        credit_count:
-          type: integer
-          description: Count of records with amount > 0
-        credit_sum:
-          type: integer
-          description: Sum of credit amounts in cents (non-negative)
-        avg_age_days:
-          type: number
-          description: Average age in days since each record's `overdue_at`
-        oldest_at:
-          type: string
-          format: date-time
-          nullable: true
-          description: Transaction date of the oldest record in the slice
-        newest_at:
-          type: string
-          format: date-time
-          nullable: true
-          description: Transaction date of the newest record in the slice
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

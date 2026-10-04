@@ -45,25 +45,13 @@ webhooks:
       x-summary-source: derived
 components:
   schemas:
-    WebhookEvent:
-      type: object
-      required:
-      - id
-      - event_type
-      - data
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the event
-        event_type:
-          type: string
-          description: Description of the event (e.g. record.reconciled or record.reconciliation_overdue)
-        timestamp:
-          type: string
-          format: date-time
-        data:
-          type: object
-          description: Payload data for the event
+    RecordWebhookEvent:
+      allOf:
+      - $ref: '#/components/schemas/WebhookEvent'
+      - type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/Record'
     Record:
       type: object
       required:
@@ -104,13 +92,25 @@ components:
           type: string
         data_stream_key:
           type: string
-    RecordWebhookEvent:
-      allOf:
-      - $ref: '#/components/schemas/WebhookEvent'
-      - type: object
-        properties:
-          data:
-            $ref: '#/components/schemas/Record'
+    WebhookEvent:
+      type: object
+      required:
+      - id
+      - event_type
+      - data
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the event
+        event_type:
+          type: string
+          description: Description of the event (e.g. record.reconciled or record.reconciliation_overdue)
+        timestamp:
+          type: string
+          format: date-time
+        data:
+          type: object
+          description: Payload data for the event
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -322,6 +322,62 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    DataStream:
+      type: object
+      required:
+      - key
+      - name
+      properties:
+        id:
+          type: integer
+          description: Unique numeric identifier
+        key:
+          type: string
+          description: Unique immutable identifier
+        name:
+          type: string
+          description: Human readable name
+        description:
+          type: string
+          description: Optional description of the data stream
+        type:
+          type: string
+          description: The type of data stream (e.g. api, csv, stripe, bank_feed)
+    DataStreamHealth:
+      type: object
+      description: Ingestion health snapshot for a data stream. All counts are indexed lookups; safe to poll.
+      properties:
+        records_count:
+          type: integer
+        import_batches_count:
+          type: integer
+        import_batches_record_sum:
+          type: integer
+          description: Sum of `record_count` across all import batches. Drift from `records_count` indicates orphaned or extra records.
+        orphan_records_count:
+          type: integer
+          description: Records on this stream with no `import_batch_id` (typically created via POST /records or POST /records/bulk)
+        bulk_requests:
+          type: object
+          properties:
+            pending:
+              type: integer
+            processing:
+              type: integer
+            completed:
+              type: integer
+            failed:
+              type: integer
+            cancelled:
+              type: integer
+            stuck:
+              type: integer
+              description: Currently `processing` with no heartbeat for >5 minutes
+        last_ingestion_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Most recent record `created_at` on this stream
     DataStreamOperation:
       type: object
       description: Async operation against a data stream (delete or reset). Poll via GET /data_streams/{key}/operations/{id}.
@@ -364,41 +420,6 @@ components:
         requested_by_user_id:
           type: integer
           nullable: true
-    DataStreamHealth:
-      type: object
-      description: Ingestion health snapshot for a data stream. All counts are indexed lookups; safe to poll.
-      properties:
-        records_count:
-          type: integer
-        import_batches_count:
-          type: integer
-        import_batches_record_sum:
-          type: integer
-          description: Sum of `record_count` across all import batches. Drift from `records_count` indicates orphaned or extra records.
-        orphan_records_count:
-          type: integer
-          description: Records on this stream with no `import_batch_id` (typically created via POST /records or POST /records/bulk)
-        bulk_requests:
-          type: object
-          properties:
-            pending:
-              type: integer
-            processing:
-              type: integer
-            completed:
-              type: integer
-            failed:
-              type: integer
-            cancelled:
-              type: integer
-            stuck:
-              type: integer
-              description: Currently `processing` with no heartbeat for >5 minutes
-        last_ingestion_at:
-          type: string
-          format: date-time
-          nullable: true
-          description: Most recent record `created_at` on this stream
     ImportBatch:
       type: object
       properties:
@@ -450,27 +471,6 @@ components:
         records_url:
           type: string
           description: URL to fetch records belonging to this batch
-    DataStream:
-      type: object
-      required:
-      - key
-      - name
-      properties:
-        id:
-          type: integer
-          description: Unique numeric identifier
-        key:
-          type: string
-          description: Unique immutable identifier
-        name:
-          type: string
-          description: Human readable name
-        description:
-          type: string
-          description: Optional description of the data stream
-        type:
-          type: string
-          description: The type of data stream (e.g. api, csv, stripe, bank_feed)
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
