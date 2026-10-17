@@ -289,46 +289,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Record:
-      type: object
-      required:
-      - date
-      - data_stream_key
-      - amount
-      - direction
-      properties:
-        id:
-          type: integer
-        amount:
-          type: integer
-          description: The monetary amount in cents (e.g., 1234 = $12.34)
-        currency:
-          type: string
-          description: Three-letter ISO 4217 currency code (e.g. USD, EUR). **Optional on create — defaults to `USD` when omitted.** Case-insensitive on input; always returned uppercase.
-          pattern: ^[A-Za-z]{3}$
-          default: USD
-        decimal_places:
-          type: integer
-          description: Number of decimal places for this currency (2 for USD)
-          default: 2
-        direction:
-          type: string
-          enum:
-          - credit
-          - debit
-        description:
-          type: string
-        date:
-          type: string
-          format: date
-        metadata:
-          type: object
-          additionalProperties: true
-          default: {}
-        external_id:
-          type: string
-        data_stream_key:
-          type: string
     ReconciliationEntry:
       description: A record's entry in one reconciliation. Match status, escalation, and matched records are all scoped to that reconciliation; a record has one entry per reconciliation it participates in. `id` is the record id.
       allOf:
@@ -398,6 +358,96 @@ components:
             type: integer
             nullable: true
             description: Open exception covering this entry's data stream when the entry is escalated. Null otherwise.
+    Record:
+      type: object
+      required:
+      - date
+      - data_stream_key
+      - amount
+      - direction
+      properties:
+        id:
+          type: integer
+        amount:
+          type: integer
+          description: The monetary amount in cents (e.g., 1234 = $12.34)
+        currency:
+          type: string
+          description: Three-letter ISO 4217 currency code (e.g. USD, EUR). **Optional on create — defaults to `USD` when omitted.** Case-insensitive on input; always returned uppercase.
+          pattern: ^[A-Za-z]{3}$
+          default: USD
+        decimal_places:
+          type: integer
+          description: Number of decimal places for this currency (2 for USD)
+          default: 2
+        direction:
+          type: string
+          enum:
+          - credit
+          - debit
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        metadata:
+          type: object
+          additionalProperties: true
+          default: {}
+        external_id:
+          type: string
+        data_stream_key:
+          type: string
+    ReconciliationRun:
+      type: object
+      description: A single execution of a reconciliation's batch or continuous matching pipeline.
+      properties:
+        id:
+          type: integer
+        kind:
+          type: string
+          enum:
+          - batch
+          - continuous
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+        trigger:
+          type: string
+          enum:
+          - manual
+          - rule_activated
+          - agent
+          - record_created
+          description: What initiated this run
+        total_records:
+          type: integer
+          description: Total records considered by the run
+        processed_records:
+          type: integer
+          description: Records processed so far
+        matched_records:
+          type: integer
+          description: Records that were matched during the run
+        rule_summary:
+          type: object
+          nullable: true
+          description: Per-rule match counts, populated as the run progresses
+        progress:
+          type: integer
+          description: Processing progress as a percentage (0-100)
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
     DataStream:
       type: object
       required:
@@ -456,56 +506,6 @@ components:
           $ref: '#/components/schemas/ReconciliationRun'
           nullable: true
           description: The most recent completed or failed batch run, if any
-    ReconciliationRun:
-      type: object
-      description: A single execution of a reconciliation's batch or continuous matching pipeline.
-      properties:
-        id:
-          type: integer
-        kind:
-          type: string
-          enum:
-          - batch
-          - continuous
-        status:
-          type: string
-          enum:
-          - pending
-          - running
-          - completed
-          - failed
-        trigger:
-          type: string
-          enum:
-          - manual
-          - rule_activated
-          - agent
-          - record_created
-          description: What initiated this run
-        total_records:
-          type: integer
-          description: Total records considered by the run
-        processed_records:
-          type: integer
-          description: Records processed so far
-        matched_records:
-          type: integer
-          description: Records that were matched during the run
-        rule_summary:
-          type: object
-          nullable: true
-          description: Per-rule match counts, populated as the run progresses
-        progress:
-          type: integer
-          description: Processing progress as a percentage (0-100)
-        started_at:
-          type: string
-          format: date-time
-          nullable: true
-        completed_at:
-          type: string
-          format: date-time
-          nullable: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

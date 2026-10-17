@@ -243,6 +243,89 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ExceptionAggregates:
+      type: object
+      description: Summary statistics for the (filtered) set of unmatched overdue records behind an exception.
+      properties:
+        record_count:
+          type: integer
+          description: Number of matching overdue unmatched records
+        total_amount:
+          type: integer
+          description: Sum of signed amounts in cents (debits are negative)
+        debit_count:
+          type: integer
+          description: Count of records with amount < 0
+        debit_sum:
+          type: integer
+          description: Sum of debit amounts in cents (non-positive)
+        credit_count:
+          type: integer
+          description: Count of records with amount > 0
+        credit_sum:
+          type: integer
+          description: Sum of credit amounts in cents (non-negative)
+        avg_age_days:
+          type: number
+          description: Average age in days since each record's `overdue_at`
+        oldest_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Transaction date of the oldest record in the slice
+        newest_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Transaction date of the newest record in the slice
+    AgentInvestigationSession:
+      type: object
+      description: An agent-run investigation into an exception's record slice.
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          description: Investigation status (e.g. pending, running, completed, failed)
+        outcome:
+          type: string
+          nullable: true
+          enum:
+          - match_found
+          - no_match
+          - needs_review
+          - null
+          description: Standardized outcome of a completed investigation. `match_found` = confident candidate matches; `no_match` = thorough search returned nothing; `needs_review` = candidates found but signals are weak. Null when the session is not yet completed or failed.
+        recommendation_text:
+          type: string
+          nullable: true
+          description: Agent's recommendation once the investigation completes
+        confidence_score:
+          type: number
+          nullable: true
+          description: Agent confidence in its recommendation (0.0-1.0)
+        candidate_records_searched:
+          type: integer
+          nullable: true
+          description: Number of candidate records the agent evaluated
+        suggested_record_ids:
+          type: array
+          nullable: true
+          items:
+            type: integer
+          description: Records the agent suggests linking to this exception
+        filter_params:
+          type: object
+          nullable: true
+          additionalProperties: true
+          description: Filter parameters the session was scoped to, if any. Matches the filter shape on `GET /reconciliation_exceptions/{id}`.
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
     ReconciliationException:
       type: object
       required:
@@ -347,89 +430,6 @@ components:
           description: Up to the five most recent investigation sessions, newest first. Exceptions may accumulate multiple sessions as the overdue set evolves.
           items:
             $ref: '#/components/schemas/AgentInvestigationSession'
-    ExceptionAggregates:
-      type: object
-      description: Summary statistics for the (filtered) set of unmatched overdue records behind an exception.
-      properties:
-        record_count:
-          type: integer
-          description: Number of matching overdue unmatched records
-        total_amount:
-          type: integer
-          description: Sum of signed amounts in cents (debits are negative)
-        debit_count:
-          type: integer
-          description: Count of records with amount < 0
-        debit_sum:
-          type: integer
-          description: Sum of debit amounts in cents (non-positive)
-        credit_count:
-          type: integer
-          description: Count of records with amount > 0
-        credit_sum:
-          type: integer
-          description: Sum of credit amounts in cents (non-negative)
-        avg_age_days:
-          type: number
-          description: Average age in days since each record's `overdue_at`
-        oldest_at:
-          type: string
-          format: date-time
-          nullable: true
-          description: Transaction date of the oldest record in the slice
-        newest_at:
-          type: string
-          format: date-time
-          nullable: true
-          description: Transaction date of the newest record in the slice
-    AgentInvestigationSession:
-      type: object
-      description: An agent-run investigation into an exception's record slice.
-      properties:
-        id:
-          type: integer
-        status:
-          type: string
-          description: Investigation status (e.g. pending, running, completed, failed)
-        outcome:
-          type: string
-          nullable: true
-          enum:
-          - match_found
-          - no_match
-          - needs_review
-          - null
-          description: Standardized outcome of a completed investigation. `match_found` = confident candidate matches; `no_match` = thorough search returned nothing; `needs_review` = candidates found but signals are weak. Null when the session is not yet completed or failed.
-        recommendation_text:
-          type: string
-          nullable: true
-          description: Agent's recommendation once the investigation completes
-        confidence_score:
-          type: number
-          nullable: true
-          description: Agent confidence in its recommendation (0.0-1.0)
-        candidate_records_searched:
-          type: integer
-          nullable: true
-          description: Number of candidate records the agent evaluated
-        suggested_record_ids:
-          type: array
-          nullable: true
-          items:
-            type: integer
-          description: Records the agent suggests linking to this exception
-        filter_params:
-          type: object
-          nullable: true
-          additionalProperties: true
-          description: Filter parameters the session was scoped to, if any. Matches the filter shape on `GET /reconciliation_exceptions/{id}`.
-        completed_at:
-          type: string
-          format: date-time
-          nullable: true
-        created_at:
-          type: string
-          format: date-time
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
