@@ -137,20 +137,6 @@ apis:
     url: https://endclose.com/docs
   - type: APIReference
     url: https://endclose.com/docs/api-reference/list-records
-- aid: end-close:end-close-import-batches-api
-  name: End Close Import Batches API
-  description: The Import Batches API from End Close — 2 operation(s) for import batches.
-  humanURL: https://endclose.com/docs
-  baseURL: https://api.endclose.com/v1
-  tags:
-  - Import Batches
-  properties:
-  - type: OpenAPI
-    url: openapi/end-close-import-batches-api-openapi.yml
-  - type: Documentation
-    url: https://endclose.com/docs
-  - type: APIReference
-    url: https://endclose.com/docs/api-reference/list-records
 - aid: end-close:end-close-reconciliation-exceptions-api
   name: End Close Reconciliation Exceptions API
   description: >-
@@ -250,6 +236,48 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/end-close-end-close-api-api-openapi.yml
+- aid: end-close:end-close-agents-api
+  name: End Close Agents API
+  description: The Agents API from End Close — 6 operation(s) for agents.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Agents
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-agents-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-file-imports-api
+  name: End Close File Imports API
+  description: The File Imports API from End Close — 5 operation(s) for file imports.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - File Imports
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-file-imports-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
+- aid: end-close:end-close-relays-api
+  name: End Close Relays API
+  description: The Relays API from End Close — 3 operation(s) for relays.
+  humanURL: https://endclose.com/docs
+  baseURL: https://api.endclose.com/v1
+  tags:
+  - Relays
+  properties:
+  - type: OpenAPI
+    url: openapi/end-close-relays-api-openapi.yml
+  - type: Documentation
+    url: https://endclose.com/docs
+  - type: APIReference
+    url: https://endclose.com/docs/api-reference/list-records
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

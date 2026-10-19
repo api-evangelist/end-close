@@ -49,6 +49,9 @@ paths:
                   type: string
                   description: Three-letter ISO 4217 currency code (e.g. USD, EUR). Must be uppercase. Optional.
                   pattern: ^[A-Z]{3}$
+                mask:
+                  type: string
+                  description: Last four digits of the account number, as it appears on statements. Set automatically for Plaid-linked accounts.
       responses:
         '201':
           description: Bank account created
@@ -112,6 +115,9 @@ paths:
                   type: string
                   description: Three-letter ISO 4217 currency code (e.g. USD, EUR). Must be uppercase. Optional.
                   pattern: ^[A-Z]{3}$
+                mask:
+                  type: string
+                  description: Last four digits of the account number, as it appears on statements. Set automatically for Plaid-linked accounts.
       responses:
         '200':
           description: Bank account updated
@@ -163,11 +169,47 @@ components:
         name:
           type: string
           description: Human readable name for the bank account
+        mask:
+          type: string
+          nullable: true
+          description: Last four digits of the account number, as it appears on statements. Populated for Plaid-linked accounts.
+        display_name:
+          type: string
+          description: 'Human label for the account: "Name (mask)" when a mask is known, otherwise just the name.'
         currency:
           type: string
           description: Three-letter ISO 4217 currency code (e.g. USD, EUR). Must be uppercase. Optional — bank accounts may be created without a currency.
           pattern: ^[A-Z]{3}$
           nullable: true
+        role:
+          type: string
+          description: Canonical account role within a program. Null when the account has no declared role.
+          enum:
+          - fbo
+          - ach_suspense
+          - network_settlement
+          - secondary_network
+          - revenue
+          - cardholder_adjustment
+          - cash_load
+          - unload_settlement
+          - reserve
+          - escheat
+          - gl
+          - operating
+          nullable: true
+          readOnly: true
+        program:
+          type: object
+          description: The program this account belongs to, if any.
+          nullable: true
+          readOnly: true
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
         created_at:
           type: string
           format: date-time

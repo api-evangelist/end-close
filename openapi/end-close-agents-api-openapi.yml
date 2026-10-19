@@ -1,0 +1,788 @@
+openapi: 3.2.0
+info:
+  title: End Close Agents API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Agents
+paths:
+  /agents:
+    get:
+      summary: List agents
+      description: Returns a paginated list of the environment's agents, newest first.
+      parameters:
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+        description: Opaque cursor from a previous response's `next_cursor`. Omit for the first page.
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+      responses:
+        '200':
+          description: Paginated list of agents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Agent'
+                  next_cursor:
+                    type: string
+                    nullable: true
+                    description: Opaque cursor for the next page. Null when no more pages.
+                  limit:
+                    type: integer
+        '401':
+          description: Unauthorized
+      tags:
+      - Agents
+      operationId: getAgents
+      x-operation-id-source: derived
+    post:
+      summary: Create an agent
+      description: 'Create an agent in the environment. Only `name` and `instructions` are required — `cadence` defaults to `manual`, which runs only when triggered via `POST /agents/{id}/runs`. Scheduled cadences require their time fields: `minute` for hourly, plus `hour` for daily/weekdays, plus `day_of_week` for weekly.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - instructions
+              properties:
+                name:
+                  type: string
+                  description: Unique within the environment
+                description:
+                  type: string
+                instructions:
+                  type: string
+                  description: The standing prompt every run executes
+                model:
+                  type: string
+                  description: Explicit model override. Omit to follow the platform default.
+                cadence:
+                  type: string
+                  enum:
+                  - manual
+                  - hourly
+                  - daily
+                  - weekdays
+                  - weekly
+                  default: manual
+                hour:
+                  type: integer
+                  minimum: 0
+                  maximum: 23
+                minute:
+                  type: integer
+                  minimum: 0
+                  maximum: 59
+                day_of_week:
+                  type: integer
+                  minimum: 0
+                  maximum: 6
+                  description: 0 = Sunday
+                timezone:
+                  type: string
+                  default: UTC
+                  description: IANA timezone the schedule is evaluated in
+                active:
+                  type: boolean
+                  default: true
+                handles_file_drops:
+                  type: boolean
+                  default: false
+                  description: At most one active agent per environment can have this enabled
+                delivery_enabled:
+                  type: boolean
+                  default: false
+                delivery_recipients:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                delivery_file_pattern:
+                  type: string
+                  default: '*.csv'
+                mentions:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - type
+                    - id
+                    - label
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - reconciliation
+                        - data_stream
+                        - user
+                        - agent
+                      id:
+                        type: string
+                      label:
+                        type: string
+      responses:
+        '201':
+          description: Agent created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden — agent management requires a standard API key
+        '422':
+          description: Validation error
+      tags:
+      - Agents
+      operationId: postAgents
+      x-operation-id-source: derived
+  /agents/{id}:
+    get:
+      summary: Retrieve an agent
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the agent
+      responses:
+        '200':
+          description: Agent retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Agent not found
+      tags:
+      - Agents
+      operationId: getAgentsById
+      x-operation-id-source: derived
+    patch:
+      summary: Update an agent
+      description: Update any subset of the agent's attributes. Accepts the same fields as create; omitted fields are left unchanged.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                instructions:
+                  type: string
+                model:
+                  type: string
+                cadence:
+                  type: string
+                  enum:
+                  - manual
+                  - hourly
+                  - daily
+                  - weekdays
+                  - weekly
+                hour:
+                  type: integer
+                  minimum: 0
+                  maximum: 23
+                minute:
+                  type: integer
+                  minimum: 0
+                  maximum: 59
+                day_of_week:
+                  type: integer
+                  minimum: 0
+                  maximum: 6
+                timezone:
+                  type: string
+                active:
+                  type: boolean
+                handles_file_drops:
+                  type: boolean
+                delivery_enabled:
+                  type: boolean
+                delivery_recipients:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                delivery_file_pattern:
+                  type: string
+                mentions:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - type
+                    - id
+                    - label
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - reconciliation
+                        - data_stream
+                        - user
+                        - agent
+                      id:
+                        type: string
+                      label:
+                        type: string
+      responses:
+        '200':
+          description: Agent updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Agent not found
+        '422':
+          description: Validation error
+      tags:
+      - Agents
+      operationId: patchAgentsById
+      x-operation-id-source: derived
+    delete:
+      summary: Delete an agent
+      description: Deletes the agent and all of its runs, including their transcripts and files.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the agent
+      responses:
+        '204':
+          description: Agent deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: Agent not found
+      tags:
+      - Agents
+      operationId: deleteAgentsById
+      x-operation-id-source: derived
+  /agents/{id}/runs:
+    get:
+      summary: List an agent's runs
+      description: Returns a paginated list of the agent's runs, newest first. Transcripts are omitted — fetch a single run to get its transcript.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the agent
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+        description: Opaque cursor from a previous response's `next_cursor`. Omit for the first page.
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+      responses:
+        '200':
+          description: Paginated list of runs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AgentRun'
+                  next_cursor:
+                    type: string
+                    nullable: true
+                    description: Opaque cursor for the next page. Null when no more pages.
+                  limit:
+                    type: integer
+        '401':
+          description: Unauthorized
+        '404':
+          description: Agent not found
+      tags:
+      - Agents
+      operationId: getAgentsByIdRuns
+      x-operation-id-source: derived
+    post:
+      summary: Run an agent
+      description: 'Triggers a run of the agent immediately, regardless of its cadence or active flag. The run is created `pending` and executed asynchronously — poll `GET /agents/{id}/runs/{run_id}` for status, summary, and output files. Unlike the rest of the agent-management surface, this endpoint also accepts a run''s session key, letting one agent kick off another (`triggered_by: agent`); those requests are refused with 422 when they would loop — the target agent already ran in the trigger chain — or chain more than 5 runs deep.'
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the agent
+      responses:
+        '201':
+          description: Run created and queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRun'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Agent not found
+        '422':
+          description: Refused agent-to-agent trigger — the run would create a loop or chain more than 5 runs deep
+      tags:
+      - Agents
+      operationId: postAgentsByIdRuns
+      x-operation-id-source: derived
+  /agents/{id}/runs/{run_id}:
+    get:
+      summary: Retrieve a run
+      description: Returns one run including its full event transcript.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the agent
+      - in: path
+        name: run_id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the run
+      responses:
+        '200':
+          description: Run retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentRun'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Agent or run not found
+      tags:
+      - Agents
+      operationId: getAgentsByIdRunsByRunId
+      x-operation-id-source: derived
+  /agents/{id}/files:
+    post:
+      summary: Attach an input file
+      description: 'Attaches one file to the agent''s input files — the same files the app''s agent form manages under "Files". Every run lists the agent''s input files in its prompt and can download them, so this is how to hand an agent a mapping table, a prior statement, or any reference material. Send `multipart/form-data` with a single `file` part; call once per file. Limits match the app: 50 MB per file, 20 files per agent, any content type (JSON is fine as an input). A file whose name matches an existing input file is added as a second file, not a replacement — delete the old one first to replace it.'
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the agent
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to attach (at most 50 MB)
+      responses:
+        '201':
+          description: File attached
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentFile'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden — agent management requires a standard API key
+        '404':
+          description: Agent not found
+        '422':
+          description: No `file` part, file over 50 MB, or the agent already has 20 input files
+      tags:
+      - Agents
+      operationId: postAgentsByIdFiles
+      x-operation-id-source: derived
+  /agents/{id}/files/{file_id}:
+    get:
+      summary: Download an input file
+      description: Redirects (302) to a short-lived signed URL for the file's bytes; follow the redirect to download. This is the API-key-authenticated way to fetch an input file. The `url` on the file object reaches the same bytes through a signed link that needs no credentials.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the agent
+      - in: path
+        name: file_id
+        required: true
+        schema:
+          type: string
+        description: The `id` of the file from the agent's `input_files`
+      responses:
+        '302':
+          description: Redirect to the signed download URL
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden — agent management requires a standard API key
+        '404':
+          description: Agent not found, or the file is not one of this agent's input files
+      tags:
+      - Agents
+      operationId: getAgentsByIdFilesByFileId
+      x-operation-id-source: derived
+    delete:
+      summary: Remove an input file
+      description: Detaches and deletes one of the agent's input files. Runs already in progress keep the copy they downloaded; later runs no longer see the file.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the agent
+      - in: path
+        name: file_id
+        required: true
+        schema:
+          type: string
+        description: The `id` of the file from the agent's `input_files`
+      responses:
+        '204':
+          description: File removed
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden — agent management requires a standard API key
+        '404':
+          description: Agent not found, or the file is not one of this agent's input files
+      tags:
+      - Agents
+      operationId: deleteAgentsByIdFilesByFileId
+      x-operation-id-source: derived
+components:
+  schemas:
+    AgentRun:
+      type: object
+      description: One execution of an agent. Unset fields (e.g. error_message on a successful run) are omitted from responses.
+      properties:
+        id:
+          type: string
+          format: uuid
+        scheduled_agent_id:
+          type: string
+          format: uuid
+          description: The agent this run belongs to
+        triggered_by:
+          type: string
+          enum:
+          - manual
+          - schedule
+          - resume
+          - drop
+          - api
+          - agent
+          description: '`api` for runs started through this API with an API key; `agent` for runs started by another agent''s run using its session key'
+        triggered_by_user_id:
+          type: string
+          nullable: true
+          description: The user who started a manual run; null for API-triggered runs
+        triggered_by_run_id:
+          type: string
+          nullable: true
+          description: 'For agent-triggered runs: the run whose agent started this one'
+        agent_review_task_id:
+          type: string
+          nullable: true
+          description: 'For resume runs: the review task whose resolution this run executes'
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+          - cancelled
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        duration_ms:
+          type: integer
+          nullable: true
+        error_message:
+          type: string
+          nullable: true
+        summary:
+          type: string
+          nullable: true
+          description: The agent's markdown summary of what it did
+        model:
+          type: string
+          nullable: true
+          description: The model this run executed on
+        total_input_tokens:
+          type: integer
+          nullable: true
+        total_output_tokens:
+          type: integer
+          nullable: true
+        output_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentFile'
+          description: Files the agent produced for the operator
+        dropped_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentFile'
+          description: 'For drop runs: the file(s) this run was triggered to process'
+        delivery:
+          type: object
+          nullable: true
+          description: The email delivery record for this run's output files, when delivery ran
+        transcript:
+          type: array
+          items:
+            type: object
+          description: Full event transcript. Only included when fetching a single run
+        created_at:
+          type: string
+          format: date-time
+    AgentFile:
+      type: object
+      description: A file attached to an agent (input) or produced by a run (output). `url` is an absolute, signed download link on the API host; input files can also be fetched with `GET /agents/{id}/files/{file_id}`.
+      properties:
+        id:
+          type: string
+          format: uuid
+        filename:
+          type: string
+        byte_size:
+          type: integer
+        content_type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        url:
+          type: string
+          description: Absolute signed download URL on the API host (e.g. `https://api.endclose.com/rails/active_storage/blobs/redirect/...`). Fetching it needs no credentials; it 302s to a short-lived object-storage URL.
+    Agent:
+      type: object
+      required:
+      - name
+      - instructions
+      description: 'An agent: standing instructions executed in an isolated sandbox with access to the environment''s data, on a schedule or on demand. The same objects the app''s Agents page manages.'
+      properties:
+        id:
+          type: string
+          format: uuid
+        kind:
+          type: string
+          enum:
+          - llm
+          - browser
+          readOnly: true
+          description: What executes the agent's runs. `llm` agents run their instructions in a sandbox. `browser` agents run a fixed automation against a web portal and import what it exports; they have no instructions, are set up by End Close, and cannot be created or converted through the API.
+        browser:
+          type: object
+          readOnly: true
+          description: Present on `browser` agents only. The portal login itself is never returned.
+          properties:
+            automation:
+              type: string
+              description: The automation the agent runs, e.g. `snb_activity_export_v1`
+            portal_url:
+              type: string
+            has_credentials:
+              type: boolean
+              description: Whether a portal login is saved
+            has_browser_context:
+              type: boolean
+              description: Whether the agent has signed in to the portal before
+            settings:
+              type: object
+              description: 'Automation settings: `lookback_days` and `streams`, which maps each export type to the key of the data stream it is imported into, and `oldest_pending_on` (set by the agent, absent when there is none): the created date of the oldest transaction the last run found that the bank had not settled yet (not sent, cancelled or failed — this includes one that is approved and already imported), which the next run looks back to'
+              additionalProperties: true
+            needs_verification:
+              type: boolean
+              description: Whether the agent is paused until a person signs it in to the portal. Runs fail while this is true.
+            verification_reason:
+              type: string
+              enum:
+              - code_requested
+              - never_signed_in
+              nullable: true
+              description: 'Why the agent needs verification: `code_requested` when the portal asked for a verification code, `never_signed_in` when the agent has not signed in yet. Null when it does not.'
+            verification_required_at:
+              type: string
+              format: date-time
+              nullable: true
+              description: Set when the portal asked for a verification code, which a run cannot enter. Runs fail until someone signs the agent in again.
+        name:
+          type: string
+          description: Unique within the environment
+        description:
+          type: string
+          nullable: true
+        instructions:
+          type: string
+          description: The standing prompt every run executes. Empty for `browser` agents
+        mentions:
+          type: array
+          description: Reconciliations, data streams, users, and other agents whose context is resolved into every run's prompt. Mentioning an agent also teaches the run how to trigger it (see POST /agents/{id}/runs)
+          items:
+            type: object
+            required:
+            - type
+            - id
+            - label
+            properties:
+              type:
+                type: string
+                enum:
+                - reconciliation
+                - data_stream
+                - user
+                - agent
+              id:
+                type: string
+              label:
+                type: string
+        model:
+          type: string
+          nullable: true
+          description: The model the agent runs on — resolved to the platform default when not set explicitly. Null for `browser` agents, which run on no model
+        cadence:
+          type: string
+          enum:
+          - manual
+          - hourly
+          - daily
+          - weekdays
+          - weekly
+          description: '`manual` agents only run when triggered (POST /agents/{id}/runs)'
+        hour:
+          type: integer
+          nullable: true
+          minimum: 0
+          maximum: 23
+          description: Required for daily, weekdays, and weekly cadences
+        minute:
+          type: integer
+          nullable: true
+          minimum: 0
+          maximum: 59
+          description: Required for every cadence except manual
+        day_of_week:
+          type: integer
+          nullable: true
+          minimum: 0
+          maximum: 6
+          description: 0 = Sunday. Required for weekly cadence
+        timezone:
+          type: string
+          description: IANA timezone the schedule is evaluated in
+          default: UTC
+        active:
+          type: boolean
+          description: Inactive agents are never scheduled but can still be run on demand
+        handles_file_drops:
+          type: boolean
+          description: Whether this agent processes files dropped in the app. At most one active agent per environment can have this enabled.
+        delivery_enabled:
+          type: boolean
+          description: Email output files matching delivery_file_pattern to delivery_recipients after each completed run
+        delivery_recipients:
+          type: array
+          items:
+            type: string
+            format: email
+        delivery_file_pattern:
+          type: string
+          description: Case-insensitive glob selecting which output files are delivered
+          default: '*.csv'
+        input_files:
+          type: array
+          description: Files attached for every run to use — managed with `POST /agents/{id}/files` and `DELETE /agents/{id}/files/{file_id}`
+          items:
+            $ref: '#/components/schemas/AgentFile'
+        next_run_at:
+          type: string
+          format: date-time
+          nullable: true
+        last_run_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

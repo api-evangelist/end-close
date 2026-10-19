@@ -287,8 +287,256 @@ paths:
       - Reconciliations
       operationId: getReconciliationsByIdAgentStatus
       x-operation-id-source: derived
+  /reconciliations/{reconciliation_id}/data_streams/{data_stream_id}/findings:
+    put:
+      summary: Write findings for a data stream's lines
+      description: The same upsert as `PUT /reconciliation_exceptions/{id}/findings`, for an engine that runs before the sweeper has opened an exception. Opens the exception for the (reconciliation, data stream) pair if none is open, reuses it otherwise, and returns its id with the result.
+      parameters:
+      - in: path
+        name: reconciliation_id
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: data_stream_id
+        required: true
+        schema:
+          type: string
+        description: The data stream whose records the findings are about. Must be part of the reconciliation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindingsUpsertRequest'
+      responses:
+        '200':
+          description: Findings written against the open exception
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/FindingsUpsertResult'
+                - type: object
+                  properties:
+                    exception_id:
+                      type: string
+                      description: The open exception the findings were written to
+        '401':
+          description: Unauthorized
+        '404':
+          description: Reconciliation or data stream not found
+        '422':
+          description: Data stream is not part of the reconciliation, or `findings` is invalid
+      tags:
+      - Reconciliations
+      operationId: putReconciliationsByReconciliationIdDataStreamsByDataStreamIdFindings
+      x-operation-id-source: derived
 components:
   schemas:
+    FindingInput:
+      type: object
+      required:
+      - note
+      description: One line of the review as your engine sees it. Identify the record by `record_id` or by `external_id` (resolved within the exception's data stream). `suggestion.record_ids` may be record ids or external ids from either side of the reconciliation; unknown ids reject the finding.
+      properties:
+        record_id:
+          type: string
+          description: The record's id. Required unless `external_id` is given.
+        external_id:
+          type: string
+          description: The record's external id within the exception's data stream. Rejected when it matches more than one record.
+        looks_right:
+          type: boolean
+          default: false
+          description: '`true` when the line is correct as it stands and only needs the note. These lines can be confirmed in bulk.'
+        note:
+          type: string
+          description: 'One or two plain sentences: what happened to this line and what was checked.'
+        category:
+          type: string
+          nullable: true
+          description: A short label for the kind of line, in your own words (e.g. `back-billing`, `monthly minimum`).
+        suggestion:
+          type: object
+          description: What Approve applies. Omit, or use kind `none`, when there is nothing to apply.
+          properties:
+            kind:
+              type: string
+              enum:
+              - match
+              - adjust
+              - none
+              default: none
+              description: '`match`: pair the line with `record_ids` (must balance). `adjust`: pair them and plug the remaining gap with an adjustment carrying `reason`. `none`: nothing to apply.'
+            record_ids:
+              type: array
+              items:
+                type: string
+              description: Every other record of the proposed match, either side, as record ids or external ids.
+            reason:
+              type: string
+              description: 'For `adjust`: why a gap remains. Becomes the adjustment''s description.'
+            text:
+              type: string
+              description: The sentence shown next to the Approve button.
+            difference_cents:
+              type: integer
+              description: Informational. Recomputed from the records as |side A| − |side B| whenever `record_ids` is given; only kept as sent for a one-sided `adjust`.
+        evidence:
+          type: array
+          description: Quotes that back the note. A quote with a `url` marks the line as checked against a document in the review.
+          items:
+            type: object
+            required:
+            - quote
+            properties:
+              quote:
+                type: string
+              source:
+                type: string
+                nullable: true
+                description: Where the quote is from, e.g. `Services Agreement, Exhibit B p.19`.
+              url:
+                type: string
+                nullable: true
+                description: 'An http(s) link to the document — for a file in End Close, the file''s `url`. End `#page=N` to open a PDF at that page: the review drawer labels the link “Open p.N” and shows the document inline. Other schemes are dropped.'
+        precedent:
+          type: string
+          nullable: true
+          description: How the same line was handled before, in one sentence.
+        labels:
+          type: object
+          additionalProperties: true
+          description: 'Free-form markers your reviewers care about, e.g. `{"carried_forward": true, "colour": "peach"}`. The review page reads `colour`, `colour_cell` and `carried_forward`; anything else is stored and returned untouched.'
+    Record:
+      type: object
+      required:
+      - date
+      - data_stream_key
+      - amount
+      - direction
+      properties:
+        id:
+          type: integer
+        amount:
+          type: integer
+          description: The monetary amount in cents (e.g., 1234 = $12.34)
+        currency:
+          type: string
+          description: Three-letter ISO 4217 currency code (e.g. USD, EUR). **Optional on create — defaults to `USD` when omitted.** Case-insensitive on input; always returned uppercase.
+          pattern: ^[A-Za-z]{3}$
+          default: USD
+        decimal_places:
+          type: integer
+          description: Number of decimal places for this currency (2 for USD)
+          default: 2
+        direction:
+          type: string
+          enum:
+          - credit
+          - debit
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        metadata:
+          type: object
+          additionalProperties: true
+          default: {}
+        external_id:
+          type: string
+        data_stream_key:
+          type: string
+    ReconciliationRun:
+      type: object
+      description: A single execution of a reconciliation's batch or continuous matching pipeline.
+      properties:
+        id:
+          type: integer
+        kind:
+          type: string
+          enum:
+          - batch
+          - continuous
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+        trigger:
+          type: string
+          enum:
+          - manual
+          - rule_activated
+          - agent
+          - record_created
+          - ingestion
+          description: What initiated this run. `ingestion` runs are queued automatically once an import lands, so rollup (many_to_one) rules apply to the new records.
+        total_records:
+          type: integer
+          description: Total records considered by the run
+        processed_records:
+          type: integer
+          description: Records processed so far
+        matched_records:
+          type: integer
+          description: Records that were matched during the run
+        rule_summary:
+          type: object
+          nullable: true
+          description: Per-rule match counts, populated as the run progresses
+        progress:
+          type: integer
+          description: Processing progress as a percentage (0-100)
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+    DataStream:
+      type: object
+      required:
+      - key
+      - name
+      properties:
+        id:
+          type: integer
+          description: Unique numeric identifier
+        key:
+          type: string
+          description: Unique immutable identifier
+        name:
+          type: string
+          description: Human readable name
+        description:
+          type: string
+          description: Optional description of the data stream
+        type:
+          type: string
+          description: The type of data stream (e.g. api, csv, stripe, bank_feed)
+        program_id:
+          type: integer
+          nullable: true
+        records_count:
+          type: integer
+          description: Record count from the ClickHouse mirror
+    FindingsUpsertRequest:
+      type: object
+      required:
+      - findings
+      properties:
+        findings:
+          type: array
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/FindingInput'
     ReconciliationEntry:
       description: A record's entry in one reconciliation. Match status, escalation, and matched records are all scoped to that reconciliation; a record has one entry per reconciliation it participates in. `id` is the record id.
       allOf:
@@ -358,117 +606,6 @@ components:
             type: integer
             nullable: true
             description: Open exception covering this entry's data stream when the entry is escalated. Null otherwise.
-    Record:
-      type: object
-      required:
-      - date
-      - data_stream_key
-      - amount
-      - direction
-      properties:
-        id:
-          type: integer
-        amount:
-          type: integer
-          description: The monetary amount in cents (e.g., 1234 = $12.34)
-        currency:
-          type: string
-          description: Three-letter ISO 4217 currency code (e.g. USD, EUR). **Optional on create — defaults to `USD` when omitted.** Case-insensitive on input; always returned uppercase.
-          pattern: ^[A-Za-z]{3}$
-          default: USD
-        decimal_places:
-          type: integer
-          description: Number of decimal places for this currency (2 for USD)
-          default: 2
-        direction:
-          type: string
-          enum:
-          - credit
-          - debit
-        description:
-          type: string
-        date:
-          type: string
-          format: date
-        metadata:
-          type: object
-          additionalProperties: true
-          default: {}
-        external_id:
-          type: string
-        data_stream_key:
-          type: string
-    ReconciliationRun:
-      type: object
-      description: A single execution of a reconciliation's batch or continuous matching pipeline.
-      properties:
-        id:
-          type: integer
-        kind:
-          type: string
-          enum:
-          - batch
-          - continuous
-        status:
-          type: string
-          enum:
-          - pending
-          - running
-          - completed
-          - failed
-        trigger:
-          type: string
-          enum:
-          - manual
-          - rule_activated
-          - agent
-          - record_created
-          description: What initiated this run
-        total_records:
-          type: integer
-          description: Total records considered by the run
-        processed_records:
-          type: integer
-          description: Records processed so far
-        matched_records:
-          type: integer
-          description: Records that were matched during the run
-        rule_summary:
-          type: object
-          nullable: true
-          description: Per-rule match counts, populated as the run progresses
-        progress:
-          type: integer
-          description: Processing progress as a percentage (0-100)
-        started_at:
-          type: string
-          format: date-time
-          nullable: true
-        completed_at:
-          type: string
-          format: date-time
-          nullable: true
-    DataStream:
-      type: object
-      required:
-      - key
-      - name
-      properties:
-        id:
-          type: integer
-          description: Unique numeric identifier
-        key:
-          type: string
-          description: Unique immutable identifier
-        name:
-          type: string
-          description: Human readable name
-        description:
-          type: string
-          description: Optional description of the data stream
-        type:
-          type: string
-          description: The type of data stream (e.g. api, csv, stripe, bank_feed)
     Reconciliation:
       type: object
       required:
@@ -506,6 +643,26 @@ components:
           $ref: '#/components/schemas/ReconciliationRun'
           nullable: true
           description: The most recent completed or failed batch run, if any
+    FindingsUpsertResult:
+      type: object
+      description: 'Each finding is validated on its own, so a batch succeeds partially: `upserted` counts the rows written and `errors` names the rejected ones by position.'
+      properties:
+        upserted:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+                description: Position of the rejected finding in the request's `findings`.
+              record_id:
+                type: string
+              external_id:
+                type: string
+              message:
+                type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

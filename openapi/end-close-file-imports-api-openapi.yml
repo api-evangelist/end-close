@@ -1,0 +1,427 @@
+openapi: 3.2.0
+info:
+  title: End Close File Imports API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: File Imports
+paths:
+  /file_imports:
+    get:
+      summary: List file imports
+      description: Returns a cursor-paginated list of file imports across all data streams, newest first. Filter to one stream with `data_stream_key` (equivalent to GET /data_streams/{key}/file_imports, which also returns per-import aggregates).
+      parameters:
+      - in: query
+        name: data_stream_key
+        schema:
+          type: string
+        description: Restrict to one data stream
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+      - in: query
+        name: cursor
+        schema:
+          type: string
+        description: 'Opaque cursor from a previous response''s `next_cursor`. Pass it back unchanged; `next_cursor: null` is the only terminator.'
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - pending
+          - processing
+          - replicating
+          - completed
+          - failed
+          - cancelled
+      - in: query
+        name: source
+        schema:
+          type: string
+        description: Filter by import source (e.g. `csv`, `nacha`, `bulk_api`)
+      - in: query
+        name: created_after
+        schema:
+          type: string
+          format: date-time
+        description: ISO8601; inclusive
+      - in: query
+        name: created_before
+        schema:
+          type: string
+          format: date-time
+        description: ISO8601; inclusive
+      responses:
+        '200':
+          description: Cursor-paginated list of file imports
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileImport'
+                  next_cursor:
+                    type: string
+                    nullable: true
+                    description: Pass as `cursor` for the next page; null on the last page
+                  limit:
+                    type: integer
+        '401':
+          description: Unauthorized
+      tags:
+      - File Imports
+      operationId: getFileImports
+      x-operation-id-source: derived
+  /file_imports/{id}:
+    get:
+      summary: Retrieve a file import
+      description: Retrieve a single file import by its unique ID.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: outcome
+        schema:
+          type: string
+        description: Filter the embedded row errors by outcome
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+        description: Page size for the embedded row errors
+      - in: query
+        name: offset
+        schema:
+          type: integer
+          default: 0
+        description: Offset for the embedded row errors
+      responses:
+        '200':
+          description: The file import, plus an offset-paginated page of its row errors. Successful rows are not listed here — they are real records.
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/FileImport'
+                - type: object
+                  properties:
+                    errors:
+                      type: object
+                      properties:
+                        data:
+                          type: array
+                          items:
+                            type: object
+                        has_more:
+                          type: boolean
+                        offset:
+                          type: integer
+        '401':
+          description: Unauthorized
+        '404':
+          description: File import not found
+      tags:
+      - File Imports
+      operationId: getFileImportsById
+      x-operation-id-source: derived
+  /file_imports/{id}/records:
+    get:
+      summary: List records for a file import
+      description: Returns a paginated list of records belonging to a specific file import.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the file import
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 25
+      - in: query
+        name: offset
+        required: false
+        schema:
+          type: integer
+          default: 0
+        description: Pagination offset
+      responses:
+        '200':
+          description: Paginated list of records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Record'
+                  has_more:
+                    type: boolean
+                  offset:
+                    type: number
+        '401':
+          description: Unauthorized
+        '404':
+          description: Import batch not found
+      tags:
+      - File Imports
+      operationId: getFileImportsByIdRecords
+      x-operation-id-source: derived
+  /file_imports/{id}/cancel:
+    post:
+      summary: Cancel a file import
+      description: Sets `cancellation_requested_at` so the running job exits cleanly to `cancelled` on its next heartbeat. Idempotent — re-cancelling just bumps the timestamp.
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Cancel accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileImport'
+        '401':
+          description: Unauthorized
+        '404':
+          description: File import not found
+        '409':
+          description: File import is not in a cancellable status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+      - File Imports
+      operationId: postFileImportsByIdCancel
+      x-operation-id-source: derived
+  /file_imports/{id}/retry:
+    post:
+      summary: Retry a file import
+      description: 'In-place retry: resumes an unfinished main pass from `processed_offset` and re-runs the queued row errors. No child import is created.'
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Retry accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileImport'
+        '401':
+          description: Unauthorized
+        '404':
+          description: File import not found
+        '409':
+          description: File import is not in a retryable status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      tags:
+      - File Imports
+      operationId: postFileImportsByIdRetry
+      x-operation-id-source: derived
+components:
+  schemas:
+    FileImport:
+      type: object
+      description: A file import (CSV/NACHA upload or bulk API submission) and its ingestion lifecycle. Aggregate fields (record_count, total_credits, total_debits, net_amount, date_range_start, date_range_end, currency) are merged in only on the stream-scoped index GET /data_streams/{key}/file_imports, and are trustworthy once status is `completed`.
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - replicating
+          - completed
+          - failed
+          - cancelled
+        source:
+          type: string
+          nullable: true
+          description: Origin of the import (e.g. `csv`, `nacha`, `bulk_api`)
+        filename:
+          type: string
+          nullable: true
+        total_items:
+          type: integer
+        processed_items:
+          type: integer
+        successful_items:
+          type: integer
+        failed_items:
+          type: integer
+        skipped_items:
+          type: integer
+          description: 'Records skipped due to `on_conflict: skip` matching an existing `external_id`'
+        expected_records_count:
+          type: integer
+          nullable: true
+        progress:
+          type: integer
+          description: processed_items / total_items as a percentage (0-100)
+        parsing:
+          type: boolean
+          description: True until rows start landing; file totals are unknown while parsing
+        decimal_places:
+          type: integer
+          description: Number of decimal places (2 for USD)
+        stuck:
+          type: boolean
+          description: Currently processing with no heartbeat for >5 minutes
+        on_conflict:
+          type: string
+          nullable: true
+        error_message:
+          type: string
+          nullable: true
+        error_details:
+          type: object
+          nullable: true
+        data_stream_ids:
+          type: array
+          items:
+            type: integer
+        created_at:
+          type: string
+          format: date-time
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        records_written_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        last_progress_at:
+          type: string
+          format: date-time
+          nullable: true
+        cancellation_requested_at:
+          type: string
+          format: date-time
+          nullable: true
+        url:
+          type: string
+          description: e.g. /v1/file_imports/123
+        records_url:
+          type: string
+          description: e.g. /v1/file_imports/123/records
+        record_count:
+          type: integer
+          description: Aggregate; stream-scoped index only
+        total_credits:
+          type: integer
+          description: Aggregate, in cents; stream-scoped index only
+        total_debits:
+          type: integer
+          description: Aggregate, in cents; stream-scoped index only
+        net_amount:
+          type: integer
+          description: 'Aggregate: credits minus debits, in cents; stream-scoped index only'
+        date_range_start:
+          type: string
+          format: date
+          nullable: true
+          description: Aggregate; stream-scoped index only
+        date_range_end:
+          type: string
+          format: date
+          nullable: true
+          description: Aggregate; stream-scoped index only
+        currency:
+          type: string
+          nullable: true
+          description: Aggregate; stream-scoped index only
+    Record:
+      type: object
+      required:
+      - date
+      - data_stream_key
+      - amount
+      - direction
+      properties:
+        id:
+          type: integer
+        amount:
+          type: integer
+          description: The monetary amount in cents (e.g., 1234 = $12.34)
+        currency:
+          type: string
+          description: Three-letter ISO 4217 currency code (e.g. USD, EUR). **Optional on create — defaults to `USD` when omitted.** Case-insensitive on input; always returned uppercase.
+          pattern: ^[A-Za-z]{3}$
+          default: USD
+        decimal_places:
+          type: integer
+          description: Number of decimal places for this currency (2 for USD)
+          default: 2
+        direction:
+          type: string
+          enum:
+          - credit
+          - debit
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        metadata:
+          type: object
+          additionalProperties: true
+          default: {}
+        external_id:
+          type: string
+        data_stream_key:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

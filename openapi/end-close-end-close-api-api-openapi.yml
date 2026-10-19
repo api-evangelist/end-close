@@ -45,13 +45,6 @@ webhooks:
       x-summary-source: derived
 components:
   schemas:
-    RecordWebhookEvent:
-      allOf:
-      - $ref: '#/components/schemas/WebhookEvent'
-      - type: object
-        properties:
-          data:
-            $ref: '#/components/schemas/Record'
     Record:
       type: object
       required:
@@ -92,6 +85,13 @@ components:
           type: string
         data_stream_key:
           type: string
+    RecordWebhookEvent:
+      allOf:
+      - $ref: '#/components/schemas/WebhookEvent'
+      - type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/Record'
     WebhookEvent:
       type: object
       required:

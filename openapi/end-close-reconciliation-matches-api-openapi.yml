@@ -15,7 +15,7 @@ paths:
   /reconciliation_matches:
     get:
       summary: List reconciliation matches
-      description: Returns a paginated list of matches, optionally filtered by reconciliation or status.
+      description: Returns a paginated list of matches, optionally filtered by reconciliation or status. Results are ordered by `created_at` descending, then `id` descending — a stable total order, so paging through the full list with `offset` returns every row exactly once even when many rows share a `created_at`.
       parameters:
       - in: query
         name: reconciliation_id
@@ -64,7 +64,7 @@ paths:
       x-operation-id-source: derived
     post:
       summary: Create a reconciliation match
-      description: Manually match a set of records. All records must be unreconciled and belong to the specified reconciliation's data streams.
+      description: Manually match a set of records. All records must be unreconciled in the specified reconciliation (a record matched in a different reconciliation is fine) and belong to its data streams.
       requestBody:
         required: true
         content:
@@ -84,7 +84,7 @@ paths:
                   description: IDs of records to match together
                 create_adjustment:
                   type: boolean
-                  description: If true, creates an adjustment record to balance the match
+                  description: If true and the records do not balance, creates an adjustment record so the match nets to zero. With records on both sides the adjustment is a credit on the side with the lower total. With records on one side only it is an offsetting entry on the other side, mirroring the selection's amount and direction.
                 adjustment_reason:
                   type: string
                   description: Description for the adjustment record

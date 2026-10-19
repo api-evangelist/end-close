@@ -186,7 +186,10 @@ paths:
   /data_streams/{key}/reset:
     post:
       summary: Reset a data stream
-      description: Asynchronously wipes all records on the stream while preserving stream config, property definitions, and reconciliation links. Always async. Poll the returned operation.
+      description: 'Asynchronously wipes all records on the stream while preserving stream config, property definitions, and reconciliation links. Always async. Poll the returned operation.
+
+
+        **Completion is verified.** The operation reaches `completed` only after the stream is confirmed empty in the primary database, with `records_remaining` set to `0`. Records that land while the reset is running are swept up a bounded number of times; if any survive, the operation ends `failed` with `records_remaining` greater than `0` and an `error_message` asking you to stop ingestion and retry. Do not reload data onto the stream until you observe `completed`.'
       parameters:
       - in: path
         name: key
@@ -217,7 +220,7 @@ paths:
   /data_streams/{key}/health:
     get:
       summary: Get data stream ingestion health
-      description: Cheap, indexed snapshot of ingestion health for the stream — record count, import batch totals, orphan records, bulk request counters by status, and last ingestion time. Safe to poll from the UI.
+      description: Cheap, indexed snapshot of ingestion health for the stream — record count, file import totals, orphan records, bulk request counters by status, and last ingestion time. Safe to poll from the UI.
       parameters:
       - in: path
         name: key
@@ -243,7 +246,7 @@ paths:
   /data_streams/{key}/operations/{id}:
     get:
       summary: Get a data stream operation
-      description: Poll a delete or reset operation kicked off against this data stream. Returns the serialized `DataStreamOperation`.
+      description: Poll a delete or reset operation kicked off against this data stream. Returns the serialized `DataStreamOperation`. On a terminal status, `records_remaining` is the primary-database count of records left on the stream (`0` on `completed`), so callers can trust the operation instead of re-listing records.
       parameters:
       - in: path
         name: key
@@ -272,10 +275,10 @@ paths:
       - Data Streams
       operationId: getDataStreamsByKeyOperationsById
       x-operation-id-source: derived
-  /data_streams/{key}/import_batches:
+  /data_streams/{key}/file_imports:
     get:
-      summary: List import batches
-      description: Returns a paginated list of import batches for a data stream.
+      summary: List file imports
+      description: Returns a cursor-paginated list of file imports for a data stream, newest first. Rows on this stream-scoped route additionally carry the ClickHouse aggregates (record_count, total_credits, total_debits, net_amount, date_range_start, date_range_end, currency).
       parameters:
       - in: path
         name: key
@@ -288,17 +291,44 @@ paths:
         schema:
           type: integer
           minimum: 1
-          maximum: 100
-          default: 100
+          maximum: 200
+          default: 50
       - in: query
-        name: offset
+        name: cursor
         schema:
-          type: integer
-          default: 0
-        description: Pagination offset
+          type: string
+        description: 'Opaque cursor from a previous response''s `next_cursor`. Pass it back unchanged; `next_cursor: null` is the only terminator.'
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - pending
+          - processing
+          - replicating
+          - completed
+          - failed
+          - cancelled
+      - in: query
+        name: source
+        schema:
+          type: string
+        description: Filter by import source (e.g. `csv`, `nacha`, `bulk_api`)
+      - in: query
+        name: created_after
+        schema:
+          type: string
+          format: date-time
+        description: ISO8601; inclusive
+      - in: query
+        name: created_before
+        schema:
+          type: string
+          format: date-time
+        description: ISO8601; inclusive
       responses:
         '200':
-          description: Paginated list of import batches
+          description: Cursor-paginated list of file imports
           content:
             application/json:
               schema:
@@ -307,24 +337,175 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ImportBatch'
-                  has_more:
-                    type: boolean
-                  offset:
-                    type: number
+                      $ref: '#/components/schemas/FileImport'
+                  next_cursor:
+                    type: string
+                    nullable: true
+                    description: Pass as `cursor` for the next page; null on the last page
+                  limit:
+                    type: integer
         '401':
           description: Unauthorized
         '404':
           description: Data stream not found
       tags:
       - Data Streams
-      operationId: getDataStreamsByKeyImportBatches
+      operationId: getDataStreamsByKeyFileImports
       x-operation-id-source: derived
 components:
   schemas:
+    FileImport:
+      type: object
+      description: A file import (CSV/NACHA upload or bulk API submission) and its ingestion lifecycle. Aggregate fields (record_count, total_credits, total_debits, net_amount, date_range_start, date_range_end, currency) are merged in only on the stream-scoped index GET /data_streams/{key}/file_imports, and are trustworthy once status is `completed`.
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - replicating
+          - completed
+          - failed
+          - cancelled
+        source:
+          type: string
+          nullable: true
+          description: Origin of the import (e.g. `csv`, `nacha`, `bulk_api`)
+        filename:
+          type: string
+          nullable: true
+        total_items:
+          type: integer
+        processed_items:
+          type: integer
+        successful_items:
+          type: integer
+        failed_items:
+          type: integer
+        skipped_items:
+          type: integer
+          description: 'Records skipped due to `on_conflict: skip` matching an existing `external_id`'
+        expected_records_count:
+          type: integer
+          nullable: true
+        progress:
+          type: integer
+          description: processed_items / total_items as a percentage (0-100)
+        parsing:
+          type: boolean
+          description: True until rows start landing; file totals are unknown while parsing
+        decimal_places:
+          type: integer
+          description: Number of decimal places (2 for USD)
+        stuck:
+          type: boolean
+          description: Currently processing with no heartbeat for >5 minutes
+        on_conflict:
+          type: string
+          nullable: true
+        error_message:
+          type: string
+          nullable: true
+        error_details:
+          type: object
+          nullable: true
+        data_stream_ids:
+          type: array
+          items:
+            type: integer
+        created_at:
+          type: string
+          format: date-time
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        records_written_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        last_progress_at:
+          type: string
+          format: date-time
+          nullable: true
+        cancellation_requested_at:
+          type: string
+          format: date-time
+          nullable: true
+        url:
+          type: string
+          description: e.g. /v1/file_imports/123
+        records_url:
+          type: string
+          description: e.g. /v1/file_imports/123/records
+        record_count:
+          type: integer
+          description: Aggregate; stream-scoped index only
+        total_credits:
+          type: integer
+          description: Aggregate, in cents; stream-scoped index only
+        total_debits:
+          type: integer
+          description: Aggregate, in cents; stream-scoped index only
+        net_amount:
+          type: integer
+          description: 'Aggregate: credits minus debits, in cents; stream-scoped index only'
+        date_range_start:
+          type: string
+          format: date
+          nullable: true
+          description: Aggregate; stream-scoped index only
+        date_range_end:
+          type: string
+          format: date
+          nullable: true
+          description: Aggregate; stream-scoped index only
+        currency:
+          type: string
+          nullable: true
+          description: Aggregate; stream-scoped index only
+    DataStreamHealth:
+      type: object
+      description: Ingestion health snapshot for a data stream. All counts are indexed lookups; safe to poll.
+      properties:
+        records_count:
+          type: integer
+        imports_count:
+          type: integer
+          description: Total file imports on this stream, all statuses
+        imports:
+          type: object
+          description: File imports on this stream, counted by status
+          properties:
+            pending:
+              type: integer
+            processing:
+              type: integer
+            replicating:
+              type: integer
+            completed:
+              type: integer
+            failed:
+              type: integer
+            cancelled:
+              type: integer
+            stuck:
+              type: integer
+              description: Currently `processing` with no heartbeat for >5 minutes
+        last_ingestion_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Most recent record `created_at` on this stream
     DataStreamOperation:
       type: object
-      description: Async operation against a data stream (delete or reset). Poll via GET /data_streams/{key}/operations/{id}.
+      description: Async operation against a data stream (delete or reset). Poll via GET /data_streams/{key}/operations/{id}. An operation only reaches `completed` once the stream is verified empty in the primary database; if records outlive the wipe (for example, ingestion landing mid-reset), it ends `failed` with `records_remaining` > 0 and an `error_message` asking you to retry.
       properties:
         id:
           type: integer
@@ -350,6 +531,10 @@ components:
         error_message:
           type: string
           nullable: true
+        records_remaining:
+          type: integer
+          nullable: true
+          description: Number of records still on the stream when the operation reached a terminal state, counted in the primary database (not the analytics mirror behind `records_count`, which can lag). `0` on `completed`; greater than `0` on a `failed` operation that left records behind; `null` while `pending` or `running`. After a reset, trust this field rather than re-listing `/records`.
         started_at:
           type: string
           format: date-time
@@ -364,41 +549,6 @@ components:
         requested_by_user_id:
           type: integer
           nullable: true
-    DataStreamHealth:
-      type: object
-      description: Ingestion health snapshot for a data stream. All counts are indexed lookups; safe to poll.
-      properties:
-        records_count:
-          type: integer
-        import_batches_count:
-          type: integer
-        import_batches_record_sum:
-          type: integer
-          description: Sum of `record_count` across all import batches. Drift from `records_count` indicates orphaned or extra records.
-        orphan_records_count:
-          type: integer
-          description: Records on this stream with no `import_batch_id` (typically created via POST /records or POST /records/bulk)
-        bulk_requests:
-          type: object
-          properties:
-            pending:
-              type: integer
-            processing:
-              type: integer
-            completed:
-              type: integer
-            failed:
-              type: integer
-            cancelled:
-              type: integer
-            stuck:
-              type: integer
-              description: Currently `processing` with no heartbeat for >5 minutes
-        last_ingestion_at:
-          type: string
-          format: date-time
-          nullable: true
-          description: Most recent record `created_at` on this stream
     DataStream:
       type: object
       required:
@@ -420,57 +570,12 @@ components:
         type:
           type: string
           description: The type of data stream (e.g. api, csv, stripe, bank_feed)
-    ImportBatch:
-      type: object
-      properties:
-        id:
+        program_id:
           type: integer
-        data_stream_key:
-          type: string
-          description: Key of the data stream this import batch belongs to
-        source:
-          type: string
-          enum:
-          - csv_upload
-          - nacha_upload
-          - bulk_api
-          description: How the records were imported
-        filename:
-          type: string
           nullable: true
-          description: Original filename for CSV uploads
-        record_count:
+        records_count:
           type: integer
-          description: Number of records in this batch
-        total_credits:
-          type: integer
-          description: Sum of credit amounts in cents
-        total_debits:
-          type: integer
-          description: Sum of debit amounts in cents
-        net_amount:
-          type: integer
-          description: Net amount in cents (credits minus debits)
-        decimal_places:
-          type: integer
-          description: Number of decimal places (2 for USD)
-          default: 2
-        date_range_start:
-          type: string
-          format: date
-          nullable: true
-          description: Earliest record date in the batch
-        date_range_end:
-          type: string
-          format: date
-          nullable: true
-          description: Latest record date in the batch
-        created_at:
-          type: string
-          format: date-time
-        records_url:
-          type: string
-          description: URL to fetch records belonging to this batch
+          description: Record count from the ClickHouse mirror
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

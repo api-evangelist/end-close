@@ -1,0 +1,301 @@
+openapi: 3.2.0
+info:
+  title: End Close Relays API
+  description: REST API is used to interact with the End Close platform.
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: https://api.endclose.com/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Relays
+paths:
+  /relays/config:
+    get:
+      summary: Get relay configuration
+      description: 'The routes document End Close is managing for the environment this API key belongs to: which processor webhook routes the relay accepts, how each is verified, and the field map that decides what leaves your network.
+
+
+        This is the only thing End Close tells a relay, and the status code is the whole message. A 200 is itself the statement that End Close owns this configuration, so the relay runs the document and hides its own config editor — there is no local copy that can drift. A 304 says the same and that nothing moved. A 404 means End Close is not managing this environment (nothing provisioned, or the switch turned off in Settings → Relay). It is a state, not a terminal answer: keep the document you already have, fall back to local configuration if you have one, and keep polling at your normal cadence — this is the only way you will hear that management was switched back on, and stopping forwarding on a 404 would turn a settings toggle into an outage.
+
+
+        Poll it with `If-None-Match`. The 200 carries a strong `ETag` identifying the document, which changes only when the document itself changes — a save that alters nothing keeps it — so the ordinary answer on a heartbeat is a 304 with no body. The API key alone resolves the environment: no parameters are needed, and rotating the key does not change the document. `routes` has the same content as the `routes:` block of the relay''s `relay.yaml`; `environment` is informational.'
+      parameters:
+      - in: header
+        name: If-None-Match
+        required: false
+        schema:
+          type: string
+        description: The ETag from the last 200. Send it back and an unchanged document answers 304.
+      responses:
+        '200':
+          description: The provisioned routes document. The ETag header identifies it.
+          headers:
+            ETag:
+              description: 'Strong validator for this document. Opaque to the relay: store it and send it back as If-None-Match.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RelayConfig'
+        '304':
+          description: Not Modified — End Close still owns this configuration and the document has not changed. No body; keep running what you have.
+        '401':
+          description: Unauthorized — missing, invalid, or revoked API key
+        '403':
+          description: Forbidden — the key is a run-scoped agent session key, not a relay key
+        '404':
+          description: End Close is not managing the relay configuration for this environment. Keep the document you have and keep polling — a 404 is a state, not a terminal answer.
+      tags:
+      - Relays
+      operationId: getRelaysConfig
+      x-operation-id-source: derived
+  /relays/events:
+    post:
+      summary: Accept a legacy relay check-in
+      description: 'Accepted for legacy relay clients (v0.11.0–v0.12.4) that still call home with `{ "name", "properties" }` (`relay_boot`, `relay_heartbeat`, `relay_error`, `relay_shutdown`, `relay_killswitch`, `relay_config_applied`, `relay_batch_parked`, or whatever an older build sends). The body is logged and discarded: nothing is stored, and this is not a configuration channel. It does not return `{ config: { managed, fingerprint } }`. Current relays report themselves with PUT /relays/instances/{instance_id} and read configuration from GET /relays/config. A 204 with an empty body means the event was accepted. Same API-key auth as the other /relays endpoints.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Whatever the legacy client sends. `name` and `properties` are logged; other keys are logged too. Names are not validated.
+              properties:
+                name:
+                  type: string
+                  example: relay_heartbeat
+                properties:
+                  type: object
+                  additionalProperties: true
+                  description: Event fields the client allowlists (version, config YAML, queue, routes, stack, …). Logged in full. `config` may be the relay's YAML; `stack` is treated as sensitive.
+              additionalProperties: true
+      responses:
+        '204':
+          description: Accepted and logged. Empty body. Not a configuration response.
+        '400':
+          description: Body is not JSON, or exceeds 64 KB
+        '401':
+          description: Unauthorized — missing, invalid, or revoked API key
+        '403':
+          description: Forbidden — the key is a run-scoped agent session key, not a relay key
+      tags:
+      - Relays
+      operationId: postRelaysEvents
+      x-operation-id-source: derived
+  /relays/instances/{instance_id}:
+    put:
+      summary: Report a relay instance's manifest
+      description: 'A running relay instance describing itself: host kind, engine version, the routes-document schema version it understands, where its configuration comes from, and the adapters and enrichments it has registered. Idempotent replace keyed by the environment the API key belongs to plus a host-chosen instance id (up to 128 characters; embedded hosts without a configured id use a random UUID per process). Send it on boot and on every heartbeat. End Close checks any document saved for the environment against the instances seen in the last 24 hours: every route `source` must be an adapter every live instance has, every `enrich:` an enrichment every live instance has registered (none at all while any live instance is the standard application), and no document feature newer than the oldest instance''s `config_schema`. Instances unseen for 30 days are deleted. Nothing is required of a relay that never sends a manifest: authoring then falls back to the built-in adapters and no enrichments.'
+      parameters:
+      - in: path
+        name: instance_id
+        required: true
+        schema:
+          type: string
+          maxLength: 128
+        description: Host-chosen identifier for this running instance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RelayInstanceManifest'
+      responses:
+        '204':
+          description: Manifest stored
+        '400':
+          description: Malformed manifest; the message names the field
+        '401':
+          description: Unauthorized — missing, invalid, or revoked API key
+        '403':
+          description: Forbidden — the key is a run-scoped agent session key, not a relay key
+        '413':
+          description: Body exceeds 64 KB
+      tags:
+      - Relays
+      operationId: putRelaysInstancesByInstanceId
+      x-operation-id-source: derived
+components:
+  schemas:
+    RelayRoute:
+      type: object
+      description: 'One webhook route on the relay. Validated on save against the relay''s own rules (schema in End-Close/endclose-relay, packages/core/src/config/schema.ts): route ids are unique lowercase slugs, `source` names a known adapter, `auth.secret_env` is the NAME of an environment variable on the relay (never a secret value), metadata output names are snake_case and may not be on the relay''s hard denylist (cvv, ssn, account/routing number, password, api key, ...) unless hashed, and `enrich:` references are not accepted.'
+      required:
+      - id
+      - source
+      - auth
+      - map
+      properties:
+        id:
+          type: string
+          pattern: ^[a-z0-9][a-z0-9-_]*$
+          description: Unique lowercase slug for the route.
+          example: payabli-settlements
+        source:
+          type: string
+          enum:
+          - payabli
+          - generic_hmac
+          description: The processor adapter that verifies and parses the webhook.
+        auth:
+          type: object
+          description: 'How inbound webhooks are verified. `mode: static_header` (header, secret_env, allowed_ips) or `mode: hmac` (header, algorithm, secret_env, signed_content, timestamp_header, tolerance_seconds, event_id, event_type). `secret_env` names an environment variable on the relay.'
+          required:
+          - mode
+          - secret_env
+          properties:
+            mode:
+              type: string
+              enum:
+              - static_header
+              - hmac
+            header:
+              type: string
+            secret_env:
+              type: string
+              pattern: ^[A-Z][A-Z0-9_]*$
+              example: PAYABLI_WEBHOOK_SECRET
+            allowed_ips:
+              type: array
+              items:
+                type: string
+        events:
+          type: array
+          minItems: 1
+          items:
+            type: string
+          description: Payload event types accepted by this route (glob `*` allowed). Others are dropped locally and never forwarded.
+        map:
+          type: object
+          description: 'How a webhook event becomes an End Close record: only fields named here are forwarded. Field references are dot-notation paths into the payload (`batchId`, `batch.id`) or `{ source, transform }` objects (transforms: trim, lowercase, hash).'
+          required:
+          - data_stream_key
+          - external_id
+          - amount
+          - direction
+          properties:
+            data_stream_key:
+              type: string
+            external_id:
+              description: Field reference
+            amount:
+              description: Field reference to a string amount like "3,762.87"; converted to integer cents.
+            direction:
+              type: string
+              enum:
+              - credit
+              - debit
+            date:
+              description: 'Optional payload timestamp: a path, or `{ source, format }` with format `iso8601` (default) or `mdy_hms`. Absent means the record is dated by receive time.'
+            description:
+              description: Optional field reference
+            currency:
+              type: string
+              pattern: ^[A-Za-z]{3}$
+            metadata:
+              type: object
+              description: Extra fields to forward, as snake_case output name → field reference.
+              additionalProperties: true
+        max_body_bytes:
+          type: integer
+          minimum: 1
+          maximum: 10485760
+          default: 1048576
+    RelayConfig:
+      type: object
+      required:
+      - routes
+      properties:
+        environment:
+          type: string
+          description: 'Name of the environment the API key belongs to, and that owns this document. Informational: the relay logs it and writes it into a comment in its stored copy.'
+          example: Sandbox
+        routes:
+          type: array
+          minItems: 1
+          description: 'The relay''s routes document — the same content as the `routes:` block of `relay.yaml`. Never empty: an environment with no document gets a 404 instead.'
+          items:
+            $ref: '#/components/schemas/RelayRoute'
+    RelayInstanceManifest:
+      type: object
+      required:
+      - schema
+      - reason
+      - host
+      - engine_version
+      - config_schema
+      - config_source
+      - capabilities
+      properties:
+        schema:
+          type: integer
+          enum:
+          - 1
+          description: Manifest format version. Unknown values are rejected with 400.
+        reason:
+          type: string
+          example: heartbeat
+          description: 'Why the relay is checking in. One lowercase word: `boot`, `heartbeat`, `config_applied`, `error` and `shutdown` are the ones End Close knows about, and any other lowercase word is accepted and stored, so a new relay version is never blocked from checking in. Only `shutdown` carries meaning: it is recorded but does not refresh the instance''s liveness, so an instance that says goodbye stops constraining what a document may name instead of counting as alive for another 24 hours. Send no other detail with it — extra keys are stored verbatim and never read, which is the wrong home for stack traces or metrics.'
+        host:
+          type: string
+          enum:
+          - application
+          - embedded
+          description: The shipped Docker image, or `createRelay()` embedded in the customer's own backend.
+        engine_version:
+          type: string
+          description: Semver of `@end-close/relay` in use.
+          example: 0.12.2
+        config_schema:
+          type: integer
+          minimum: 1
+          description: 'The routes-document schema version this engine understands. Version 1 is current. Gates which document features may be saved: nothing newer than the oldest reporting instance understands.'
+        config_source:
+          type: string
+          enum:
+          - remote
+          - local
+          description: '`remote` fetches from End Close; `local` has routes supplied in code or by file. Informational.'
+        capabilities:
+          type: object
+          required:
+          - adapters
+          properties:
+            adapters:
+              type: array
+              items:
+                type: string
+              description: Lowercase adapter slugs. Always includes the built-ins `payabli` and `generic_hmac`.
+              example:
+              - payabli
+              - generic_hmac
+              - stripe
+            enrichments:
+              type: object
+              description: Registered enrichment functions keyed by lowercase snake_case name. Each value is a descriptor that may be empty; recognised keys are `description` (string) and `output` (`string` | `number` | `boolean`). Unknown keys are stored as sent.
+              additionalProperties:
+                type: object
+                properties:
+                  description:
+                    type: string
+                  output:
+                    type: string
+                    enum:
+                    - string
+                    - number
+                    - boolean
+                additionalProperties: true
+              example:
+                resident_name:
+                  output: string
+                  description: Resident full name from the Payabli payor id
+                resident_unit: {}
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY

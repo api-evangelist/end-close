@@ -171,7 +171,7 @@ components:
           description: Lower values run first
         filters:
           type: object
-          description: A rule tree with group nodes (AND/OR) and condition leaf nodes. Conditions compare a field on one side to a field on the other side.
+          description: 'A rule tree with group nodes (AND/OR) and condition leaf nodes. Conditions compare a field on one side to a field on the other side. On a `many_to_one` rule only AND-combined `eq` conditions without tolerances are accepted: `amount eq amount` is satisfied by the rollup itself (the group total is compared to the Side B amount), and every other condition segments the Side A groups by its `key` and requires the Side B record to carry the same value in its `value` field (for example `metadata.operator eq metadata.operator` keeps each operator''s batches with that operator''s payout). OR groups, other operands and tolerances are rejected on `many_to_one` rules.'
           properties:
             operand:
               type: string
@@ -227,7 +227,7 @@ components:
           type: array
           items:
             type: string
-          description: 'Side A field keys to group records by before matching. The first key is the primary axis: in `rollup.group_by_kind` ''date'' mode it must be a date field; in ''identifier'' mode it can be any field (e.g. a batch id in metadata). Additional keys further segment Side A — in date mode each segment matches only Side B records with the same value for those fields; in identifier mode they form a composite cohort key.'
+          description: 'Side A field keys to group records by before matching. The first key is the primary axis: in `rollup.group_by_kind` ''date'' mode it must be a date field; in ''identifier'' mode it can be any field (e.g. a batch id in metadata). Additional keys further segment Side A — in date mode each segment matches only Side B records with the same value for those fields; in identifier mode they form a composite cohort key and do not constrain the Side B record. To require the Side B record to share a value in either mode, add an `eq` condition to `filters`.'
         cardinality:
           type: string
           enum:
@@ -268,7 +268,7 @@ components:
           - user
           - ai
           - default
-          description: Origin of the rule. 'user' = created manually via the API or UI. 'ai' = created by the AI rules engine. 'default' = seeded built-in rule.
+          description: Origin of the rule. 'user' = created manually via the API or UI. 'ai' = created by the AI rules engine. 'default' = built-in rule seeded on older reconciliations (no longer created).
         status:
           type: string
           enum:

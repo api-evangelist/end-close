@@ -49,7 +49,7 @@ paths:
         required: false
         schema:
           type: integer
-        description: Filter to records created by this import batch
+        description: Filter to records created by this file import
       - in: query
         name: bulk_request_id
         required: false
@@ -76,10 +76,14 @@ paths:
         schema:
           type: string
           enum:
+          - single_api
           - csv_upload
           - nacha_upload
           - bulk_api
-        description: Filter via the joined import batch's `source`
+          - plaid
+          - airwallex
+          - flows
+        description: Filter via the joined file import's `source`
       - in: query
         name: status
         required: false
@@ -350,40 +354,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    BulkRequestSummary:
-      type: object
-      description: Summary returned when a bulk request is created or retrieved via idempotency key
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the bulk request
-        status:
-          type: string
-          enum:
-          - pending
-          - processing
-          - completed
-          - failed
-          - cancelled
-          description: Current processing status
-        total_items:
-          type: integer
-          description: Number of records submitted
-        processed_items:
-          type: integer
-          description: Number of records processed so far
-        successful_items:
-          type: integer
-          description: Number of records successfully created
-        failed_items:
-          type: integer
-          description: Number of records that failed
-        skipped_items:
-          type: integer
-          description: 'Number of records skipped due to `on_conflict: skip` matching an existing `external_id`'
-        url:
-          type: string
-          description: Polling URL to check progress (e.g. /v1/bulk_requests/123)
     Record:
       type: object
       required:
@@ -424,6 +394,40 @@ components:
           type: string
         data_stream_key:
           type: string
+    BulkRequestSummary:
+      type: object
+      description: Summary returned when a bulk request is created or retrieved via idempotency key
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the bulk request
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - completed
+          - failed
+          - cancelled
+          description: Current processing status
+        total_items:
+          type: integer
+          description: Number of records submitted
+        processed_items:
+          type: integer
+          description: Number of records processed so far
+        successful_items:
+          type: integer
+          description: Number of records successfully created
+        failed_items:
+          type: integer
+          description: Number of records that failed
+        skipped_items:
+          type: integer
+          description: 'Number of records skipped due to `on_conflict: skip` matching an existing `external_id`'
+        url:
+          type: string
+          description: Polling URL to check progress (e.g. /v1/bulk_requests/123)
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
