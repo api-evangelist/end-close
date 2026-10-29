@@ -64,6 +64,142 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-End Close is a company surfaced as a portfolio company of y-combinator and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+End Close is an automated reconciliation platform for payments companies and other high-volume transaction businesses. Its REST API connects payment processors, bank accounts, and accounting systems, continuously matches transactions across those sources into reconciliations, surfaces exceptions with full context, and automates their resolution using rules and agents. The v1 API covers data streams, records, reconciliations, matches, rules, stories, exceptions, bank accounts and balances, bulk/async ingestion, and webhooks. Backed by Y Combinator.
 
-Backed by: y-combinator
+**Areas:** Company · Reconciliation · Payments · Financial Operations · Accounting · Banking · Data Integration · Webhook · Fintech
+
+## End Close on APIs.io
+
+Everything profiled for End Close is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/end-close/](https://apis.io/providers/end-close/)** — or go straight to one of the APIs or properties below.
+
+### APIs (13)
+
+- [End Close Bank Account Balances API](https://apis.io/apis/end-close/end-close-bank-account-balances-api/) — The Bank Account Balances API from End Close — 2 operation(s) for bank account balances.
+- [End Close Bank Accounts API](https://apis.io/apis/end-close/end-close-bank-accounts-api/) — The Bank Accounts API from End Close — 2 operation(s) for bank accounts.
+- [End Close Bulk Requests API](https://apis.io/apis/end-close/end-close-bulk-requests-api/) — The Bulk Requests API from End Close — 4 operation(s) for bulk requests.
+- [End Close Data Stream Property Definitions API](https://apis.io/apis/end-close/end-close-data-stream-property-definitions-api/) — The Data Stream Property Definitions API from End Close — 2 operation(s) for data stream property definitions.
+- [End Close Data Streams API](https://apis.io/apis/end-close/end-close-data-streams-api/) — The Data Streams API from End Close — 6 operation(s) for data streams.
+- [End Close Import Batches API](https://apis.io/apis/end-close/end-close-import-batches-api/) — The Import Batches API from End Close — 2 operation(s) for import batches.
+- [End Close Reconciliation Exceptions API](https://apis.io/apis/end-close/end-close-reconciliation-exceptions-api/) — The Reconciliation Exceptions API from End Close — 2 operation(s) for reconciliation exceptions.
+- [End Close Reconciliation Matches API](https://apis.io/apis/end-close/end-close-reconciliation-matches-api/) — The Reconciliation Matches API from End Close — 2 operation(s) for reconciliation matches.
+- [End Close Reconciliation Rules API](https://apis.io/apis/end-close/end-close-reconciliation-rules-api/) — The Reconciliation Rules API from End Close — 2 operation(s) for reconciliation rules.
+- [End Close Reconciliation Stories API](https://apis.io/apis/end-close/end-close-reconciliation-stories-api/) — The Reconciliation Stories API from End Close — 2 operation(s) for reconciliation stories.
+- [End Close Reconciliations API](https://apis.io/apis/end-close/end-close-reconciliations-api/) — The Reconciliations API from End Close — 4 operation(s) for reconciliations.
+- [End Close Records API](https://apis.io/apis/end-close/end-close-records-api/) — The Records API from End Close — 3 operation(s) for records.
+- [End Close End Close API](https://apis.io/apis/end-close/end-close-end-close-api-api/) — The End Close API API from End Close — 0 operation(s) for end close api.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [End Close Webhooks](https://apis.io/asyncapis/end-close/end-close-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [end-close](https://apis.io/servers/end-close/end-close/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [End Close Agentic Access](https://apis.io/agentic-access/end-close/end-close-agentic-access/)
+
+#### Collections (12)
+
+Postman and Open Collection request collections.
+
+- [End Close Bank Account Balances API](https://apis.io/collections/end-close/open-end-close-bank-account-balances-api/)
+- [End Close Bank Account Balances Bank Accounts API](https://apis.io/collections/end-close/open-end-close-bank-accounts-api/)
+- [End Close Bank Account Balances Bulk Requests API](https://apis.io/collections/end-close/open-end-close-bulk-requests-api/)
+- [End Close Bank Account Balances Data Stream Property Definitions API](https://apis.io/collections/end-close/open-end-close-data-stream-property-definitions-api/)
+- [End Close Bank Account Balances Data Streams API](https://apis.io/collections/end-close/open-end-close-data-streams-api/)
+- [End Close Bank Account Balances Import Batches API](https://apis.io/collections/end-close/open-end-close-import-batches-api/)
+- [End Close Bank Account Balances Reconciliation Exceptions API](https://apis.io/collections/end-close/open-end-close-reconciliation-exceptions-api/)
+- [End Close Bank Account Balances Reconciliation Matches API](https://apis.io/collections/end-close/open-end-close-reconciliation-matches-api/)
+- [End Close Bank Account Balances Reconciliation Rules API](https://apis.io/collections/end-close/open-end-close-reconciliation-rules-api/)
+- [End Close Bank Account Balances Reconciliation Stories API](https://apis.io/collections/end-close/open-end-close-reconciliation-stories-api/)
+- [End Close Bank Account Balances Reconciliations API](https://apis.io/collections/end-close/open-end-close-reconciliations-api/)
+- [End Close Bank Account Balances Records API](https://apis.io/collections/end-close/open-end-close-records-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [End Close Openapi Overlay](https://apis.io/overlays/end-close/end-close-openapi-overlay/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [End Close Authentication](https://apis.io/security/end-close/end-close-authentication/)
+- [End Close Domain Security](https://apis.io/security/end-close/end-close-domain-security/)
+- [End Close Trust Center](https://apis.io/security/end-close/end-close-trust-center/)
+- [End Close Vulnerability Disclosure](https://apis.io/security/end-close/end-close-vulnerability-disclosure/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.endclose.com/)
+- [Security](https://www.endclose.com/security)
+
+## API Evangelist rating
+
+**Kin Score 41.0** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 58.4 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 38.1 |
+| Access clarity | 14.5 |
+
+**Agent readiness 35.0** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | verified |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 22.0** — Banking & Open Finance
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/end-close/](https://apis.io/providers/end-close/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for End Close: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/end-close/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
